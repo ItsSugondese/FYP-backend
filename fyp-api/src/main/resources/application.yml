@@ -1,0 +1,42 @@
+server:
+  port: 9192
+  servlet:
+    context-path: /canteen
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/canteen_management
+    username: postgres
+    password: admin
+
+
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 300
+      connection-timeout: 600000
+      idle-timeout: 60000
+      max-lifetime: 1800
+      leak-detection-threshold: 600000
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+      format_sql: true
+    open-in-view: false
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 746907184110-vm60s3kv0ofk1soqg2l5qptm60t82it0.apps.googleusercontent.com
+            client-secret: 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
