@@ -5,6 +5,7 @@ import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.generics.controller.BaseController;
+import fyp.canteen.fypcore.model.entity.auth.jwt.JwtRequest;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -39,4 +42,11 @@ public class AuthController extends BaseController {
         return ResponseEntity.ok(successResponse(Message.Crud(MessageConstants.SAVE, moduleName), authService.signInWithGoogle(credential)));
     }
 
+    @PostMapping("/login")
+    @Operation(summary = "Use this api to save ", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> signIn(@RequestBody @Valid JwtRequest request){
+        return ResponseEntity.ok(successResponse(Message.Crud(MessageConstants.SAVE, moduleName), authService.signIn(request)));
+    }
 }

@@ -6,8 +6,10 @@ import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.usermgmt.UserService;
 import fyp.canteen.fypapi.utils.JwtUtil;
 import fyp.canteen.fypcore.exception.AppException;
+import fyp.canteen.fypcore.model.entity.auth.Role;
 import fyp.canteen.fypcore.model.entity.auth.jwt.JwtRequest;
 import fyp.canteen.fypcore.model.entity.auth.jwt.JwtResponse;
+import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,6 +17,9 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -34,14 +39,19 @@ public class JwtService {
 
         authenticate(userEmail, userPassword);
 
+        User user = userService.findUserByEmail(userEmail);
 
         String newGeneratedToken = jwtUtil.generateToken(userDetailsService.loadUserByUsername(userEmail),
-                userService.findUserByEmail(userEmail));
+                user);
 
 
         JwtResponse response = new JwtResponse();
         response.setJwtToken(newGeneratedToken);
 
+        response.setRoles(user.getRole().stream().map(
+                Role::getRole
+        ).collect(Collectors.toList()));
+        response.setUsername(user.getFullName());
         return response;
     }
 

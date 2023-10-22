@@ -44,7 +44,7 @@ public class User extends AuditActiveAbstract {
     @Column(columnDefinition = "TEXT")
     private String profilePath;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_ROLE",
             joinColumns = {

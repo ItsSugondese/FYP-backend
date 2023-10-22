@@ -2,6 +2,8 @@ package fyp.canteen.fypapi.service.auth;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.jwt.JwtService;
 import fyp.canteen.fypapi.service.usermgmt.UserService;
@@ -14,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -23,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private final GoogleIdTokenVerifier googleIdTokenVerifier;
     private final JwtService jwtService;
     private final PasswordEncoder encoder;
-
+    private final String appClient = "746907184110-46l1lat1ds4e1fvk6vhd2dn9j8f97hp7.apps.googleusercontent.com";
     @Override
     public JwtResponse signInWithGoogle(String credential) {
         GoogleIdToken idToken = verifyAndGetGoogleIdToken(credential);
@@ -45,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
             }
             try {
                 // Use the user information to generate a JWT or perform other actions
-                return jwtService.createJwtToken(JwtRequest.builder().userEmail(email).userPassword(password).build());
+                return generateToken(JwtRequest.builder().userEmail(email).userPassword(password).build());
             } catch (Exception e) {
                 throw new AppException(e.getMessage(), e);
             }
@@ -54,6 +58,24 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
+
+    @Override
+    public JwtResponse signIn(JwtRequest request) {
+        return generateToken(request);
+    }
+
+    private JwtResponse generateToken(JwtRequest request){
+        try {
+            // Use the user information to generate a JWT or perform other actions
+            return jwtService.createJwtToken(JwtRequest.builder()
+                    .userEmail(request.getUserEmail())
+                    .userPassword(request.getUserPassword())
+                    .build());
+        } catch (Exception e) {
+            throw new AppException(e.getMessage(), e);
+        }
+    }
+
     private GoogleIdToken verifyAndGetGoogleIdToken(String credential) {
         try {
             return googleIdTokenVerifier.verify(credential.substring(1, credential.length() - 1));
@@ -61,4 +83,6 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException(e.getMessage(), e);
         }
     }
+
+
 }

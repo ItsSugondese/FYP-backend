@@ -1,0 +1,10 @@
+
+v	java:S116"URename this field "SECRET_KEY" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÚÒËÈıÿÿÿÿ8˜àÜê´1
+C
+java:S1170"!Make this final field static too.(ÚÒËÈıÿÿÿÿ8˜àÜê´1
+X
+java:S6437#"6Revoke and change this password, as it is compromised.(¨‚à˜úÿÿÿÿ8ÚàÄî´1
+S
+java:S64375"6Revoke and change this password, as it is compromised.(Áãşÿ8‰áÄî´1
+S
+java:S6437:"6Revoke and change this password, as it is compromised.(ÑƒÅÙ8ê¦Íî´1

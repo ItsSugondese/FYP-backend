@@ -1,10 +1,14 @@
 package fyp.canteen.fypcore.model.entity.auth.jwt;
 
+import fyp.canteen.fypcore.model.entity.auth.Role;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,4 +16,6 @@ import lombok.Setter;
 @Setter
 public class JwtResponse {
     private String jwtToken;
+    private List<String> roles;
+    private String username;
 }
