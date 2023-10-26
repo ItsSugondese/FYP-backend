@@ -23,8 +23,6 @@ t
 Dfyp-core/src/main/java/fyp/canteen/fypcore/enums/ResponseStatus.java,f\6\f6dfed3f47f9486926237a6667ebab8e590344f2
 Ç
 Rfyp-core/src/main/java/fyp/canteen/fypcore/generics/controller/BaseController.java,3\b\3b2e71d0d0cb5af425be0984164e3b19d70f617c
-ç
-]fyp-api/src/main/java/fyp/canteen/fypapi/config/security/jwt/JwtAuthenticationEntryPoint.java,e\b\ebc43c2441d034c481d0ead918527eb68d05cd8f
 v
 Ffyp-core/src/main/java/fyp/canteen/fypcore/exception/AppException.java,9\f\9fa0b32cafa7a66eeec50d5152b8a03660468219
 Ö
@@ -40,10 +38,6 @@ Bfyp-api/src/main/java/fyp/canteen/fypapi/utils/UserDataConfig.java,1\8\18e992f
 |
 Lfyp-core/src/main/java/fyp/canteen/fypcore/utils/NullAwareBeanUtilsBean.java,4\b\4bf71e6a834ffbd47d9fd9a56f97f7636ef24361
 z
-Jfyp-api/src/main/java/fyp/canteen/fypapi/controller/CanteenController.java,8\2\826358d72adca538b1cd55262b95a85dca843a18
-Ä
-Pfyp-api/src/main/java/fyp/canteen/fypapi/controller/usermgmt/UserController.java,9\7\9797c3568a6c076608bf701b88334c054d60bec0
-z
 Jfyp-core/src/main/java/fyp/canteen/fypcore/constants/MessageConstants.java,e\1\e1baabc6989d4640b3293a843a1ca83a9409dbc8
 q
 Afyp-core/src/main/java/fyp/canteen/fypcore/constants/Message.java,a\3\a3df2856b41c95a682eb7e9c8b7ad20374841374
@@ -51,3 +45,7 @@ Afyp-core/src/main/java/fyp/canteen/fypcore/constants/Message.java,a\3\a3df2856
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 ?
 fyp-api/pom.xml,9\f\9f2f12543d1fcc5b21ceb3c56ce73e5d919eb460
+v
+Ffyp-api/src/main/java/fyp/canteen/fypapi/service/auth/AuthService.java,d\e\de7b89dec15fdf4868782d885a50c51fe3dedf1b
+v
+Ffyp-core/src/main/java/fyp/canteen/fypcore/model/entity/auth/Role.java,c\a\ca4e788e6d86f68438e9189de3be223aaa21aea2

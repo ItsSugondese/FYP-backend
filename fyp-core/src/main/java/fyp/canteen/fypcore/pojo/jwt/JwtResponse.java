@@ -1,4 +1,4 @@
-package fyp.canteen.fypcore.model.entity.auth.jwt;
+package fyp.canteen.fypcore.pojo.jwt;
 
 import fyp.canteen.fypcore.model.entity.auth.Role;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;

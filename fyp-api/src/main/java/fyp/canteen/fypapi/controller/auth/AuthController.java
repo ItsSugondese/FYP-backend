@@ -5,7 +5,7 @@ import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.generics.controller.BaseController;
-import fyp.canteen.fypcore.model.entity.auth.jwt.JwtRequest;
+import fyp.canteen.fypcore.pojo.jwt.JwtRequest;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

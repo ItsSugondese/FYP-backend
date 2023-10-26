@@ -4,7 +4,7 @@ import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.auth.RoleService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
-import fyp.canteen.fypcore.exception.AppException;
+import fyp.canteen.fypapi.exception.AppException;
 import fyp.canteen.fypcore.model.entity.auth.Role;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import fyp.canteen.fypcore.pojo.usermgmt.UserDetailsRequestPojo;

@@ -5,20 +5,18 @@ import fyp.canteen.fypapi.config.security.CustomUserDetailsService;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.usermgmt.UserService;
 import fyp.canteen.fypapi.utils.JwtUtil;
-import fyp.canteen.fypcore.exception.AppException;
+import fyp.canteen.fypapi.exception.AppException;
 import fyp.canteen.fypcore.model.entity.auth.Role;
-import fyp.canteen.fypcore.model.entity.auth.jwt.JwtRequest;
-import fyp.canteen.fypcore.model.entity.auth.jwt.JwtResponse;
+import fyp.canteen.fypcore.pojo.jwt.JwtRequest;
+import fyp.canteen.fypcore.pojo.jwt.JwtResponse;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 

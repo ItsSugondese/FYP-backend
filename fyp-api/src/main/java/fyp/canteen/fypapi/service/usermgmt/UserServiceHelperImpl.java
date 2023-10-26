@@ -1,7 +1,7 @@
 package fyp.canteen.fypapi.service.usermgmt;
 
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
-import fyp.canteen.fypcore.exception.AppException;
+import fyp.canteen.fypapi.exception.AppException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

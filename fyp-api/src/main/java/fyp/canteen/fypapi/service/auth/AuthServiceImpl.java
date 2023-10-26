@@ -2,21 +2,17 @@ package fyp.canteen.fypapi.service.auth;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.jwt.JwtService;
 import fyp.canteen.fypapi.service.usermgmt.UserService;
+import fyp.canteen.fypapi.exception.AppException;
 import fyp.canteen.fypcore.enums.UserType;
-import fyp.canteen.fypcore.exception.AppException;
-import fyp.canteen.fypcore.model.entity.auth.jwt.JwtRequest;
-import fyp.canteen.fypcore.model.entity.auth.jwt.JwtResponse;
+import fyp.canteen.fypcore.pojo.jwt.JwtRequest;
+import fyp.canteen.fypcore.pojo.jwt.JwtResponse;
 import fyp.canteen.fypcore.pojo.usermgmt.UserDetailsRequestPojo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +24,8 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder encoder;
     private final String appClient = "746907184110-46l1lat1ds4e1fvk6vhd2dn9j8f97hp7.apps.googleusercontent.com";
+
+
     @Override
     public JwtResponse signInWithGoogle(String credential) {
         GoogleIdToken idToken = verifyAndGetGoogleIdToken(credential);
@@ -59,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
 
 
 
+
     @Override
     public JwtResponse signIn(JwtRequest request) {
         return generateToken(request);
@@ -78,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
 
     private GoogleIdToken verifyAndGetGoogleIdToken(String credential) {
         try {
-            return googleIdTokenVerifier.verify(credential.substring(1, credential.length() - 1));
+            return googleIdTokenVerifier.verify(credential);
         } catch (Exception e) {
             throw new AppException(e.getMessage(), e);
         }

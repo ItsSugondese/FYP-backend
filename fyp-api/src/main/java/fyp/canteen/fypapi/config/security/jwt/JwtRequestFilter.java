@@ -3,7 +3,7 @@ package fyp.canteen.fypapi.config.security.jwt;
 import fyp.canteen.fypapi.config.security.CustomUserDetailsService;
 import fyp.canteen.fypapi.utils.UserDataConfig;
 import fyp.canteen.fypapi.utils.JwtUtil;
-import fyp.canteen.fypcore.exception.AppException;
+import fyp.canteen.fypapi.exception.AppException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -40,13 +41,15 @@ public class JwtRequestFilter extends OncePerRequestFilter  {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         if (!this.requestMatcher.matches(request)) {
             final String requestTokenHeader = request.getHeader("Authorization");
 
+            if(requestTokenHeader != null){
             String email = null;
             String jwtToken = null;
 
-            if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+            if (requestTokenHeader.startsWith("Bearer ")) {
                 jwtToken = requestTokenHeader.substring(7);
 
                 try {
@@ -73,6 +76,7 @@ public class JwtRequestFilter extends OncePerRequestFilter  {
             }
         }
 
+    }
         filterChain.doFilter(request, response);
     }
 
