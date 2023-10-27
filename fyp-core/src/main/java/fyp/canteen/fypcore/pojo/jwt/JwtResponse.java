@@ -1,8 +1,5 @@
 package fyp.canteen.fypcore.pojo.jwt;
 
-import fyp.canteen.fypcore.model.entity.auth.Role;
-import fyp.canteen.fypcore.model.entity.usermgmt.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

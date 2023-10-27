@@ -1,6 +1,6 @@
 package fyp.canteen.fypapi.config.auditor;
 
-import fyp.canteen.fypapi.utils.UserDataConfig;
+import fyp.canteen.fypcore.utils.UserDataConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

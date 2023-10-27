@@ -4,7 +4,7 @@ server:
     context-path: /canteen
 spring:
   application:
-    name: user-service
+    name: fyp-api
   datasource:
     url: jdbc:postgresql://localhost:5432/canteen_management
     username: postgres
@@ -40,3 +40,9 @@ spring:
           google:
             client-id: 746907184110-vm60s3kv0ofk1soqg2l5qptm60t82it0.apps.googleusercontent.com
             client-secret: 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
+
+mybatis:
+  mapper-locations: classpath*:/mybatis/*.xml # Tells mybatis to look in resources/mybatis for XML com.infodev.oauthserver.mappers
+  type-aliases-package: fyp.canteen.fypcore.pojo.* # Tells mybatis to look for our POJO class in the right package
+  configuration:
+    map-underscore-to-camel-case: true #converts underscore of db into camelcase

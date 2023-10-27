@@ -1,6 +1,6 @@
 package fyp.canteen.fypapi.service.auth;
 
-import fyp.canteen.fypcore.model.entity.auth.Role;
+import fyp.canteen.fypcore.model.auth.Role;
 
 public interface RoleService {
 

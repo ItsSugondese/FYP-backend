@@ -4,11 +4,10 @@ package fyp.canteen.fypcore.model.entity.usermgmt;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import fyp.canteen.fypcore.enums.UserType;
 import fyp.canteen.fypcore.generics.api.AuditActiveAbstract;
-import fyp.canteen.fypcore.model.entity.auth.Role;
+import fyp.canteen.fypcore.model.auth.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
