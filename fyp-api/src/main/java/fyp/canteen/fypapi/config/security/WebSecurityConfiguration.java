@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +26,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+//@EnableMethodSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfiguration {
 
@@ -41,12 +42,12 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(
+        http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(
                         auth -> auth.requestMatchers("/canteen/authenticate", "/authenticate", "/addUser", "/canteen/login-with-google", "/login-with-google",
                                         "/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .exceptionHandling(eh -> eh .authenticationEntryPoint(jwtAuthenticationEntryPoint))
+//                .exceptionHandling(eh -> eh .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

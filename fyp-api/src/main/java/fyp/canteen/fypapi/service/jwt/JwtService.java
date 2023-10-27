@@ -5,7 +5,7 @@ import fyp.canteen.fypapi.config.security.CustomUserDetailsService;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.usermgmt.UserService;
 import fyp.canteen.fypcore.config.security.JwtUtil;
-import fyp.canteen.fypapi.exception.AppException;
+import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.auth.Role;
 import fyp.canteen.fypcore.pojo.jwt.JwtRequest;
 import fyp.canteen.fypcore.pojo.jwt.JwtResponse;

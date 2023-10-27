@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface FoodPictureRepo extends GenericSoftDeleteRepository<FoodMenuPicture, Long> {
 
-    @Query(value = "update food_menu_picture fp set fp.isActive= false where fp.id = ?1", nativeQuery = true)
+    @Query(value = "update food_menu_picture set is_Active= false where food_menu_id = ?1", nativeQuery = true)
     @Transactional
     @Modifying
     void deleteAllByFoodMenuId(Long foodMenuId);

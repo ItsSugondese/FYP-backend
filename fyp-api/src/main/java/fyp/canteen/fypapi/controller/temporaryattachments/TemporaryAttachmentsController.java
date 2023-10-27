@@ -42,7 +42,7 @@ public class TemporaryAttachmentsController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = MultipartFile.class)))})})
     public ResponseEntity<GlobalApiResponse> saveTemporaryAttachments(@ModelAttribute @Valid TemporaryAttachmentsDetailRequestPojo requestPojo) throws Exception {
-        return ResponseEntity.ok(successResponse(Message.Crud(MessageConstants.SAVE, moduleName),
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 temporaryAttachmentService.saveTemporaryAttachment(requestPojo)));
     }
 }

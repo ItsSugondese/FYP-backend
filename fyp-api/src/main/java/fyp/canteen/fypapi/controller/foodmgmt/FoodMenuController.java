@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/food-menu")
 @Tag(name = ModuleNameConstants.FOOD_MENU)
 public class FoodMenuController extends BaseController {
 
@@ -32,13 +32,13 @@ public class FoodMenuController extends BaseController {
         this.foodMenuService = foodMenuService;
         this.moduleName = ModuleNameConstants.FOOD_MENU;
     }
-    @PostMapping("/food-menu")
+    @PostMapping
     @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> signInWithGoogle(@RequestBody @Valid FoodMenuRequestPojo requestPojo){
         foodMenuService.saveFoodMenu(requestPojo);
-        return ResponseEntity.ok(successResponse(Message.Crud(MessageConstants.SAVE, moduleName), true));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), true));
     }
 }
 

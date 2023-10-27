@@ -1,9 +1,9 @@
 package fyp.canteen.fypapi.config.security.jwt;
 
 import fyp.canteen.fypapi.config.security.CustomUserDetailsService;
+import fyp.canteen.fypcore.exception.CustomSecurityException;
 import fyp.canteen.fypcore.utils.UserDataConfig;
 import fyp.canteen.fypcore.config.security.JwtUtil;
-import fyp.canteen.fypapi.exception.AppException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -54,12 +54,12 @@ public class JwtRequestFilter extends OncePerRequestFilter  {
                 try {
                     email = userDataConfig.getEmailFromToken(jwtToken);
                 } catch (IllegalArgumentException e) {
-                    throw new AppException("Unable to get JWT Token");
+                    CustomSecurityException.forbiddenException("Unable to get JWT Token", response);
                 } catch (ExpiredJwtException e) {
-                    throw new AppException("JWT Token has expired");
+                    CustomSecurityException.forbiddenException("JWT Token has expired", response);
                 }
             } else {
-                throw new AppException("JWT token didn't start with Bearer");
+                CustomSecurityException.forbiddenException("JWT token didn't start with Bearer", response);
             }
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {

@@ -250,7 +250,7 @@ public class GenericFileUtil {
         return pathPermanent + datePermanent + FilePathConstants.FILE_SEPARATOR + fileNamePermanent;
     }
 
-    public String copyFileToServer(String filePath, FilePathMapping moduleName, String fileFromPath, Long... companyId) throws Exception {
+    public String copyFileToServer(String filePath, FilePathMapping moduleName, String fileFromPath) throws Exception {
         String fileName = filePath.substring(filePath.lastIndexOf(FilePathConstants.FILE_SEPARATOR) + 1);
 //        Long company = null;
 //        if (companyId.length == 0&&userDataConfig.getCompanyId()!=null) {

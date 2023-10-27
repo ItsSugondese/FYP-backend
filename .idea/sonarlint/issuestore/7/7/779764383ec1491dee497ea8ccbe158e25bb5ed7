@@ -1,7 +1,0 @@
-
-E
-java:S5411E"(Use a primitive boolean expression here.(Â˜Éã8Ãü™Ü¶1
-o
-java:S3776*"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(³æÒñ8¤ý™Ü¶1
-s
-java:S1128"VRemove this unused import 'org.springframework.security.core.AuthenticationException'.(¤ò›¿8³ý™Ü¶1

@@ -5,7 +5,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.jwt.JwtService;
 import fyp.canteen.fypapi.service.usermgmt.UserService;
-import fyp.canteen.fypapi.exception.AppException;
+import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.enums.UserType;
 import fyp.canteen.fypcore.pojo.jwt.JwtRequest;
 import fyp.canteen.fypcore.pojo.jwt.JwtResponse;

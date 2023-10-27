@@ -39,7 +39,7 @@ public class FoodPictureServiceImpl implements FoodPictureService{
             foodPictureRepo.deleteAllByFoodMenuId(foodMenu.getId());
             TemporaryAttachmentsDetailResponsePojo temporaryAttachmentsById = temporaryAttachmentsDetailMapper.getTemporaryAttachmentsById(id);
 
-            String path = genericFileUtil.copyFileToServer(temporaryAttachmentsById.getLocation(), FilePathMapping.TEMPORARY_FILE, FilePathConstants.TEMP_PATH);
+            String path = genericFileUtil.copyFileToServer(temporaryAttachmentsById.getLocation(), FilePathMapping.FOOD_FILE, FilePathConstants.TEMP_PATH);
             foodPictureRepo.save(FoodMenuPicture
                     .builder()
                     .fileName(temporaryAttachmentsById.getName())

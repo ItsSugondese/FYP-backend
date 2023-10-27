@@ -1,6 +1,6 @@
 package fyp.canteen.fypapi.service.food;
 
-import fyp.canteen.fypapi.exception.AppException;
+import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypapi.repository.foodmgmt.FoodMenuRepo;
 import fyp.canteen.fypcore.enums.FoodType;
 import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;

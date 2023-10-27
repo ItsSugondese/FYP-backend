@@ -39,7 +39,7 @@ public class AuthController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> signInWithGoogle(@RequestBody String credential){
-        return ResponseEntity.ok(successResponse(Message.Crud(MessageConstants.SAVE, moduleName), authService.signInWithGoogle(credential)));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), authService.signInWithGoogle(credential)));
     }
 
     @PostMapping("/login")
@@ -47,6 +47,6 @@ public class AuthController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> signIn(@RequestBody @Valid JwtRequest request){
-        return ResponseEntity.ok(successResponse(Message.Crud(MessageConstants.SAVE, moduleName), authService.signIn(request)));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), authService.signIn(request)));
     }
 }

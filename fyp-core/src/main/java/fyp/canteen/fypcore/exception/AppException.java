@@ -1,4 +1,4 @@
-package fyp.canteen.fypapi.exception;
+package fyp.canteen.fypcore.exception;
 
 public class AppException extends RuntimeException {
     public AppException(String message) {
