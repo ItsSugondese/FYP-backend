@@ -77,6 +77,9 @@ public class AuthServiceImpl implements AuthService {
 
     private GoogleIdToken verifyAndGetGoogleIdToken(String credential) {
         try {
+            if(credential.charAt(0) == '"'){
+                credential = credential.substring(1, credential.length()-1);
+            }
             return googleIdTokenVerifier.verify(credential);
         } catch (Exception e) {
             throw new AppException(e.getMessage(), e);

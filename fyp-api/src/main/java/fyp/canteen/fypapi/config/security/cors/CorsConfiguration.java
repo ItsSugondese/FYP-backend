@@ -21,6 +21,7 @@ public class CorsConfiguration {
                 registry.addMapping("/**")
                         .allowedMethods(GET, POST, PUT, DELETE)
                         .allowedHeaders("*")
+                        .allowedOrigins("http://localhost:4200")
                         .allowedOriginPatterns("*")
                         .allowCredentials(true);
 

@@ -44,11 +44,11 @@ public class JwtRequestFilter extends OncePerRequestFilter  {
         if (!this.requestMatcher.matches(request)) {
             final String requestTokenHeader = request.getHeader("Authorization");
 
-            if(requestTokenHeader != null){
+//            if(requestTokenHeader != null){
             String email = null;
             String jwtToken = null;
 
-            if (requestTokenHeader.startsWith("Bearer ")) {
+            if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
                 jwtToken = requestTokenHeader.substring(7);
 
                 try {
@@ -73,7 +73,7 @@ public class JwtRequestFilter extends OncePerRequestFilter  {
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
             }
-        }
+//        }
 
     }
         filterChain.doFilter(request, response);
