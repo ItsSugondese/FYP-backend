@@ -1,7 +1,8 @@
 package fyp.canteen.fypapi.service.food;
 
-import fyp.canteen.fypapi.mapper.TemporaryAttachmentsDetailMapper;
+import fyp.canteen.fypapi.mapper.temporaryattachments.TemporaryAttachmentsDetailMapper;
 import fyp.canteen.fypapi.repository.foodmgmt.FoodPictureRepo;
+import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
 import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenuPicture;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodPictureRequestPojo;
@@ -9,6 +10,7 @@ import fyp.canteen.fypcore.pojo.temporaryattachments.TemporaryAttachmentsDetailR
 import fyp.canteen.fypcore.utils.genericfile.FilePathConstants;
 import fyp.canteen.fypcore.utils.genericfile.FilePathMapping;
 import fyp.canteen.fypcore.utils.genericfile.GenericFileUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +27,6 @@ public class FoodPictureServiceImpl implements FoodPictureService{
             if(requestPojo.getPhotoId() !=null)
                 savePictureToPath(requestPojo.getPhotoId(), foodMenu);
 
-        if(requestPojo.getRemoveFileId() != null)
-            deleteFoodPictureById(requestPojo.getRemoveFileId());
     }
 
     @Override
@@ -54,4 +54,13 @@ public class FoodPictureServiceImpl implements FoodPictureService{
         }
     }
 
+    @Override
+    public void showFoodPictureById(HttpServletResponse response, Long id) {
+        String photoPath = foodPictureRepo.findById(id).orElseThrow(() -> new RuntimeException("Staff not found")).getFilePath();
+        try {
+            genericFileUtil.getFileFromFilePath(photoPath, response);
+        }catch (Exception e){
+            throw new AppException(e.getMessage(), e);
+        }
+    }
 }

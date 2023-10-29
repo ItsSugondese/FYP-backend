@@ -1,4 +1,4 @@
-package fyp.canteen.fypapi.mapper;
+package fyp.canteen.fypapi.mapper.temporaryattachments;
 
 import fyp.canteen.fypcore.pojo.temporaryattachments.TemporaryAttachmentsDetailResponsePojo;
 import org.apache.ibatis.annotations.Mapper;

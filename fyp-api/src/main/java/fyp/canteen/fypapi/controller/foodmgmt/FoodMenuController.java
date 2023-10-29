@@ -4,6 +4,7 @@ import fyp.canteen.fypapi.service.food.FoodMenuService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.pojo.FoodFilter;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuRequestPojo;
@@ -13,11 +14,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -36,9 +35,26 @@ public class FoodMenuController extends BaseController {
     @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
-    public ResponseEntity<GlobalApiResponse> signInWithGoogle(@RequestBody @Valid FoodMenuRequestPojo requestPojo){
+    public ResponseEntity<GlobalApiResponse> saveFoodMenu(@RequestBody @Valid FoodMenuRequestPojo requestPojo){
         foodMenuService.saveFoodMenu(requestPojo);
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), true));
+    }
+
+    @GetMapping
+    @Operation(summary = "Use this api to Get food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = FoodMenuRequestPojo.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> getAllFoodMenu(@RequestParam("type")FoodFilter foodFilter){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), foodMenuService.getAllFoodMenu(foodFilter)));
+    }
+
+    @GetMapping("/photo/{id}")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> getFoodPicture(@PathVariable("id") Long id, HttpServletResponse response){
+        foodMenuService.getFoodPhoto(response, id);
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), true));
     }
 }
 

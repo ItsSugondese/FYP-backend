@@ -11,5 +11,4 @@ import java.util.List;
 @Builder
 public class FoodPictureRequestPojo {
     private Long photoId;
-    private Long removeFileId;
 }
