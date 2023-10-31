@@ -2,6 +2,7 @@ package fyp.canteen.fypcore.utils;
 
 import fyp.canteen.fypcore.config.security.JwtUtil;
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.Date;
 public class UserDataConfig {
 
     private final JwtUtil jwtUtil;
-
+    private final HttpServletRequest request;
 
     public String getEmailFromToken(String token) {
         return jwtUtil.extractClaim(token, Claims::getSubject);
@@ -21,7 +22,7 @@ public class UserDataConfig {
     public Date extractExpiration(String token) {
         return jwtUtil.extractClaim(token, Claims::getExpiration);
     }
-    public Long userId(String token){
-        return Long.parseLong(jwtUtil.getTokenBody(token).get("userId").toString());
+    public Long userId(){
+        return Long.parseLong(jwtUtil.getTokenBody((request.getHeader("Authorization")).substring(7)).get("userId").toString());
     }
 }

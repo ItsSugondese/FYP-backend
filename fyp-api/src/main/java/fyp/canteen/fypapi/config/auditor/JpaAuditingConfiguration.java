@@ -25,8 +25,7 @@ public class JpaAuditingConfiguration {
             @Override
             public Optional<Long> getCurrentAuditor() {
                 if (SecurityContextHolder.getContext().getAuthentication() != null) {
-                    String requestTokenHeader = request.getHeader("Authorization").substring(7);
-                    return Optional.of(userDataConfig.userId(requestTokenHeader));
+                    return Optional.of(userDataConfig.userId());
                 } else {
                     return Optional.empty();
                 }

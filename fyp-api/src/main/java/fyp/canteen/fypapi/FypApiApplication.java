@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfigu
 
 
 @SpringBootApplication
-//@MapperScan("fyp.canteen.fypapi.mapper")
 @Import(DelegatingWebMvcConfiguration.class)
 @ComponentScan(basePackages = {"fyp.canteen.fypcore.*", "fyp.canteen.fypapi.*"})
 @EnableJpaRepositories({"fyp.canteen.fypapi.repository"})
