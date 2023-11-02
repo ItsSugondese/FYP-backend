@@ -6,6 +6,8 @@ import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalTime;
+
 @Entity
 @Table(name = "online_order")
 @Getter
@@ -31,4 +33,9 @@ public class OnlineOrder extends AuditActiveAbstract {
 
     @Column(nullable = false)
     private String orderCode;
+
+    @Column(nullable = false)
+    private LocalTime fromTime;
+    @Column(nullable = false)
+    private LocalTime toTime;
 }

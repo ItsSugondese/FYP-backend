@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,5 +18,8 @@ public class OnlineOrderRequestPojo {
     private List<FoodOrderRequestPojo> foodOrderList = new ArrayList<>();
     private List<Long> removeFoodId = new ArrayList<>();
 
+    private LocalTime fromTime;
+
+    private LocalTime toTime;
     private ApprovalStatus approvalStatus;
 }
