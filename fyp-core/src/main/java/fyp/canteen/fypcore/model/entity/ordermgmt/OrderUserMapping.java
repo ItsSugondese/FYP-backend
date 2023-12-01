@@ -23,16 +23,16 @@ public class OrderUserMapping extends AuditActiveAbstract {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_user_mapping_gen")
     private Long id;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_order_user_mapping_user"), nullable = false)
     private User user;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private OrderType orderType;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private PayStatus payStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,10 +40,14 @@ public class OrderUserMapping extends AuditActiveAbstract {
     private OnlineOrder onlineOrder;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ApprovalStatus approvalStatus;
+
+    private Integer tableNumber;
 
 
 }

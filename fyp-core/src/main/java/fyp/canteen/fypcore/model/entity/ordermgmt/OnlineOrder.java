@@ -9,7 +9,7 @@ import lombok.*;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "online_order")
+@Table(name = "online_order", uniqueConstraints ={@UniqueConstraint(name = "unique_order_code", columnNames = {"orderCode"})})
 @Getter
 @Setter
 @AllArgsConstructor
@@ -35,7 +35,5 @@ public class OnlineOrder extends AuditActiveAbstract {
     private String orderCode;
 
     @Column(nullable = false)
-    private LocalTime fromTime;
-    @Column(nullable = false)
-    private LocalTime toTime;
+    private LocalTime arrivalTime;
 }

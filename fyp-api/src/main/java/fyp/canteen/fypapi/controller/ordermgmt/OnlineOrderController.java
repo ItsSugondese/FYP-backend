@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/online-order")
@@ -35,19 +36,18 @@ public class OnlineOrderController extends BaseController {
     }
 
     @PostMapping
-    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
-            content = {@Content(array =
-            @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200")})
     public ResponseEntity<GlobalApiResponse> saveFoodMenu(@RequestBody @Valid OnlineOrderRequestPojo requestPojo){
-        onlineOrderService.saveOnlineOrder(requestPojo);
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), true));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), onlineOrderService.saveOnlineOrder(requestPojo)));
     }
 
     @PostMapping("/get-order-paginated")
     @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
             content = {@Content(array =
-            @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+            @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getFoodMenu(@RequestBody OnlineOrderPaginationRequestPojo requestPojo){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), onlineOrderService.getPaginatedOrderListByTime(requestPojo)));
     }
+    
+    
 }

@@ -36,7 +36,7 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
 
     @Override
     @Transactional
-    public void saveOnlineOrder(OnlineOrderRequestPojo requestPojo) {
+    public Integer saveOnlineOrder(OnlineOrderRequestPojo requestPojo) {
         OnlineOrder onlineOrder = new OnlineOrder();
 
         if (requestPojo.getId() != null)
@@ -52,9 +52,6 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
             throw new AppException(e.getMessage(), e);
         }
 
-        if(onlineOrder.getFromTime().isAfter(onlineOrder.getToTime()))
-            throw new AppException("From time must not be ahead of to time");
-
         if (onlineOrder.getApprovalStatus() == null)
             onlineOrder.setApprovalStatus(ApprovalStatus.PENDING);
 
@@ -67,6 +64,8 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
                     .foodOrderList(requestPojo.getFoodOrderList())
                     .removeFoodId(requestPojo.getRemoveFoodId())
                     .build(), onlineOrder, null);
+
+        return Integer.parseInt((onlineOrder.getOrderCode().split(" "))[1]);
     }
 
     @Override
@@ -90,8 +89,5 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
     private void validationWhenIdIsNull(OnlineOrderRequestPojo requestPojo){
         if (requestPojo.getFoodOrderList().isEmpty())
             throw new AppException("Selecting food is compulsory when making orders.");
-
-        if(requestPojo.getFromTime() == null || requestPojo.getToTime() == null)
-            throw new AppException("Arrival time range must be selected");
     }
 }

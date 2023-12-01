@@ -6,7 +6,7 @@ import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 
 public interface OnlineOrderService {
 
-    void saveOnlineOrder(OnlineOrderRequestPojo requestPojo);
+    Integer saveOnlineOrder(OnlineOrderRequestPojo requestPojo);
 
     PaginationResponse getPaginatedOrderListByTime(OnlineOrderPaginationRequestPojo requestPojo);
 }

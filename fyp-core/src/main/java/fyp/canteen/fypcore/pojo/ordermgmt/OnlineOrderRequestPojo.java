@@ -18,8 +18,7 @@ public class OnlineOrderRequestPojo {
     private List<FoodOrderRequestPojo> foodOrderList = new ArrayList<>();
     private List<Long> removeFoodId = new ArrayList<>();
 
-    private LocalTime fromTime;
-
-    private LocalTime toTime;
+    @NotNull
+    private LocalTime arrivalTime;
     private ApprovalStatus approvalStatus;
 }
