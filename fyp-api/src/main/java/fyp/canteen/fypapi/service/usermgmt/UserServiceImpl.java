@@ -7,13 +7,18 @@ import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.auth.Role;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
+import fyp.canteen.fypcore.pojo.usermgmt.UserDetailPaginationRequest;
+import fyp.canteen.fypcore.pojo.usermgmt.UserDetailResponsePojo;
 import fyp.canteen.fypcore.pojo.usermgmt.UserDetailsRequestPojo;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
+import fyp.canteen.fypcore.utils.pagination.CustomPaginationHandler;
+import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -22,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final RoleService roleService;
     private final BeanUtilsBean beanUtilsBean = new NullAwareBeanUtilsBean();
+    private final CustomPaginationHandler customPaginationHandler;
 
     @Override
     public void saveUser(UserDetailsRequestPojo requestPojo) {
@@ -43,6 +49,11 @@ public class UserServiceImpl implements UserService {
 
         user.setRole(roles);
         userRepo.save(user);
+    }
+
+    @Override
+    public PaginationResponse getAllUsersPaginated(UserDetailPaginationRequest paginationRequest) {
+        return customPaginationHandler.getPaginatedData(userRepo.findAllUsers(paginationRequest.getPageable()));
     }
 
     @Override

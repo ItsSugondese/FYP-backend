@@ -41,7 +41,7 @@ public class OnlineOrderController extends BaseController {
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), onlineOrderService.saveOnlineOrder(requestPojo)));
     }
 
-    @PostMapping("/get-order-paginated")
+    @PostMapping("/paginated")
     @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})

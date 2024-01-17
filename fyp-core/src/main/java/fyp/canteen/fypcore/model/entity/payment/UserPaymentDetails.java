@@ -2,7 +2,7 @@ package fyp.canteen.fypcore.model.entity.payment;
 
 import fyp.canteen.fypcore.enums.PaymentMode;
 import fyp.canteen.fypcore.generics.api.AuditActiveAbstract;
-import fyp.canteen.fypcore.model.entity.ordermgmt.OrderUserMapping;
+import fyp.canteen.fypcore.model.entity.ordermgmt.OnsiteOrder;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -45,7 +45,7 @@ public class UserPaymentDetails extends AuditActiveAbstract {
     private PaymentMode paymentMode = PaymentMode.CASH;
 
     @OneToOne
-    @JoinColumn(name = "order_user_mapping_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_user_payment_details_order_user_mapping"))
-    private OrderUserMapping orderUserMapping;
+    @JoinColumn(name = "onsite_order_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_user_payment_details_onsite_order"))
+    private OnsiteOrder onsiteOrder;
 
 }

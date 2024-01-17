@@ -5,7 +5,7 @@ import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OrderFoodMapping;
-import fyp.canteen.fypcore.model.entity.ordermgmt.OrderUserMapping;
+import fyp.canteen.fypcore.model.entity.ordermgmt.OnsiteOrder;
 import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodMappingRequestPojo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class OrderFoodMappingServiceImpl implements OrderFoodMappingService{
 
     private final OrderFoodMappingRepo orderFoodMappingRepo;
     @Override
-    public void saveOrderFoodMapping(OrderFoodMappingRequestPojo requestPojo, OnlineOrder onlineOrder, OrderUserMapping orderUserMapping) {
+    public void saveOrderFoodMapping(OrderFoodMappingRequestPojo requestPojo, OnlineOrder onlineOrder, OnsiteOrder onsiteOrder) {
         orderFoodMappingRepo.saveAll(Optional.ofNullable(requestPojo.getFoodOrderList()).orElse(new ArrayList<>())
                 .stream().map(
                         e -> {
@@ -35,15 +35,15 @@ public class OrderFoodMappingServiceImpl implements OrderFoodMappingService{
                             orderFoodMapping.setFoodMenu(FoodMenu.builder().id(e.getFoodId()).build());
                             orderFoodMapping.setQuantity(e.getQuantity());
                             if(onlineOrder != null) {
-                                if((orderUserMapping != null || (orderFoodMapping.getId()!= null && !Objects.equals(orderFoodMapping.getOnlineOrder().getId(), onlineOrder.getId()))))
+                                if((onsiteOrder != null || (orderFoodMapping.getId()!= null && !Objects.equals(orderFoodMapping.getOnlineOrder().getId(), onlineOrder.getId()))))
                                     throw new AppException("The order you're trying to update is  made by someone else");
                                 orderFoodMapping.setOnlineOrder(onlineOrder);
                             }
 
-                            if(orderUserMapping != null) {
-                                if((onlineOrder!= null || (orderFoodMapping.getId()!= null && !Objects.equals(orderFoodMapping.getOrderUserMapping().getId(), orderUserMapping.getId()))))
+                            if(onsiteOrder != null) {
+                                if((onlineOrder!= null || (orderFoodMapping.getId()!= null && !Objects.equals(orderFoodMapping.getOnsiteOrder().getId(), onsiteOrder.getId()))))
                                     throw new AppException("The order you're trying to update is  made by someone else");
-                                orderFoodMapping.setOrderUserMapping(orderUserMapping);
+                                orderFoodMapping.setOnsiteOrder(onsiteOrder);
                             }
                             return  orderFoodMapping;
                         }

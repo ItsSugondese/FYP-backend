@@ -23,8 +23,8 @@ public class OrderFoodMapping {
     private FoodMenu foodMenu;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_user_mapping_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_order_food_mapping_order_user_mapping"))
-    private OrderUserMapping orderUserMapping;
+    @JoinColumn(name = "onsite_order_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_order_food_mapping_onsite_order"))
+    private OnsiteOrder onsiteOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "online_order_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_order_food_mapping_online_order"))

@@ -1,0 +1,9 @@
+
+u
+java:S1104"XMake objectMapper a static final constant or non-public and provide accessors if needed.(åñÓï8™çá´1
+y	java:S116"]Rename this field "API_SUCCESS_STATUS" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡ÉÜ¼8¿™çá´1
+|	java:S116"[Rename this field "API_ERROR_STATUS" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÂÃô¬şÿÿÿÿ8¿™çá´1
+>
+java:S1170"!Make this final field static too.(‡ÉÜ¼8À™çá´1
+C
+java:S1170"!Make this final field static too.(ÂÃô¬şÿÿÿÿ8À™çá´1
