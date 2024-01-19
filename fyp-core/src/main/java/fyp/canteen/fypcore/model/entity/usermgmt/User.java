@@ -29,8 +29,7 @@ public class User extends AuditActiveAbstract {
     @Column(nullable = false)
     private String email;
     private String fullName;
-
-
+    private String contactNumber;
     @Column(nullable = false, name = "user_type")
     @Enumerated(EnumType.STRING)
     private UserType userType;

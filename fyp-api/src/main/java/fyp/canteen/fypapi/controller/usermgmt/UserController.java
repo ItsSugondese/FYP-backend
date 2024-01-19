@@ -14,10 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -39,5 +36,13 @@ public class UserController extends BaseController {
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 userService.getAllUsersPaginated(requestPojo)
         ));
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Use this api to get single staff", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> getSingleStaff(@PathVariable("id") Long id){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), userService.getSingleUserById(id)));
     }
 }

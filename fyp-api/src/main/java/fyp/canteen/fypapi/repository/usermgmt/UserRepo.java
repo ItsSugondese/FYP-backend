@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserRepo extends GenericSoftDeleteRepository<User, Long> {
 
     @Query(value = "select case  when\n" +
-            "    upper(email_address) = ?1 then 'Email Address Already Exists' end as \"Status\"\n" +
+            "    upper(email) = ?1 then 'Email Address Already Exists' end as \"Status\"\n" +
             "    from users order by \"Status\" limit 1", nativeQuery = true)
     String isUnique(String username);
     Optional<User> findByEmail(String email);
@@ -21,6 +21,10 @@ public interface UserRepo extends GenericSoftDeleteRepository<User, Long> {
 
 
     @Query(nativeQuery = true, value = "select u.id, u.full_name as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
-            "u.profile_path as \"profilePath\" from users u where u.is_active")
+            "u.profile_path as \"profilePath\" from users u where u.is_active and u.user_type = 'USER'")
     Page<Map<String, Object>> findAllUsers(Pageable pageable);
+
+    @Query(nativeQuery = true, value = "select u.id, u.full_name as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
+            "u.profile_path as \"profilePath\", u.contact_number as \"contactNumber\" from users u where u.is_active and u.user_type = 'STAFF'")
+    Page<Map<String, Object>> findAllStaff(Pageable pageable);
 }

@@ -9,7 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class UserDetailsRequestPojo {
-
     private Long id;
     private String password;
     private String email;

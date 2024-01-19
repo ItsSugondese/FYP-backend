@@ -33,6 +33,7 @@ public class FoodMenuRequestPojo {
     private List<String> menuItems = new ArrayList<>();
 
     private Boolean isAvailableToday;
+
     private Long photoId;
     @JsonIgnore
     private String menuItemsString;
