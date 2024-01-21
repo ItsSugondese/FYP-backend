@@ -2,6 +2,7 @@ package fyp.canteen.fypapi.controller.usermgmt;
 
 import fyp.canteen.fypapi.service.usermgmt.StaffService;
 import fyp.canteen.fypapi.service.usermgmt.UserService;
+import fyp.canteen.fypapi.service.usermgmt.disable.UserDisableHistoryService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
@@ -10,6 +11,7 @@ import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.usermgmt.StaffDetailPaginationRequest;
 import fyp.canteen.fypcore.pojo.usermgmt.StaffDetailsRequestPojo;
 import fyp.canteen.fypcore.pojo.usermgmt.UserDetailPaginationRequest;
+import fyp.canteen.fypcore.pojo.usermgmt.disable.UserDisableHistoryRequestPojo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,9 +30,11 @@ import java.util.Map;
 @Tag(name = ModuleNameConstants.STAFF)
 public class StaffController extends BaseController {
     private final StaffService staffService;
+    private final UserDisableHistoryService userDisableHistoryService;
 
-    public StaffController(StaffService staffService) {
+    public StaffController(StaffService staffService, UserDisableHistoryService userDisableHistoryService) {
         this.staffService = staffService;
+        this.userDisableHistoryService = userDisableHistoryService;
         this.moduleName = ModuleNameConstants.STAFF;
     }
 
@@ -70,4 +74,6 @@ public class StaffController extends BaseController {
     public ResponseEntity<GlobalApiResponse> getSingleStaff(@PathVariable("id") Long id){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), staffService.getSingleStaffById(id)));
     }
+
+
 }

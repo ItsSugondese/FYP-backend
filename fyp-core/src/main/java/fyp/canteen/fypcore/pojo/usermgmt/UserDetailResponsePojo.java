@@ -11,4 +11,6 @@ public class UserDetailResponsePojo {
     private boolean isAccountNonLocked;
     private String email;
     private String profilePath;
+    private String contactNumber;
+    private String startedWorkingOn;
 }

@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface UserDetailMapper {
 
     @Select("select u.id, u.full_name as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
-            "u.profile_path as \"profilePath\" from users u where u.id = #{id}")
+            "u.profile_path as \"profilePath\", to_char(u.created_date, 'YYYY-MM-DD HH:MI AM') as \"startedWorkingOn\", \n" +
+            " u.contact_number as \"contactNumber\"  from users u where u.id = #{id}")
     Optional<UserDetailResponsePojo> getSingleUser(Long id);
 }
