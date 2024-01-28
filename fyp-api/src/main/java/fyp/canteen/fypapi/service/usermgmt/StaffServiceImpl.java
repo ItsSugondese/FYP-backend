@@ -4,6 +4,8 @@ import fyp.canteen.fypapi.mapper.temporaryattachments.TemporaryAttachmentsDetail
 import fyp.canteen.fypapi.mapper.usermgmt.StaffDetailMapper;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.auth.RoleService;
+import fyp.canteen.fypapi.service.resetpassword.ResetPasswordService;
+import fyp.canteen.fypapi.utils.email.EmailServiceHelper;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.UserType;
@@ -33,12 +35,14 @@ public class StaffServiceImpl extends  UserServiceHelperImpl implements StaffSer
     private final GenericFileUtil genericFileUtil;
     private final StaffDetailMapper staffDetailMapper;
 
-    public StaffServiceImpl(RoleService roleService, UserRepo userRepo, UserRepo userRepo1,
+    public StaffServiceImpl(RoleService roleService, UserRepo userRepo,
+                            ResetPasswordService resetPasswordService,
                             TemporaryAttachmentsDetailMapper temporaryAttachmentsDetailMapper,
-                            CustomPaginationHandler customPaginationHandler, GenericFileUtil genericFileUtil,
-                            StaffDetailMapper staffDetailMapper) {
-        super(roleService, userRepo);
-        this.userRepo = userRepo1;
+                            CustomPaginationHandler customPaginationHandler,
+                            GenericFileUtil genericFileUtil, StaffDetailMapper staffDetailMapper,
+                            EmailServiceHelper emailServiceHelper) {
+        super(roleService, userRepo, resetPasswordService, emailServiceHelper);
+        this.userRepo = userRepo;
         this.temporaryAttachmentsDetailMapper = temporaryAttachmentsDetailMapper;
         this.customPaginationHandler = customPaginationHandler;
         this.genericFileUtil = genericFileUtil;

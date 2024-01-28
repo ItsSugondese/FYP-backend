@@ -49,7 +49,7 @@ public class WebSecurityConfiguration {
         http.cors(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(
                         auth -> auth.requestMatchers("/canteen/authenticate", "/authenticate", "/addUser", "/canteen/login-with-google", "/login-with-google",
-                                        "/auth/**").permitAll()
+                                        "/auth/**", "/test/**", "/test").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(eh -> eh .authenticationEntryPoint(jwtAuthenticationEntryPoint))

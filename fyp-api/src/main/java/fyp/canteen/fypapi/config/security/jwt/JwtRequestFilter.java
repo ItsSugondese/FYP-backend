@@ -34,7 +34,9 @@ public class JwtRequestFilter extends OncePerRequestFilter  {
             new AntPathRequestMatcher("/authenticate"),
             new AntPathRequestMatcher("/addUser"),
             new AntPathRequestMatcher("/canteen/login-with-google"),
-            new AntPathRequestMatcher("/auth/**")
+            new AntPathRequestMatcher("/auth/**"),
+            new AntPathRequestMatcher("/test/**"),
+            new AntPathRequestMatcher("/test")
     );
 
     @Override

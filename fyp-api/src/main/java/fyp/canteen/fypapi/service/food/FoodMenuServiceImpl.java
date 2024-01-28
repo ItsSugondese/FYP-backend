@@ -1,6 +1,8 @@
 package fyp.canteen.fypapi.service.food;
 
 import fyp.canteen.fypapi.mapper.foodmgmt.FoodMenuMapper;
+import fyp.canteen.fypcore.constants.Message;
+import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.pojo.FoodFilter;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypapi.repository.foodmgmt.FoodMenuRepo;
@@ -68,5 +70,10 @@ public class FoodMenuServiceImpl implements FoodMenuService{
     @Override
     public void getFoodPhoto(HttpServletResponse response, Long id) {
         foodPictureService.showFoodPictureById(response, id);
+    }
+
+    @Override
+    public FoodMenu findById(Long id) {
+        return foodMenuRepo.findById(id).orElseThrow(() -> new AppException(Message.idNotFound(ModuleNameConstants.FOOD_MENU)));
     }
 }

@@ -5,6 +5,8 @@ import fyp.canteen.fypapi.mapper.usermgmt.StaffDetailMapper;
 import fyp.canteen.fypapi.mapper.usermgmt.UserDetailMapper;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.auth.RoleService;
+import fyp.canteen.fypapi.service.resetpassword.ResetPasswordService;
+import fyp.canteen.fypapi.utils.email.EmailServiceHelper;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.UserType;
@@ -36,16 +38,15 @@ public class UserServiceImpl extends UserServiceHelperImpl implements UserServic
     private final BeanUtilsBean beanUtilsBean = new NullAwareBeanUtilsBean();
     private final CustomPaginationHandler customPaginationHandler;
     private final UserDetailMapper userDetailMapper;
-    public UserServiceImpl(RoleService roleService, UserRepo userRepo,
+
+    public UserServiceImpl(RoleService roleService, UserRepo userRepo, ResetPasswordService resetPasswordService, EmailServiceHelper emailServiceHelper,
                            CustomPaginationHandler customPaginationHandler,
                            UserDetailMapper userDetailMapper) {
-        super(roleService, userRepo);
+        super(roleService, userRepo, resetPasswordService, emailServiceHelper);
         this.userRepo = userRepo;
         this.customPaginationHandler = customPaginationHandler;
         this.userDetailMapper = userDetailMapper;
     }
-
-
 
     @Override
     public void saveUserFromGoogleLogin(UserDetailsRequestPojo requestPojo) {
