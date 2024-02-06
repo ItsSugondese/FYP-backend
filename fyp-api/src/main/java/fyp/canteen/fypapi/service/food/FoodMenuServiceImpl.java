@@ -8,9 +8,12 @@ import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypapi.repository.foodmgmt.FoodMenuRepo;
 import fyp.canteen.fypcore.enums.FoodType;
 import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
+import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuRequestPojo;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodPictureRequestPojo;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
+import fyp.canteen.fypcore.utils.pagination.CustomPaginationHandler;
+import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -27,6 +30,7 @@ public class FoodMenuServiceImpl implements FoodMenuService{
     private final BeanUtilsBean beanUtilsBean = new NullAwareBeanUtilsBean();
     private final FoodPictureService foodPictureService;
     private final FoodMenuMapper foodMenuMapper;
+    private final CustomPaginationHandler customPaginationHandler;
 
     @Override
     @Transactional
@@ -68,12 +72,26 @@ public class FoodMenuServiceImpl implements FoodMenuService{
     }
 
     @Override
+    public PaginationResponse getFoodMenuPageable(FoodMenuPaginationRequestPojo requestPojo) {
+        return customPaginationHandler.getPaginatedData(foodMenuRepo.getFoodMenuPageable(requestPojo.getName(),
+                requestPojo.getPageable()));
+    }
+
+    @Override
     public void getFoodPhoto(HttpServletResponse response, Long id) {
         foodPictureService.showFoodPictureById(response, id);
+    }
+
+    @Override
+    public FoodMenuRequestPojo getFoodMenuById(Long id) {
+        return foodMenuMapper.getFoodMenuById(id).orElseThrow(
+                () -> new AppException(Message.idNotFound(ModuleNameConstants.FOOD_MENU))
+        );
     }
 
     @Override
     public FoodMenu findById(Long id) {
         return foodMenuRepo.findById(id).orElseThrow(() -> new AppException(Message.idNotFound(ModuleNameConstants.FOOD_MENU)));
     }
+
 }

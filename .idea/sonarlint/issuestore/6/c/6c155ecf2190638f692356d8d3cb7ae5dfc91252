@@ -1,9 +1,9 @@
 
-n
-java:S1128"LRemove this unused import 'fyp.canteen.fypapi.service.usermgmt.UserService'.(”Æ¸¼şÿÿÿÿ8ßÁ°Ò1
-|
-java:S1128"ZRemove this unused import 'fyp.canteen.fypcore.pojo.usermgmt.UserDetailPaginationRequest'.(ğ±ÿÕÿÿÿÿÿ8ßÁ°Ò1
-
-java:S1128"dRemove this unused import 'fyp.canteen.fypcore.pojo.usermgmt.disable.UserDisableHistoryRequestPojo'.(Ò½—ó8ö¾ö°Ò1
-_
-java:S1068!"=Remove this unused "userDisableHistoryService" private field.(—ƒàÄùÿÿÿÿ8÷¾ö°Ò1
+g
+java:S1128"LRemove this unused import 'fyp.canteen.fypapi.service.usermgmt.UserService'.(”Æ¸¼şÿÿÿÿ
+u
+java:S1128"ZRemove this unused import 'fyp.canteen.fypcore.pojo.usermgmt.UserDetailPaginationRequest'.(ğ±ÿÕÿÿÿÿÿ
+z
+java:S1128"dRemove this unused import 'fyp.canteen.fypcore.pojo.usermgmt.disable.UserDisableHistoryRequestPojo'.(Ò½—ó
+X
+java:S1068!"=Remove this unused "userDisableHistoryService" private field.(—ƒàÄùÿÿÿÿ

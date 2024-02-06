@@ -7,6 +7,7 @@ import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.pojo.FoodFilter;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
+import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuRequestPojo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -38,6 +39,14 @@ public class FoodMenuController extends BaseController {
     public ResponseEntity<GlobalApiResponse> saveFoodMenu(@RequestBody @Valid FoodMenuRequestPojo requestPojo){
         foodMenuService.saveFoodMenu(requestPojo);
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), true));
+    }
+
+    @PostMapping("/pageable")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> getFoodMenuPageable(@RequestBody @Valid FoodMenuPaginationRequestPojo requestPojo){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), foodMenuService.getFoodMenuPageable(requestPojo)));
     }
 
     @GetMapping

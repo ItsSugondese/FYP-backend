@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map;
 
@@ -24,11 +25,24 @@ public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder
             "FROM onsite_order oo \n" +
             "JOIN users u ON u.id = oo.user_id", nativeQuery = true)
     Page<Map<String, Object>> getOnsiteOrderPaginated(LocalTime timeRange, Pageable pageable);
-//
-//    @Query(value = "SELECT oo.id, oo.approval_status, oo.user_id, u.full_name, u.email \n" +
-//            "FROM onsite_order oo \n" +
-//            "JOIN users u ON u.id = oo.user_id  \n" +
-//            "WHERE oo.is_active and cast(oo.created_date as date) = current_date and\n" +
-//            "   CAST(oo.created_date AS time) BETWEEN cast('00:00' as time) AND cast('23:59' as time)", nativeQuery = true)
-//    Page<Map<String, Object>> getOnsiteOrderPaginated(LocalTime timeRange, Pageable pageable);
+
+    @Query(value = "select oo.id, 'ONLINE_ORDER' as \"orderType\", u.profile_path as \"profileUrl\", to_char(oo.created_date, 'YYYY-MM-DD HH:MI AM') as date, oo.arrival_time as \"arrivalTime\" from online_order oo\n" +
+            "join users u on u.id = oo.user_id \n" +
+            "where oo.is_active and oo.user_id = ?3\n" +
+            "and \n" +
+            "  oo.created_date between ?1 and ?2\n" +
+            "union \n" +
+            "select onsite.id, 'ONSITE_ORDER' as \"orderType\", u.profile_path as \"profileUrl\", to_char(onsite.created_date, 'YYYY-MM-DD HH:MI AM') as date, null as \"arrivalTime\"  from onsite_order onsite join users u on u.id = onsite.user_id where onsite.is_active and onsite.user_id = ?3 and\n" +
+            " onsite.created_date between ?1 and ?2",
+            countQuery = "select count(*) from (\n" +
+                    "select oo.id, 'ONLINE_ORDER' as orderType from online_order oo\n" +
+                    "join users u on u.id = oo.user_id \n" +
+                    "where oo.is_active and oo.user_id = ?3\n" +
+                    "and \n" +
+                    "  oo.created_date between ?1 and ?2\n" +
+                    "union \n" +
+                    "select onsite.id, 'ONSITE_ORDER' as orderType  from onsite_order onsite where onsite.is_active and onsite.user_id = ?3 and\n" +
+                    " onsite.created_date between ?1 and ?2) foo",
+            nativeQuery = true)
+    Page<Map<String, Object>> getUserOrderPaginated(LocalDate fromDate, LocalDate toDate, Long userId, Pageable pageable);
 }

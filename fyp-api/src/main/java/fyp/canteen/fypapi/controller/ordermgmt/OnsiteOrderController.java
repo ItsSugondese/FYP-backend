@@ -9,6 +9,7 @@ import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderRequestPojo;
 import fyp.canteen.fypcore.pojo.pagination.OnsiteOrderPaginationRequestPojo;
+import fyp.canteen.fypcore.pojo.pagination.OrderDetailsPaginationRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -47,12 +48,17 @@ public class OnsiteOrderController extends BaseController {
     }
 
     @PostMapping("/paginated")
-    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
-            content = {@Content(array =
-            @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
-    public ResponseEntity<GlobalApiResponse> getFoodMenu(@RequestBody OnsiteOrderPaginationRequestPojo requestPojo){
+    public ResponseEntity<GlobalApiResponse> getOnisteOrderPaginated(@RequestBody OnsiteOrderPaginationRequestPojo requestPojo){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 onsiteOrderService.getPaginatedOrderListByTime(requestPojo)
+        ));
+    }
+
+    @PostMapping("/history/paginated")
+    public ResponseEntity<GlobalApiResponse> getUserOrder(@RequestBody OrderDetailsPaginationRequest requestPojo){
+
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
+                onsiteOrderService.getPaginatedOrderHistoryDetails(requestPojo)
         ));
     }
 }

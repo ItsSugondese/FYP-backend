@@ -6,6 +6,7 @@ import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
+import fyp.canteen.fypcore.pojo.feedback.FeedbackPaginationRequest;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackRequestPojo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/feedback")
@@ -39,6 +41,16 @@ public class FeedbackController extends BaseController {
     public ResponseEntity<GlobalApiResponse> saveFeedbacks(@RequestBody @Valid FeedbackRequestPojo requestPojo){
         feedbackService.saveFeedback(requestPojo);
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), true));
+    }
+
+    @PostMapping("/paginated")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> getFoodMenu(@RequestBody FeedbackPaginationRequest requestPojo){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
+                feedbackService.getFeedbackDataPaginated(requestPojo)
+        ));
     }
 
 

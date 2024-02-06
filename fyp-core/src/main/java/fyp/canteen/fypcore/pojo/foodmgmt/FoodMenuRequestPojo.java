@@ -2,6 +2,7 @@ package fyp.canteen.fypcore.pojo.foodmgmt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import fyp.canteen.fypcore.enums.FoodType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class FoodMenuRequestPojo {
     @NotNull
     private Double cost;
 
+    private FoodType foodType;
     @NotNull
     private Boolean isPackage;
 

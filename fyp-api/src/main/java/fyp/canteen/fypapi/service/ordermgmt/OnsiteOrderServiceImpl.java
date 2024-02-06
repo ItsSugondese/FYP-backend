@@ -2,6 +2,7 @@ package fyp.canteen.fypapi.service.ordermgmt;
 
 import fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper;
 import fyp.canteen.fypapi.repository.ordermgmt.OnsiteOrderRepo;
+import fyp.canteen.fypapi.service.food.FoodMenuService;
 import fyp.canteen.fypcore.enums.ApprovalStatus;
 import fyp.canteen.fypcore.enums.DeliveryStatus;
 import fyp.canteen.fypcore.enums.OrderType;
@@ -9,9 +10,11 @@ import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnsiteOrder;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
-import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodMappingRequestPojo;
 import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderRequestPojo;
+import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodMappingRequestPojo;
+import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodResponsePojo;
 import fyp.canteen.fypcore.pojo.pagination.OnsiteOrderPaginationRequestPojo;
+import fyp.canteen.fypcore.pojo.pagination.OrderDetailsPaginationRequest;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
 import fyp.canteen.fypcore.utils.UserDataConfig;
 import fyp.canteen.fypcore.utils.pagination.CustomPaginationHandler;
@@ -21,7 +24,9 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -34,6 +39,7 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     private final OrderFoodMappingService orderFoodMappingService;
     private final CustomPaginationHandler customPaginationHandler;
     private final OrderFoodMappingMapper orderFoodMappingMapper;
+    private final FoodMenuService foodMenuService;
 
     @Transactional
     @Override
@@ -86,5 +92,23 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
 
 
         return response;
+    }
+
+    @Override
+    public PaginationResponse getPaginatedOrderHistoryDetails(OrderDetailsPaginationRequest requestPojo) {
+        PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getUserOrderPaginated(requestPojo.getFromDate(),
+                requestPojo.getToDate(),
+                userDataConfig.userId(), requestPojo.getPageable()));
+
+        response.setContent(response.getContent().stream().map(
+                e -> {
+                    Map<String, Object> map = new HashMap<>(e);
+                    List<OrderFoodResponsePojo> orderFoodResponsePojos = orderFoodMappingMapper.getAllFoodDetailsByOrderId(((Long) e.get("id")),
+                            true);
+                    map.put("orderFoodDetails", orderFoodResponsePojos);
+                    return map;
+                }
+        ).collect(Collectors.toList()));
+        return  response;
     }
 }

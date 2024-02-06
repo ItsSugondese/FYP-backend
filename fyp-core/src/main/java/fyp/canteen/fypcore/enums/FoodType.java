@@ -1,5 +1,5 @@
 package fyp.canteen.fypcore.enums;
 
 public enum FoodType {
-    SINGLE, PACKAGE;
+    SINGLE, PACKAGE, DRINKS, MISC, MEAL;
 }
