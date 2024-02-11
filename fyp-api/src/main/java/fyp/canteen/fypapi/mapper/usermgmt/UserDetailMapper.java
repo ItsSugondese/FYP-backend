@@ -1,8 +1,10 @@
 package fyp.canteen.fypapi.mapper.usermgmt;
 
+import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import fyp.canteen.fypcore.pojo.usermgmt.UserBasicDetailResponsePojo;
 import fyp.canteen.fypcore.pojo.usermgmt.UserDetailResponsePojo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -20,4 +22,7 @@ public interface UserDetailMapper {
             "as fullName,u.user_type as userType,u.id as id,u.email as userEmail from users \n" +
             "where u.id=#{id}")
     UserBasicDetailResponsePojo getFullNameOfUser(Long id);
+
+    @Select("select * from users u where u.id = #{id}")
+    Optional<User> getById(@Param("id") Long id);
 }

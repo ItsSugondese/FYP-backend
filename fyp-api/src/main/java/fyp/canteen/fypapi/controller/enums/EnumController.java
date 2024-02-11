@@ -4,6 +4,7 @@ import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.FeedbackStatus;
+import fyp.canteen.fypcore.enums.FoodType;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/enums")
@@ -24,5 +27,12 @@ public class EnumController extends BaseController {
     @GetMapping("/feedback")
     public ResponseEntity<GlobalApiResponse> getFeedbackStatus(){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), FeedbackStatus.values()));
+    }
+
+    @GetMapping("/food-menu")
+    public ResponseEntity<GlobalApiResponse> getFoodMenuTypes(){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), Arrays.stream(FoodType.values()).map(
+                FoodType::getText
+        )));
     }
 }

@@ -2,7 +2,10 @@ package fyp.canteen.fypapi.service.ordermgmt;
 
 import fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper;
 import fyp.canteen.fypapi.repository.ordermgmt.OnsiteOrderRepo;
+import fyp.canteen.fypapi.repository.payment.UserPaymentDetailsRepo;
 import fyp.canteen.fypapi.service.food.FoodMenuService;
+import fyp.canteen.fypcore.constants.Message;
+import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.ApprovalStatus;
 import fyp.canteen.fypcore.enums.DeliveryStatus;
 import fyp.canteen.fypcore.enums.OrderType;
@@ -39,7 +42,7 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     private final OrderFoodMappingService orderFoodMappingService;
     private final CustomPaginationHandler customPaginationHandler;
     private final OrderFoodMappingMapper orderFoodMappingMapper;
-    private final FoodMenuService foodMenuService;
+    private final UserPaymentDetailsRepo userPaymentDetailsRepo;
 
     @Transactional
     @Override
@@ -58,14 +61,14 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
         }
 
         onsiteOrder.setUser(User.builder().id(userDataConfig.userId()).build());
-        if(orderType.equals(OrderType.ONLINE))
+        if(orderType.equals(OrderType.ONLINE)) {
             onsiteOrder.setOnlineOrder(OnlineOrder.builder().id(requestPojo.getOnlineOrderId()).build());
+        }
 
 
         onsiteOrder.setOrderType(orderType);
         onsiteOrder.setDeliveryStatus(DeliveryStatus.PENDING);
         onsiteOrder.setApprovalStatus(ApprovalStatus.PENDING);
-
         onsiteOrder = onsiteOrderRepo.save(onsiteOrder);
 
         if (!requestPojo.getFoodOrderList().isEmpty() || !requestPojo.getRemoveFoodId().isEmpty())
@@ -86,6 +89,7 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                     Map<String, Object> map = new HashMap<>(e);
                     map.put("orderFoodDetails", orderFoodMappingMapper.getAllFoodDetailsByOrderId( ((Long)e.get("id")),
                             true));
+                    map.put("remainingAmount", userPaymentDetailsRepo.getTotalRemainingAmountToPayOfUserByUserId(Long.parseLong(String.valueOf(e.get("userId")))));
                     return map;
                 }
         ).collect(Collectors.toList()));
@@ -110,5 +114,10 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                 }
         ).collect(Collectors.toList()));
         return  response;
+    }
+
+    @Override
+    public OnsiteOrder findById(Long id) {
+        return onsiteOrderRepo.findById(id).orElseThrow(() -> new AppException(Message.idNotFound(ModuleNameConstants.ONSITE_ORDER)));
     }
 }

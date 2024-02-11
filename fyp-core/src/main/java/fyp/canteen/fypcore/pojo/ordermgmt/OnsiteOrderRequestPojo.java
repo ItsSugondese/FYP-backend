@@ -20,4 +20,5 @@ public class OnsiteOrderRequestPojo {
     private Long onlineOrderId;
     private PayStatus payStatus;
     private Integer tableNumber;
+    private double totalPrice;
 }

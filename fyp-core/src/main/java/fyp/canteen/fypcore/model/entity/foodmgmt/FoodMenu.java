@@ -28,14 +28,11 @@ public class FoodMenu extends AuditActiveAbstract {
     @Column(nullable = false)
     private Double cost;
 
-    private String foodMenuItems;
-
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private FoodType foodType;
 
     @Column( name = "is_available_today")
-    private Boolean isAvailableToday;
+    private Boolean isAvailableToday = true;
 
 
 }

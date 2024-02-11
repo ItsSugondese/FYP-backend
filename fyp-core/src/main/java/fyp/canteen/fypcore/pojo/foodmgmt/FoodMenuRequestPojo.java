@@ -28,21 +28,8 @@ public class FoodMenuRequestPojo {
     @NotNull
     private Double cost;
 
-    private FoodType foodType;
     @NotNull
-    private Boolean isPackage;
-
-    private List<String> menuItems = new ArrayList<>();
-
-    private Boolean isAvailableToday;
+    private String foodType;
 
     private Long photoId;
-    @JsonIgnore
-    private String menuItemsString;
-
-    public void setMenuItemsString(String menuItemsString) {
-        this.menuItemsString = menuItemsString;
-        this.menuItems = Arrays.asList(menuItemsString.split(","));
-    }
-
 }

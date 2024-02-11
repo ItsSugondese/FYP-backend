@@ -1,0 +1,8 @@
+
+G
+java:S1602 ",Remove useless curly braces around statement(Ø”œõýÿÿÿÿ
+N	java:S106!"9Replace this use of System.out or System.err by a logger.(¹åÕ®
+`
+java:S1128"ERemove this unused import 'org.mybatis.spring.annotation.MapperScan'.(½‡ö–þÿÿÿÿ
+v
+java:S1128"[Remove this unused import 'org.springframework.boot.autoconfigure.EnableAutoConfiguration'.(æèþÞøÿÿÿÿ

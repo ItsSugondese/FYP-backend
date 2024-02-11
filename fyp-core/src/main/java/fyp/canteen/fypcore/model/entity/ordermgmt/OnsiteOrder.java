@@ -33,7 +33,7 @@ public class OnsiteOrder extends AuditActiveAbstract {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PayStatus payStatus;
+    private PayStatus payStatus = PayStatus.UNPAID;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "online_order_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_onsite_order_online_order"))
@@ -49,5 +49,7 @@ public class OnsiteOrder extends AuditActiveAbstract {
 
     private Integer tableNumber;
 
+    @Column(columnDefinition = "double precision default 0.0")
+    private double totalPrice;
 
 }

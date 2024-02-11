@@ -1,8 +1,10 @@
 package fyp.canteen.fypcore.model.entity.payment;
 
+import fyp.canteen.fypcore.enums.PayStatus;
 import fyp.canteen.fypcore.enums.PaymentMode;
 import fyp.canteen.fypcore.generics.api.AuditActiveAbstract;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnsiteOrder;
+import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,7 +37,7 @@ public class UserPaymentDetails extends AuditActiveAbstract {
     @Column(columnDefinition = "double precision default(0.00)")
     private Double dueAmount = 0.00;
 
-    @Column(nullable = false)
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate paymentDate = LocalDate.now();
 
@@ -44,8 +46,12 @@ public class UserPaymentDetails extends AuditActiveAbstract {
     @Enumerated(EnumType.STRING)
     private PaymentMode paymentMode = PaymentMode.CASH;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "onsite_order_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_user_payment_details_onsite_order"))
     private OnsiteOrder onsiteOrder;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_user_payment_details_user"))
+    private User user;
 
 }

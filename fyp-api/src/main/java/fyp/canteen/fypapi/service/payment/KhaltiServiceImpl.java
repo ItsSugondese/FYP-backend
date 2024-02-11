@@ -1,6 +1,8 @@
 package fyp.canteen.fypapi.service.payment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fyp.canteen.fypapi.service.ordermgmt.OnsiteOrderService;
+import fyp.canteen.fypcore.enums.OrderType;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.pojo.payment.KhaltiTransactionVerificationRequestPojo;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.Map;
 public class KhaltiServiceImpl implements KhatiService{
 
     private final ObjectMapper objectMapper;
+    private final OnsiteOrderService onsiteOrderService;
 
     @Override
     public Object verifyTransaction(KhaltiTransactionVerificationRequestPojo requestPojo) {
@@ -40,6 +43,7 @@ public class KhaltiServiceImpl implements KhatiService{
 
         if(responseEntity.getStatusCode() == HttpStatusCode.valueOf(200)) {
             try {
+                onsiteOrderService.saveOnsiteOrder(requestPojo.getOnsiteOrder(), OrderType.ONSITE);
                 return objectMapper.readValue(responseEntity.getBody(), Map.class);
 
             } catch (Exception e) {

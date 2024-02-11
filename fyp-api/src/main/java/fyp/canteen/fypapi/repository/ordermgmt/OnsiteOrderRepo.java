@@ -21,9 +21,9 @@ public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder
             "  ||\n" +
             "  case when Extract(second from (current_timestamp - oo.created_date))>0 then  CAST(EXTRACT(SECOND FROM date_trunc('second', CURRENT_TIMESTAMP - oo.created_date)) AS INTEGER)  || ' sec' else '' end\n" +
             "  as \"orderedTime\",\n" +
-            "  oo.approval_status as \"approvalStatus\", oo.user_id as \"userId\", u.full_name as \"fullName\", u.email \n" +
-            "FROM onsite_order oo \n" +
-            "JOIN users u ON u.id = oo.user_id", nativeQuery = true)
+            "  oo.approval_status as \"approvalStatus\", oo.total_price as \"totalPrice\", oo.user_id as \"userId\", u.full_name as \"fullName\", u.email \n" +
+            "FROM onsite_order oo  \n" +
+            "JOIN users u ON u.id = oo.user_id where oo.pay_status = 'UNPAID'", nativeQuery = true)
     Page<Map<String, Object>> getOnsiteOrderPaginated(LocalTime timeRange, Pageable pageable);
 
     @Query(value = "select oo.id, 'ONLINE_ORDER' as \"orderType\", u.profile_path as \"profileUrl\", to_char(oo.created_date, 'YYYY-MM-DD HH:MI AM') as date, oo.arrival_time as \"arrivalTime\" from online_order oo\n" +

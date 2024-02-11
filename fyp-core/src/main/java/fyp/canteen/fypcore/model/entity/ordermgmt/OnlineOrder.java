@@ -36,4 +36,7 @@ public class OnlineOrder extends AuditActiveAbstract {
 
     @Column(nullable = false)
     private LocalTime arrivalTime;
+
+    @Column(columnDefinition = "double precision default 0.0")
+    private double totalPrice;
 }

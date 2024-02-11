@@ -21,4 +21,5 @@ public class OnlineOrderRequestPojo {
     @NotNull
     private LocalTime arrivalTime;
     private ApprovalStatus approvalStatus;
+    private double totalPrice;
 }

@@ -49,11 +49,6 @@ public class FoodMenuServiceImpl implements FoodMenuService{
             throw new AppException(e.getMessage(), e);
         }
 
-        foodMenu.setFoodType(requestPojo.getIsPackage()? FoodType.PACKAGE : FoodType.SINGLE);
-        if(!requestPojo.getMenuItems().isEmpty())
-            foodMenu.setFoodMenuItems((requestPojo.getMenuItems().toString()).replaceAll("[\\[\\]]", ""));
-        else
-            foodMenu.setFoodMenuItems(null);
 
         foodMenu.setIsAvailableToday(foodMenu.getIsAvailableToday()==null? true : foodMenu.getIsAvailableToday());
         FoodMenu savedFoodMenu = foodMenuRepo.saveAndFlush(foodMenu);

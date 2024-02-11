@@ -28,7 +28,7 @@ public interface OnlineOrderRepo extends GenericSoftDeleteRepository<OnlineOrder
 //            nativeQuery = true)
 //    Page<Map<String, Object>> getOnlineOrderPaginated(LocalTime fromTime, LocalTime toTime, Pageable pageable);
 
-    @Query(value = "select oo.id, oo.approval_status, oo.order_code ,\n" +
+    @Query(value = "select oo.id, oo.approval_status, oo.order_code , oo.total_price as \"totalPrice\",\n" +
             "to_char(oo.arrival_time, 'HH:mi am' ) as arrival_time, \n" +
             "    (string_to_array(oo.order_code , ' ')) [2] as order_code, oo.user_id, u.full_name, u.email \n" +
             "   from online_order oo join users u on u.id = oo.user_id  where oo.is_active",
