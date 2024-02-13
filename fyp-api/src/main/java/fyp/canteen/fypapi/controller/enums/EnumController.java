@@ -35,4 +35,11 @@ public class EnumController extends BaseController {
                 FoodType::getText
         )));
     }
+
+    @GetMapping("/feedbacks")
+    public ResponseEntity<GlobalApiResponse> getFeedbackStatusValue(){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), Arrays.stream(FeedbackStatus.values()).map(
+                FeedbackStatus::getText
+        )));
+    }
 }

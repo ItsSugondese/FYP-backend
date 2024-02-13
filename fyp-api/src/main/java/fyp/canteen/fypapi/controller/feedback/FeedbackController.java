@@ -8,6 +8,7 @@ import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackPaginationRequest;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackRequestPojo;
+import fyp.canteen.fypcore.utils.data.DateRangeHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,10 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Map;
@@ -47,9 +45,19 @@ public class FeedbackController extends BaseController {
     @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
-    public ResponseEntity<GlobalApiResponse> getFoodMenu(@RequestBody FeedbackPaginationRequest requestPojo){
+    public ResponseEntity<GlobalApiResponse> getFeedbackPaginated(@RequestBody FeedbackPaginationRequest requestPojo){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 feedbackService.getFeedbackDataPaginated(requestPojo)
+        ));
+    }
+
+    @PostMapping("/data")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> getFeedbackStatistics(@RequestBody DateRangeHolder requestPojo){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
+                feedbackService.getFeedbackDataDetails(requestPojo)
         ));
     }
 

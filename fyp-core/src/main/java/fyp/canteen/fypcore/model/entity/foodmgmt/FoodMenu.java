@@ -29,7 +29,7 @@ public class FoodMenu extends AuditActiveAbstract {
     private Double cost;
 
     @Column(nullable = false)
-    private FoodType foodType;
+    private String foodType;
 
     @Column( name = "is_available_today")
     private Boolean isAvailableToday = true;

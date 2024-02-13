@@ -1,5 +1,6 @@
 package fyp.canteen.fypapi.service.feedback;
 
+import fyp.canteen.fypapi.mapper.feedback.FeedbackDetailMapper;
 import fyp.canteen.fypapi.repository.feedback.FeedbackRepo;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.feedback.Feedback;
@@ -7,8 +8,10 @@ import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackPaginationRequest;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackRequestPojo;
+import fyp.canteen.fypcore.pojo.feedback.FeedbackStatisticsResponsePojo;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
 import fyp.canteen.fypcore.utils.UserDataConfig;
+import fyp.canteen.fypcore.utils.data.DateRangeHolder;
 import fyp.canteen.fypcore.utils.pagination.CustomPaginationHandler;
 import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ public class FeedbackServiceImpl implements FeedbackService{
     private final BeanUtilsBean beanUtilsBean = new NullAwareBeanUtilsBean();
     private final UserDataConfig userDataConfig;
     private final CustomPaginationHandler customPaginationHandler;
+    private final FeedbackDetailMapper feedbackDetailMapper;
 
     @Override
     public void saveFeedback(FeedbackRequestPojo requestPojo) {
@@ -47,5 +51,10 @@ public class FeedbackServiceImpl implements FeedbackService{
     @Override
     public PaginationResponse getFeedbackDataPaginated(FeedbackPaginationRequest paginationRequest) {
         return customPaginationHandler.getPaginatedData(feedbackRepo.getAllFeedbackPaginated(paginationRequest.getFoodId(), paginationRequest.getPageable()));
+    }
+
+    @Override
+    public FeedbackStatisticsResponsePojo getFeedbackDataDetails(DateRangeHolder dateRangeHolder) {
+        return feedbackDetailMapper.getFeedbackStatistics(dateRangeHolder.getFromDate(), dateRangeHolder.getToDate());
     }
 }
