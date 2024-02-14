@@ -1,5 +1,6 @@
 package fyp.canteen.fypcore.utils.pagination;
 
+import fyp.canteen.fypcore.utils.data.DateRangeHolder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import javax.validation.constraints.Min;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaginationRequest {
+public class PaginationRequest extends DateRangeHolder {
 
     @Min(value = 1, message = "Page cannot be less than ")
     private int page = 0;

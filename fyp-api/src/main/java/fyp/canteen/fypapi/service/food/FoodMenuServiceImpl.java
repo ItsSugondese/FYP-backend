@@ -39,7 +39,7 @@ public class FoodMenuServiceImpl implements FoodMenuService{
         if(requestPojo.getId() != null)
             foodMenu = foodMenuRepo.findById(requestPojo.getId()).orElse(foodMenu);
 
-        if(foodMenu.getId() != null && requestPojo.getPhotoId() == null){
+        if(foodMenu.getId() == null && requestPojo.getPhotoId() == null){
             throw new AppException("Food Picture is must");
         }
 

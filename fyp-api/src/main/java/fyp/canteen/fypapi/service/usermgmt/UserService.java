@@ -14,6 +14,7 @@ public interface UserService {
     User findUserById(Long id);
 
     UserDetailResponsePojo getSingleUserById(Long id);
+    UserDetailResponsePojo getSingleUserWithoutId();
 
     PaginationResponse getAllUsersPaginated(UserDetailPaginationRequest paginationRequest);
 

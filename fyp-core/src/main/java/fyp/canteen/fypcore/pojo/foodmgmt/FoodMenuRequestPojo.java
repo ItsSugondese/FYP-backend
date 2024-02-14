@@ -29,7 +29,7 @@ public class FoodMenuRequestPojo {
     private Double cost;
 
     @NotNull
-    private String foodType;
+    private FoodType foodType;
 
     private Long photoId;
 }

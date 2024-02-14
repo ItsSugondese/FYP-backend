@@ -8,10 +8,13 @@ import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackPaginationRequest;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackRequestPojo;
+import fyp.canteen.fypcore.pojo.feedback.FeedbackStatisticsRequestPojo;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackStatisticsResponsePojo;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
 import fyp.canteen.fypcore.utils.UserDataConfig;
 import fyp.canteen.fypcore.utils.data.DateRangeHolder;
+import fyp.canteen.fypcore.utils.data.DateTypeEnum;
+import fyp.canteen.fypcore.utils.data.FromToDateGenerator;
 import fyp.canteen.fypcore.utils.pagination.CustomPaginationHandler;
 import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import lombok.RequiredArgsConstructor;
@@ -50,11 +53,14 @@ public class FeedbackServiceImpl implements FeedbackService{
 
     @Override
     public PaginationResponse getFeedbackDataPaginated(FeedbackPaginationRequest paginationRequest) {
-        return customPaginationHandler.getPaginatedData(feedbackRepo.getAllFeedbackPaginated(paginationRequest.getFoodId(), paginationRequest.getPageable()));
+        FromToDateGenerator.getFromToDate(DateTypeEnum.DAY, 1, paginationRequest);
+        return customPaginationHandler.getPaginatedData(feedbackRepo.getAllFeedbackPaginated(paginationRequest.getFoodId(),
+                paginationRequest.getFromDate(), paginationRequest.getToDate(), paginationRequest.getPageable()));
     }
 
     @Override
-    public FeedbackStatisticsResponsePojo getFeedbackDataDetails(DateRangeHolder dateRangeHolder) {
-        return feedbackDetailMapper.getFeedbackStatistics(dateRangeHolder.getFromDate(), dateRangeHolder.getToDate());
+    public FeedbackStatisticsResponsePojo getFeedbackDataDetails(FeedbackStatisticsRequestPojo dateRangeHolder) {
+        FromToDateGenerator.getFromToDate(DateTypeEnum.DAY, 1, dateRangeHolder);
+        return feedbackDetailMapper.getFeedbackStatistics(dateRangeHolder.getFoodId(), dateRangeHolder.getFromDate(), dateRangeHolder.getToDate());
     }
 }

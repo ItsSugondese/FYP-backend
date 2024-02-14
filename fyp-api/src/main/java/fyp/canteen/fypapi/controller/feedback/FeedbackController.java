@@ -8,6 +8,7 @@ import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackPaginationRequest;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackRequestPojo;
+import fyp.canteen.fypcore.pojo.feedback.FeedbackStatisticsRequestPojo;
 import fyp.canteen.fypcore.utils.data.DateRangeHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -55,7 +56,7 @@ public class FeedbackController extends BaseController {
     @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
-    public ResponseEntity<GlobalApiResponse> getFeedbackStatistics(@RequestBody DateRangeHolder requestPojo){
+    public ResponseEntity<GlobalApiResponse> getFeedbackStatistics(@RequestBody FeedbackStatisticsRequestPojo requestPojo){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 feedbackService.getFeedbackDataDetails(requestPojo)
         ));

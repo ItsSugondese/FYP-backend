@@ -29,8 +29,10 @@ public interface FeedbackDetailMapper {
             "    SUM(CASE WHEN f.feedback_status = 'NEUTRAL' THEN 1 ELSE 0 END) AS \"neutralCount\",\n" +
             "    SUM(CASE WHEN f.feedback_status = 'NEGATIVE' THEN 1 ELSE 0 END) AS \"negativeCount\" \n" +
             "  FROM feedback f \n" +
-            "  WHERE f.is_active \n" +
+            "  WHERE f.is_active and f.food_id = #{foodId} and \n" +
+            "cast(f.created_date as date) between cast(#{fromDate} as date) and cast(#{toDate} as date) \n" +
             ") foo")
-    FeedbackStatisticsResponsePojo getFeedbackStatistics(@Param("fromDate")LocalDate fromDate,
+    FeedbackStatisticsResponsePojo getFeedbackStatistics(@Param("foodId") Long foodId,
+                                                         @Param("fromDate") LocalDate fromDate,
                                                          @Param("toDate") LocalDate toDate);
 }

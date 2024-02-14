@@ -18,6 +18,7 @@ import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import fyp.canteen.fypcore.pojo.temporaryattachments.TemporaryAttachmentsDetailResponsePojo;
 import fyp.canteen.fypcore.pojo.usermgmt.*;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
+import fyp.canteen.fypcore.utils.UserDataConfig;
 import fyp.canteen.fypcore.utils.genericfile.FilePathConstants;
 import fyp.canteen.fypcore.utils.genericfile.FilePathMapping;
 import fyp.canteen.fypcore.utils.genericfile.GenericFileUtil;
@@ -38,14 +39,16 @@ public class UserServiceImpl extends UserServiceHelperImpl implements UserServic
     private final BeanUtilsBean beanUtilsBean = new NullAwareBeanUtilsBean();
     private final CustomPaginationHandler customPaginationHandler;
     private final UserDetailMapper userDetailMapper;
+    private final UserDataConfig userDataConfig;
 
     public UserServiceImpl(RoleService roleService, UserRepo userRepo, ResetPasswordService resetPasswordService, EmailServiceHelper emailServiceHelper,
                            CustomPaginationHandler customPaginationHandler,
-                           UserDetailMapper userDetailMapper) {
+                           UserDetailMapper userDetailMapper, UserDataConfig userDataConfig) {
         super(roleService, userRepo, resetPasswordService, emailServiceHelper);
         this.userRepo = userRepo;
         this.customPaginationHandler = customPaginationHandler;
         this.userDetailMapper = userDetailMapper;
+        this.userDataConfig = userDataConfig;
     }
 
     @Override
@@ -71,6 +74,11 @@ public class UserServiceImpl extends UserServiceHelperImpl implements UserServic
     @Override
     public UserDetailResponsePojo getSingleUserById(Long id) {
         return userDetailMapper.getSingleUser(id).orElseThrow(() -> new AppException(Message.idNotFound(ModuleNameConstants.USER)));
+    }
+
+    @Override
+    public UserDetailResponsePojo getSingleUserWithoutId() {
+        return getSingleUserById(userDataConfig.userId());
     }
 
     @Override
