@@ -1,6 +1,7 @@
 package fyp.canteen.fypcore.generics.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.enums.ResponseStatus;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 
@@ -57,11 +58,12 @@ public class BaseController {
      * @param data
      * @return
      */
-    protected GlobalApiResponse successResponse(String message, Object data) {
+    protected GlobalApiResponse successResponse(String message, CRUD crud,Object data) {
         GlobalApiResponse globalApiResponse = new GlobalApiResponse();
         globalApiResponse.setStatus(API_SUCCESS_STATUS);
         globalApiResponse.setMessage(message);
         globalApiResponse.setData(data);
+        globalApiResponse.setCrud(crud);
         return globalApiResponse;
     }
 

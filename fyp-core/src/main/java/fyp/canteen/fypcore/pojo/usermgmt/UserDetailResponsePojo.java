@@ -1,5 +1,6 @@
 package fyp.canteen.fypcore.pojo.usermgmt;
 
+import fyp.canteen.fypcore.enums.UserType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,4 +14,5 @@ public class UserDetailResponsePojo {
     private String profilePath;
     private String contactNumber;
     private String startedWorkingOn;
+    private UserType userType;
 }

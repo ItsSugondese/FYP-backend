@@ -67,7 +67,8 @@ public class UserServiceImpl extends UserServiceHelperImpl implements UserServic
 
     @Override
     public PaginationResponse getAllUsersPaginated(UserDetailPaginationRequest paginationRequest) {
-        return customPaginationHandler.getPaginatedData(userRepo.findAllUsers(paginationRequest.getPageable()));
+        return customPaginationHandler.getPaginatedData(userRepo.findAllUsers(paginationRequest.getUserType().toString(),
+                paginationRequest.getName(), paginationRequest.getPageable()));
     }
 
 

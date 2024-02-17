@@ -1,5 +1,7 @@
 
-=
-java:S11255"'Remove the unnecessary boolean literal.(≤Ø·√
-U
-java:S1128	"?Remove this unused import 'fyp.canteen.fypcore.enums.FoodType'.(ªÌ€û
+^
+java:S4973V"<Strings and Boxed types should be compared using "equals()".(áë‹Ñ˘ˇˇˇˇ8ë™Ûã€1
+D
+java:S11256"'Remove the unnecessary boolean literal.(≤Ø·√8™óÑÅ€1
+\
+java:S1128	"?Remove this unused import 'fyp.canteen.fypcore.enums.FoodType'.(ªÌ€û8≠¨Ûã€1

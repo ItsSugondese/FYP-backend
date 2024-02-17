@@ -4,6 +4,7 @@ import fyp.canteen.fypapi.service.temporaryattachments.TemporaryAttachmentServic
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.temporaryattachments.TemporaryAttachmentsDetailRequestPojo;
@@ -43,6 +44,6 @@ public class TemporaryAttachmentsController extends BaseController {
             @ArraySchema(schema = @Schema(implementation = MultipartFile.class)))})})
     public ResponseEntity<GlobalApiResponse> saveTemporaryAttachments(@ModelAttribute @Valid TemporaryAttachmentsDetailRequestPojo requestPojo) throws Exception {
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
-                temporaryAttachmentService.saveTemporaryAttachment(requestPojo)));
+                null, temporaryAttachmentService.saveTemporaryAttachment(requestPojo)));
     }
 }

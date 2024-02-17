@@ -4,6 +4,7 @@ import fyp.canteen.fypapi.service.ordermgmt.OnsiteOrderService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.enums.OrderType;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
@@ -38,7 +39,8 @@ public class OnsiteOrderController extends BaseController {
     @Operation(summary = "Use this api to save/update onsite order", responses = {@ApiResponse(responseCode = "200")})
     public ResponseEntity<GlobalApiResponse> saveOnsiteOrder(@RequestBody @Valid OnsiteOrderRequestPojo requestPojo){
         onsiteOrderService.saveOnsiteOrder(requestPojo, OrderType.ONSITE);
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), null));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
+                CRUD.SAVE, null));
     }
     @GetMapping("/verify-onsite")
     @Operation(summary = "Use verfiy the QR code value",
@@ -49,16 +51,15 @@ public class OnsiteOrderController extends BaseController {
 
     @PostMapping("/paginated")
     public ResponseEntity<GlobalApiResponse> getOnisteOrderPaginated(@RequestBody OnsiteOrderPaginationRequestPojo requestPojo){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
-                onsiteOrderService.getPaginatedOrderListByTime(requestPojo)
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, onsiteOrderService.getPaginatedOrderListByTime(requestPojo)
         ));
     }
 
     @PostMapping("/history/paginated")
     public ResponseEntity<GlobalApiResponse> getUserOrder(@RequestBody OrderDetailsPaginationRequest requestPojo){
-
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
-                onsiteOrderService.getPaginatedOrderHistoryDetails(requestPojo)
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, onsiteOrderService.getPaginatedOrderHistoryDetails(requestPojo)
         ));
     }
 }

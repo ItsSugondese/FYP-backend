@@ -4,6 +4,7 @@ import fyp.canteen.fypapi.service.payment.KhatiService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.payment.KhaltiTransactionVerificationRequestPojo;
@@ -34,6 +35,7 @@ public class KhaltiController extends BaseController {
     @Operation(summary = "Use this api to verify transaction made using khalti in frontend",
             responses = {@ApiResponse(responseCode = "200")})
     public ResponseEntity<GlobalApiResponse> verifyTransaction(@RequestBody @Valid KhaltiTransactionVerificationRequestPojo requestPojo){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), khatiService.verifyTransaction(requestPojo)));
+        return ResponseEntity.ok(successResponse("Transaction has been verified successfully",
+                CRUD.SAVE, khatiService.verifyTransaction(requestPojo)));
     }
 }

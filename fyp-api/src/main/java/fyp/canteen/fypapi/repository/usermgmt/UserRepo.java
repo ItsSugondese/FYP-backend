@@ -20,11 +20,16 @@ public interface UserRepo extends GenericSoftDeleteRepository<User, Long> {
     boolean existsByEmail(String email);
 
 
-    @Query(nativeQuery = true, value = "select u.id, u.full_name as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
-            "u.profile_path as \"profilePath\" from users u where u.is_active and u.user_type = 'USER'")
-    Page<Map<String, Object>> findAllUsers(Pageable pageable);
+    @Query(nativeQuery = true,
+            value = "select u.id, INITCAP(u.full_name) as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
+            "u.profile_path as \"profilePath\", u.contact_number as \"contactNumber\" from users u where u.is_active and u.user_type = ?1 and \n" +
+            "case when ?2 = '-1' then true else u.full_name ilike concat('%',?2,'%') end order by u.last_modified_date desc",
+     countQuery= "select count(*) from (select u.id, INITCAP(u.full_name) as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
+            "u.profile_path as \"profilePath\", u.contact_number as \"contactNumber\" from users u where u.is_active and u.user_type = ?1 and \n" +
+            "case when ?2 = '-1' then true else u.full_name ilike concat('%',?2,'%') end order by u.last_modified_date desc) foo")
+    Page<Map<String, Object>> findAllUsers(String userType, String name, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "select u.id, u.full_name as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
+    @Query(nativeQuery = true, value = "select u.id, INITCAP(u.full_name) as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
             "u.profile_path as \"profilePath\", u.contact_number as \"contactNumber\" from users u where u.is_active and u.user_type = 'STAFF'")
     Page<Map<String, Object>> findAllStaff(Pageable pageable);
 }

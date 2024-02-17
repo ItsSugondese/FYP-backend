@@ -3,6 +3,7 @@ package fyp.canteen.fypapi.controller.enums;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.enums.FeedbackStatus;
 import fyp.canteen.fypcore.enums.FoodType;
 import fyp.canteen.fypcore.generics.controller.BaseController;
@@ -26,19 +27,19 @@ public class EnumController extends BaseController {
 
     @GetMapping("/feedback")
     public ResponseEntity<GlobalApiResponse> getFeedbackStatus(){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), FeedbackStatus.values()));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), CRUD.GET, FeedbackStatus.values()));
     }
 
     @GetMapping("/food-menu")
     public ResponseEntity<GlobalApiResponse> getFoodMenuTypes(){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), Arrays.stream(FoodType.values()).map(
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), CRUD.GET, Arrays.stream(FoodType.values()).map(
                 FoodType::getText
         )));
     }
 
     @GetMapping("/feedbacks")
     public ResponseEntity<GlobalApiResponse> getFeedbackStatusValue(){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), Arrays.stream(FeedbackStatus.values()).map(
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), CRUD.GET, Arrays.stream(FeedbackStatus.values()).map(
                 FeedbackStatus::getText
         )));
     }

@@ -5,6 +5,7 @@ import fyp.canteen.fypapi.service.usermgmt.disable.UserDisableHistoryService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.usermgmt.UserDetailPaginationRequest;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/profile")
 @Tag(name = ModuleNameConstants.USER_PROFILE)
 public class UserProfileController extends BaseController {
     private final UserService userService;
@@ -36,6 +37,7 @@ public class UserProfileController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getSingleStaff() {
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), userService.getSingleUserWithoutId()));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, userService.getSingleUserWithoutId()));
     }
 }

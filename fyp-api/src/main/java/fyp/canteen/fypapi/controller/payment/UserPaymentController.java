@@ -4,6 +4,7 @@ import fyp.canteen.fypapi.service.payment.UserPaymentDetailsService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.payment.KhaltiTransactionVerificationRequestPojo;
@@ -35,6 +36,7 @@ public class UserPaymentController extends BaseController {
             responses = {@ApiResponse(responseCode = "200")})
     public ResponseEntity<GlobalApiResponse> savePaymentDetails(@RequestBody @Valid UserPaymentDetailsRequestPojo requestPojo){
         userPaymentDetailsService.savePayment(requestPojo);
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), null));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
+                CRUD.SAVE, null));
     }
 }

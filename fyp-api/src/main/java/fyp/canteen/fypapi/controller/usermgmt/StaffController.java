@@ -6,6 +6,7 @@ import fyp.canteen.fypapi.service.usermgmt.disable.UserDisableHistoryService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.usermgmt.StaffDetailPaginationRequest;
@@ -45,7 +46,7 @@ public class StaffController extends BaseController {
     public ResponseEntity<GlobalApiResponse> saveStaff(@RequestBody @Valid StaffDetailsRequestPojo requestPojo){
         staffService.saveStaff(requestPojo);
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
-                true
+                CRUD.SAVE, true
         ));
     }
     @PostMapping("/paginated")
@@ -54,7 +55,7 @@ public class StaffController extends BaseController {
             @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getStaffDetails(@RequestBody StaffDetailPaginationRequest  requestPojo){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
-                staffService.getAllStaffPaginated(requestPojo)
+                CRUD.GET, staffService.getAllStaffPaginated(requestPojo)
         ));
     }
 
@@ -64,7 +65,8 @@ public class StaffController extends BaseController {
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getFoodPicture(@PathVariable("id") Long id, HttpServletResponse response){
         staffService.getStaffPhoto(response, id);
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), true));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, true));
     }
 
     @GetMapping("/{id}")
@@ -72,7 +74,8 @@ public class StaffController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getSingleStaff(@PathVariable("id") Long id){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), staffService.getSingleStaffById(id)));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, staffService.getSingleStaffById(id)));
     }
 
 

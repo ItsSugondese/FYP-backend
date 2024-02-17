@@ -4,6 +4,7 @@ import fyp.canteen.fypapi.service.feedback.FeedbackService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackPaginationRequest;
@@ -39,7 +40,7 @@ public class FeedbackController extends BaseController {
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> saveFeedbacks(@RequestBody @Valid FeedbackRequestPojo requestPojo){
         feedbackService.saveFeedback(requestPojo);
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), true));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), CRUD.SAVE, true));
     }
 
     @PostMapping("/paginated")
@@ -47,7 +48,7 @@ public class FeedbackController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getFeedbackPaginated(@RequestBody FeedbackPaginationRequest requestPojo){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), CRUD.GET,
                 feedbackService.getFeedbackDataPaginated(requestPojo)
         ));
     }
@@ -57,7 +58,7 @@ public class FeedbackController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getFeedbackStatistics(@RequestBody FeedbackStatisticsRequestPojo requestPojo){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), CRUD.GET,
                 feedbackService.getFeedbackDataDetails(requestPojo)
         ));
     }

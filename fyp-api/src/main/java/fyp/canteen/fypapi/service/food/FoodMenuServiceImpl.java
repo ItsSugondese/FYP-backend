@@ -11,6 +11,7 @@ import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuRequestPojo;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodPictureRequestPojo;
+import fyp.canteen.fypcore.pojo.foodmgmt.ToggleAvailableTodayRequestPojo;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
 import fyp.canteen.fypcore.utils.pagination.CustomPaginationHandler;
 import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
@@ -69,12 +70,24 @@ public class FoodMenuServiceImpl implements FoodMenuService{
     @Override
     public PaginationResponse getFoodMenuPageable(FoodMenuPaginationRequestPojo requestPojo) {
         return customPaginationHandler.getPaginatedData(foodMenuRepo.getFoodMenuPageable(requestPojo.getName(),
+                requestPojo.getFoodType() == null? null : requestPojo.getFoodType().toString(),
                 requestPojo.getPageable()));
     }
 
     @Override
     public void getFoodPhoto(HttpServletResponse response, Long id) {
         foodPictureService.showFoodPictureById(response, id);
+    }
+
+    @Override
+    public void toggleAvailability(ToggleAvailableTodayRequestPojo requestPojo) {
+        FoodMenu foodMenu = findById(requestPojo.getFoodId());
+
+        if(foodMenu.getIsAvailableToday() == requestPojo.getStatus())
+            throw new AppException("Availability is already set to " + foodMenu.getIsAvailableToday());
+
+        foodMenu.setIsAvailableToday(requestPojo.getStatus());
+        foodMenuRepo.save(foodMenu);
     }
 
     @Override

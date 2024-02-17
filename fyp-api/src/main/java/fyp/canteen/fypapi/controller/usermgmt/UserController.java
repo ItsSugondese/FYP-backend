@@ -5,6 +5,7 @@ import fyp.canteen.fypapi.service.usermgmt.disable.UserDisableHistoryService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.usermgmt.UserDetailPaginationRequest;
@@ -39,7 +40,7 @@ public class UserController extends BaseController {
             @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getFoodMenu(@RequestBody UserDetailPaginationRequest requestPojo){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
-                userService.getAllUsersPaginated(requestPojo)
+                CRUD.GET, userService.getAllUsersPaginated(requestPojo)
         ));
     }
 
@@ -48,7 +49,8 @@ public class UserController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getSingleStaff(@PathVariable("id") Long id){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), userService.getSingleUserById(id)));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, userService.getSingleUserById(id)));
     }
 
     @PostMapping("/disable")
@@ -57,7 +59,8 @@ public class UserController extends BaseController {
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getSingleStaff(@RequestBody UserDisableHistoryRequestPojo requestPojo){
         userDisableHistoryService.saveUserDisableHistory(requestPojo);
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), true));
+        return ResponseEntity.ok(successResponse("User has been disabled successfully",
+                CRUD.SAVE, true));
     }
 
     @PostMapping("/disable/pageable")
@@ -65,6 +68,7 @@ public class UserController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> getSingleStaff(@RequestBody UserDisableHistoryPaginationRequest requestPojo){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), userDisableHistoryService.getDisableHistoryPaginated(requestPojo)));
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, userDisableHistoryService.getDisableHistoryPaginated(requestPojo)));
     }
 }
