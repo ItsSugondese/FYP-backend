@@ -12,6 +12,6 @@ public interface UserDisableHistoryRepo extends GenericSoftDeleteRepository<User
 
     @Query(nativeQuery = true, value = "select udh.id, to_char(udh.created_date, 'YYYY-MM-DD HH:MI AM') as date, \n" +
             "udh.is_disabled as \"isDisabled\", udh.remarks as remarks\n" +
-            "from users_disable_history udh where udh.is_active and udh.user_id = ?1 ")
+            "from users_disable_history udh where udh.is_active and udh.user_id = ?1 order by udh.created_date desc")
     Page<Map<String, Object>> getDisableHistoryPaginated(Long userId, Pageable pageable);
 }
