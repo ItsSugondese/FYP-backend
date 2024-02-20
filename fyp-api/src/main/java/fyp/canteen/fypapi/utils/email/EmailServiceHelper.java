@@ -5,6 +5,7 @@ import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.enums.PasswordSetType;
 import fyp.canteen.fypcore.pojo.resetpassword.ResetPasswordDetailRequestPojo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,9 +17,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class EmailServiceHelper {
     private final MailSenderService mailSenderService;
+    @Value("${base.fe-url}")
+    private String frontendUrl;
 
     public void sendResetPasswordEmail(ResetPasswordDetailRequestPojo requestPojo) throws TemplateException, IOException {
-        String baseUrl = requestPojo.getBaseUrl() == null ? MessageConstants.PASSWORD_RESET_LINK : requestPojo.getBaseUrl() + "/reset-password/";
+        String baseUrl = (requestPojo.getBaseUrl() == null ? frontendUrl : requestPojo.getBaseUrl()) + "/reset-password/";
         String link = baseUrl + requestPojo.getResetToken();
 //        CompanyDetailsForMailPojo companyDetailsToSendMail = companyDetailMapper.getCompanyDetailsToSendMail();
         Map<String, Object> model = new HashMap<>();

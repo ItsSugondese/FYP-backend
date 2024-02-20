@@ -46,3 +46,6 @@ mybatis:
   type-aliases-package: fyp.canteen.fypcore.pojo.* # Tells mybatis to look for our POJO class in the right package
   configuration:
     map-underscore-to-camel-case: true #converts underscore of db into camelcase
+
+base:
+  fe-url: http://localhost:4200/

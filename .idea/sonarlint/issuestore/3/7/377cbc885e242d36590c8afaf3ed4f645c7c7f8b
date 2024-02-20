@@ -1,0 +1,9 @@
+
+h
+java:S6204_"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ί®‚
+h
+java:S6204s"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ί®‚
+g
+java:S1128"LRemove this unused import 'fyp.canteen.fypapi.service.food.FoodMenuService'.(¥ρ£Ψωÿÿÿÿ
+K
+java:S1128"0Remove this unused import 'java.time.LocalDate'.(›‘¬θύÿÿÿÿ

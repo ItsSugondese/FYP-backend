@@ -47,7 +47,7 @@ public class FoodMenuController extends BaseController {
     @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))})})
-    public ResponseEntity<GlobalApiResponse> getFoodMenuPageable(@RequestBody @Valid FoodMenuPaginationRequestPojo requestPojo){
+    public ResponseEntity<GlobalApiResponse> getFoodMenuPageable(@RequestBody FoodMenuPaginationRequestPojo requestPojo){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),CRUD.GET, foodMenuService.getFoodMenuPageable(requestPojo)));
     }
 

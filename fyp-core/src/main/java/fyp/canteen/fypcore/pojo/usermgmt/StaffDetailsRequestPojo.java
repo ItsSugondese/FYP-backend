@@ -18,4 +18,5 @@ public class StaffDetailsRequestPojo {
     private Long profileId;
     @NotNull
     private String contactNumber;
+    private String baseUrl;
 }

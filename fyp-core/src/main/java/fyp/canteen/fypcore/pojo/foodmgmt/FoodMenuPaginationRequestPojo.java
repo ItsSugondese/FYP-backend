@@ -8,8 +8,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class    FoodMenuPaginationRequestPojo extends PaginationRequest {
+public class  FoodMenuPaginationRequestPojo extends PaginationRequest {
     private String name = "-1";
     private FoodType foodType = null;
-    private FoodFilter type = FoodFilter.ALL;
+    private FoodFilter filter = FoodFilter.ALL;
 }

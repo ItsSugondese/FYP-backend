@@ -71,6 +71,8 @@ public class FoodMenuServiceImpl implements FoodMenuService{
     public PaginationResponse getFoodMenuPageable(FoodMenuPaginationRequestPojo requestPojo) {
         return customPaginationHandler.getPaginatedData(foodMenuRepo.getFoodMenuPageable(requestPojo.getName(),
                 requestPojo.getFoodType() == null? null : requestPojo.getFoodType().toString(),
+//                requestPojo.getFilter().toString(),
+                "ALL",
                 requestPojo.getPageable()));
     }
 

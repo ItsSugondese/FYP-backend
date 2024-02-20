@@ -8,9 +8,11 @@ import fyp.canteen.fypapi.service.resetpassword.ResetPasswordService;
 import fyp.canteen.fypapi.utils.email.EmailServiceHelper;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.PasswordSetType;
 import fyp.canteen.fypcore.enums.UserType;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
+import fyp.canteen.fypcore.pojo.resetpassword.ResetPasswordDetailRequestPojo;
 import fyp.canteen.fypcore.pojo.temporaryattachments.TemporaryAttachmentsDetailResponsePojo;
 import fyp.canteen.fypcore.pojo.usermgmt.StaffDetailPaginationRequest;
 import fyp.canteen.fypcore.pojo.usermgmt.StaffDetailResponsePojo;
@@ -27,27 +29,16 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StaffServiceImpl extends  UserServiceHelperImpl implements StaffService {
+@RequiredArgsConstructor
+public class StaffServiceImpl  implements StaffService {
     private final UserRepo userRepo;
     private final BeanUtilsBean beanUtilsBean = new NullAwareBeanUtilsBean();
     private final TemporaryAttachmentsDetailMapper temporaryAttachmentsDetailMapper;
     private final CustomPaginationHandler customPaginationHandler;
     private final GenericFileUtil genericFileUtil;
     private final StaffDetailMapper staffDetailMapper;
+    private final UserServiceHelper userServiceHelper;
 
-    public StaffServiceImpl(RoleService roleService, UserRepo userRepo,
-                            ResetPasswordService resetPasswordService,
-                            TemporaryAttachmentsDetailMapper temporaryAttachmentsDetailMapper,
-                            CustomPaginationHandler customPaginationHandler,
-                            GenericFileUtil genericFileUtil, StaffDetailMapper staffDetailMapper,
-                            EmailServiceHelper emailServiceHelper) {
-        super(roleService, userRepo, resetPasswordService, emailServiceHelper);
-        this.userRepo = userRepo;
-        this.temporaryAttachmentsDetailMapper = temporaryAttachmentsDetailMapper;
-        this.customPaginationHandler = customPaginationHandler;
-        this.genericFileUtil = genericFileUtil;
-        this.staffDetailMapper = staffDetailMapper;
-    }
 
     @Override
     public void saveStaff(StaffDetailsRequestPojo requestPojo) {
@@ -65,7 +56,7 @@ public class StaffServiceImpl extends  UserServiceHelperImpl implements StaffSer
         }
 
         if(!alreadyExists){
-            user.setRole(getRoles(ModuleNameConstants.STAFF.toUpperCase()));
+            user.setRole(userServiceHelper.getRoles(ModuleNameConstants.STAFF.toUpperCase()));
             user.setUserType(UserType.STAFF);
         }
 
@@ -74,6 +65,14 @@ public class StaffServiceImpl extends  UserServiceHelperImpl implements StaffSer
         }
 
         userRepo.save(user);
+        userServiceHelper.resetPasswordMailSendHelper(ResetPasswordDetailRequestPojo.builder()
+                .userEmail(requestPojo.getEmail())
+                .fullName(requestPojo.getFullName())
+                .baseUrl(requestPojo.getBaseUrl())
+                .passwordSetType(PasswordSetType.SET)
+                .build());
+
+
     }
 
     @Override
@@ -101,7 +100,7 @@ public class StaffServiceImpl extends  UserServiceHelperImpl implements StaffSer
         boolean exists = false;
 
         if(user.getId() == null || requestPojo.getId() == null){
-            checkForUniqueEmail(requestPojo.getEmail());
+            userServiceHelper.checkForUniqueEmail(requestPojo.getEmail());
         }else {
             exists = true;
         }

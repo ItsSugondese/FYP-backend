@@ -34,22 +34,14 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class UserServiceImpl extends UserServiceHelperImpl implements UserService{
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService{
     private final UserRepo userRepo;
     private final BeanUtilsBean beanUtilsBean = new NullAwareBeanUtilsBean();
     private final CustomPaginationHandler customPaginationHandler;
     private final UserDetailMapper userDetailMapper;
     private final UserDataConfig userDataConfig;
-
-    public UserServiceImpl(RoleService roleService, UserRepo userRepo, ResetPasswordService resetPasswordService, EmailServiceHelper emailServiceHelper,
-                           CustomPaginationHandler customPaginationHandler,
-                           UserDetailMapper userDetailMapper, UserDataConfig userDataConfig) {
-        super(roleService, userRepo, resetPasswordService, emailServiceHelper);
-        this.userRepo = userRepo;
-        this.customPaginationHandler = customPaginationHandler;
-        this.userDetailMapper = userDetailMapper;
-        this.userDataConfig = userDataConfig;
-    }
+    private final UserServiceHelper userServiceHelper;
 
     @Override
     public void saveUserFromGoogleLogin(UserDetailsRequestPojo requestPojo) {
@@ -61,7 +53,7 @@ public class UserServiceImpl extends UserServiceHelperImpl implements UserServic
             throw new AppException(e.getMessage(), e);
         }
 
-        user.setRole(getRoles(ModuleNameConstants.USER.toUpperCase()));
+        user.setRole(userServiceHelper.getRoles(ModuleNameConstants.USER.toUpperCase()));
         userRepo.save(user);
     }
 

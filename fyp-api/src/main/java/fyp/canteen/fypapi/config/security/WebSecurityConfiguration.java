@@ -49,7 +49,8 @@ public class WebSecurityConfiguration {
         http.cors(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(
                         auth -> auth.requestMatchers("/canteen/authenticate", "/authenticate", "/addUser", "/canteen/login-with-google", "/login-with-google",
-                                        "/auth/**", "/test/**", "/test").permitAll()
+                                        "/auth/**", "/test/**", "/test", "/auth/validate-token", "/auth/reset-password",
+                                        "/auth/forgot-password").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(eh -> eh .authenticationEntryPoint(jwtAuthenticationEntryPoint))
@@ -60,10 +61,7 @@ public class WebSecurityConfiguration {
         return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
     @Bean
     public AuthenticationManager authenticationManager(
