@@ -28,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 @RequiredArgsConstructor
 public class StaffServiceImpl  implements StaffService {
@@ -65,15 +67,25 @@ public class StaffServiceImpl  implements StaffService {
         }
 
         userRepo.save(user);
-        userServiceHelper.resetPasswordMailSendHelper(ResetPasswordDetailRequestPojo.builder()
-                .userEmail(requestPojo.getEmail())
-                .fullName(requestPojo.getFullName())
-                .baseUrl(requestPojo.getBaseUrl())
-                .passwordSetType(PasswordSetType.SET)
-                .build());
+
+    if(!alreadyExists)
+        sendPasswordSettingMail(requestPojo);
 
 
     }
+
+    private void sendPasswordSettingMail(StaffDetailsRequestPojo requestPojo) {
+        CompletableFuture.supplyAsync(() -> {
+            userServiceHelper.resetPasswordMailSendHelper(ResetPasswordDetailRequestPojo.builder()
+                    .userEmail(requestPojo.getEmail())
+                    .fullName(requestPojo.getFullName())
+                    .baseUrl(requestPojo.getBaseUrl())
+                    .passwordSetType(PasswordSetType.SET)
+                    .build());
+            return null;
+        });
+    }
+
 
     @Override
     public PaginationResponse getAllStaffPaginated(StaffDetailPaginationRequest paginationRequest) {
@@ -89,7 +101,8 @@ public class StaffServiceImpl  implements StaffService {
     public void getStaffPhoto(HttpServletResponse response, Long id) {
         String photoPath = userRepo.findById(id).orElseThrow(() -> new RuntimeException("Staff not found")).getProfilePath();
         try {
-            genericFileUtil.getFileFromFilePath(photoPath, response);
+            if(photoPath != null)
+                genericFileUtil.getFileFromFilePath(photoPath, response);
         }catch (Exception e){
             throw new AppException(e.getMessage(), e);
         }

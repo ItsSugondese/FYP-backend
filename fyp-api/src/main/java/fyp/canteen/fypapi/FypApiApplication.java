@@ -1,6 +1,7 @@
 package fyp.canteen.fypapi;
 
 import fyp.canteen.fypapi.config.mail.MailProperties;
+import jakarta.annotation.PostConstruct;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
+
+import java.util.TimeZone;
 
 
 @SpringBootApplication
@@ -33,4 +36,12 @@ public class FypApiApplication {
 			System.out.println(mailProperties);
 		};
 	}
+
+	@PostConstruct
+	public void init() {
+		// Setting Spring Boot SetTimeZone
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Kathmandu"));
+	}
+
+
 }

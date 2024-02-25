@@ -1,0 +1,19 @@
+
+u
+java:S2293>"YReplace the type specification in this constructor call with the diamond operator ("<>").(…‰îT8Þ£Ô·Ü1
+u
+java:S2293J"YReplace the type specification in this constructor call with the diamond operator ("<>").(…‰îT8ß£Ô·Ü1
+h
+java:S1192"FDefine a constant instead of duplicating this literal "error" 3 times.(î†ü’ýÿÿÿÿ8ß£Ô·Ü1
+e
+java:S53615"HReplace this call to "replaceAll()" by a call to the "replace()" method.(ºº¿Ó8’¤Ô·Ü1
+]	java:S125G"<This block of commented-out lines of code should be removed.(‡óðšüÿÿÿÿ8–¤Ô·Ü1
+]	java:S125P"<This block of commented-out lines of code should be removed.(Ð¾Í®ýÿÿÿÿ8™¤Ô·Ü1
+e
+java:S1128"HRemove this unused import 'fyp.canteen.fypcore.constants.ErrorMessages'.(¾ä€„8›¤Ô·Ü1
+p
+java:S1128"TRemove this unused import 'org.springframework.dao.DataIntegrityViolationException'.(ÅÔº(8œ¤Ô·Ü1
+M
+java:S1128"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8œ¤Ô·Ü1
+M
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8œ¤Ô·Ü1

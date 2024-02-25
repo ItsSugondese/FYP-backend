@@ -52,4 +52,7 @@ public class OnsiteOrder extends AuditActiveAbstract {
     @Column(columnDefinition = "double precision default 0.0")
     private double totalPrice;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean markAsRead = false;
+
 }

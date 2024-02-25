@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/auth")
@@ -63,12 +64,17 @@ public class AuthController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> signIn(@RequestBody @Valid ResetPasswordDetailRequestPojo request){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),CRUD.SAVE, userServiceHelper.resetPasswordMailSendHelper(
-                ResetPasswordDetailRequestPojo.builder()
-                        .userEmail(request.getUserEmail())
-                        .passwordSetType(PasswordSetType.RESET)
-                        .build()
-        )));
+        CompletableFuture<String> futureResult = CompletableFuture.supplyAsync(() -> {
+            // Simulate a long-running computation
+            userServiceHelper.resetPasswordMailSendHelper(
+                    ResetPasswordDetailRequestPojo.builder()
+                            .userEmail(request.getUserEmail())
+                            .passwordSetType(PasswordSetType.RESET)
+                            .build()
+            );
+            return "Future Result";
+        });
+        return ResponseEntity.ok(successResponse("Check your email to reset password",CRUD.SAVE, null));
     }
 
     @PostMapping("/validate-token")

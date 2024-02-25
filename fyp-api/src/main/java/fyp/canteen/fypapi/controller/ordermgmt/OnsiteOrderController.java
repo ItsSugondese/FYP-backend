@@ -4,6 +4,7 @@ import fyp.canteen.fypapi.service.ordermgmt.OnsiteOrderService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.enums.ApprovalStatus;
 import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.enums.OrderType;
 import fyp.canteen.fypcore.generics.controller.BaseController;
@@ -54,6 +55,21 @@ public class OnsiteOrderController extends BaseController {
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
                 CRUD.GET, onsiteOrderService.getPaginatedOrderListByTime(requestPojo)
         ));
+    }
+
+    @GetMapping("/mark-as-read/{id}")
+    public ResponseEntity<GlobalApiResponse> markOnsiteOrderAsRead(@PathVariable("id") Long id){
+        onsiteOrderService.markOnsiteOrderAsRead(id);
+        return ResponseEntity.ok(successResponse("Order Marked as read",
+                CRUD.SAVE, null));
+    }
+
+    @GetMapping("/status/{id}/{status}")
+    public ResponseEntity<GlobalApiResponse> orderApprovalStatus(@PathVariable("id") Long id,
+                                                                 @PathVariable("status")ApprovalStatus status){
+        onsiteOrderService.updateOrderStatus(id, status);
+        return ResponseEntity.ok(successResponse("Selected order is sent to " + status.getText() + ".",
+                CRUD.SAVE, null));
     }
 
     @PostMapping("/history/paginated")

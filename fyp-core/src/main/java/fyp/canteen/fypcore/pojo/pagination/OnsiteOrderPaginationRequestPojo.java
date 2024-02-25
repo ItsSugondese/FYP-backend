@@ -9,5 +9,12 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class OnsiteOrderPaginationRequestPojo extends PaginationRequest {
-    LocalTime timeRange = LocalTime.now().minusMinutes(30);
+    private LocalTime timeRange = LocalTime.now().minusMinutes(30);
+    private boolean read = false;
+    private String name = "-1";
+    private OnsiteOrderFilter onsiteOrderFilter;
+
+    public enum OnsiteOrderFilter{
+        PENDING, VIEWED, DELIVERED, CANCELED
+    }
 }

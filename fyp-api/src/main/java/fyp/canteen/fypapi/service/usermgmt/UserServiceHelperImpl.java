@@ -37,6 +37,7 @@ public class UserServiceHelperImpl implements UserServiceHelper{
 
     @Override
     public ResetPasswordDetailRequestPojo resetPasswordMailSendHelper(ResetPasswordDetailRequestPojo requestPojo) {
+
         try {
             resetPasswordService.resetPasswordEmailVerify(requestPojo);
             if (requestPojo.getResetToken() != null)

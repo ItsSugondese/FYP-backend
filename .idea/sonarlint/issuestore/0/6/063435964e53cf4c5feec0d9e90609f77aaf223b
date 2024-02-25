@@ -1,0 +1,9 @@
+
+ 
+java:S1130"~Remove the declaration of thrown exception 'freemarker.template.TemplateException', as it cannot be thrown from method's body.(ÇÂŸúýÿÿÿÿ8 Êü®Ü1
+Ž
+java:S1130"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(ÇÂŸúýÿÿÿÿ8¡Êü®Ü1
+X	java:S125"<This block of commented-out lines of code should be removed.(Øä‰Å8¤Êü®Ü1
+]	java:S125"<This block of commented-out lines of code should be removed.(Íþ„Ëÿÿÿÿÿ8ªÊü®Ü1
+h
+java:S1128"KRemove this unused import 'fyp.canteen.fypcore.constants.MessageConstants'.(–Òñ8Ú—ý®Ü1

@@ -24,6 +24,7 @@ import fyp.canteen.fypcore.utils.pagination.CustomPaginationHandler;
 import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,8 +82,11 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     @Override
     public PaginationResponse getPaginatedOrderListByTime(OnsiteOrderPaginationRequestPojo requestPojo) {
         PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getOnsiteOrderPaginated(
-                requestPojo.getTimeRange(), requestPojo.getPageable()
+                null, requestPojo.getOnsiteOrderFilter().toString(), requestPojo.getName(), Pageable.unpaged()
         ));
+//        PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getOnsiteOrderPaginated(
+//                requestPojo.getTimeRange(), requestPojo.isRead(), requestPojo.getPageable()
+//        ));
         response.setContent(response.getContent().stream().map(
                 e -> {
 
@@ -96,6 +100,14 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
 
 
         return response;
+    }
+
+    @Override
+    public void updateOrderStatus(Long id, ApprovalStatus status) {
+        OnsiteOrder onsiteOrder = findById(id);
+
+        onsiteOrder.setApprovalStatus(status);
+        onsiteOrderRepo.save(onsiteOrder);
     }
 
     @Override
@@ -114,6 +126,13 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                 }
         ).collect(Collectors.toList()));
         return  response;
+    }
+
+    @Override
+    public void markOnsiteOrderAsRead(Long orderId) {
+        OnsiteOrder onsiteOrder = findById(orderId);
+        onsiteOrder.setMarkAsRead(true);
+        onsiteOrderRepo.save(onsiteOrder);
     }
 
     @Override

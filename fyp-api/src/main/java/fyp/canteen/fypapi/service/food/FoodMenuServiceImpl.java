@@ -18,6 +18,7 @@ import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,9 +72,8 @@ public class FoodMenuServiceImpl implements FoodMenuService{
     public PaginationResponse getFoodMenuPageable(FoodMenuPaginationRequestPojo requestPojo) {
         return customPaginationHandler.getPaginatedData(foodMenuRepo.getFoodMenuPageable(requestPojo.getName(),
                 requestPojo.getFoodType() == null? null : requestPojo.getFoodType().toString(),
-//                requestPojo.getFilter().toString(),
-                "ALL",
-                requestPojo.getPageable()));
+                requestPojo.getFilter().toString(),
+                Pageable.unpaged()));
     }
 
     @Override
