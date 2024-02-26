@@ -1,7 +1,7 @@
 package fyp.canteen.fypcore.enums;
 
 public enum ApprovalStatus {
-    DELIVERED("Delivered"), REJECTED("Rejected"), PENDING("Pending");
+    DELIVERED("Delivered"), CANCELED("Canceled"), PENDING("Pending");
 
     private String text;
 

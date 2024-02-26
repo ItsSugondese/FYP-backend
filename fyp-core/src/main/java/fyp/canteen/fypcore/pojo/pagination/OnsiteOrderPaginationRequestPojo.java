@@ -15,6 +15,6 @@ public class OnsiteOrderPaginationRequestPojo extends PaginationRequest {
     private OnsiteOrderFilter onsiteOrderFilter;
 
     public enum OnsiteOrderFilter{
-        PENDING, VIEWED, DELIVERED, CANCELED
+        PENDING, VIEWED, DELIVERED, CANCELED, PAID
     }
 }

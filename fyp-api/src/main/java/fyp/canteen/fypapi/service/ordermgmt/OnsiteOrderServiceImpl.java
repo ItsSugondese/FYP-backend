@@ -63,12 +63,9 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
 
         onsiteOrder.setUser(User.builder().id(userDataConfig.userId()).build());
         if(orderType.equals(OrderType.ONLINE)) {
-            onsiteOrder.setOnlineOrder(OnlineOrder.builder().id(requestPojo.getOnlineOrderId()).build());
+//            onsiteOrder.setOnlineOrder(OnlineOrder.builder().id(requestPojo.getOnlineOrderId()).build());
         }
 
-
-        onsiteOrder.setOrderType(orderType);
-        onsiteOrder.setDeliveryStatus(DeliveryStatus.PENDING);
         onsiteOrder.setApprovalStatus(ApprovalStatus.PENDING);
         onsiteOrder = onsiteOrderRepo.save(onsiteOrder);
 

@@ -9,6 +9,8 @@ import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "onsite_order")
 @Getter
@@ -27,21 +29,12 @@ public class OnsiteOrder extends AuditActiveAbstract {
     @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_onsite_order_user"), nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OrderType orderType;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private PayStatus payStatus = PayStatus.UNPAID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "online_order_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_onsite_order_online_order"))
-    private OnlineOrder onlineOrder;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private DeliveryStatus deliveryStatus;
+    private LocalDateTime orderedTime = LocalDateTime.now();
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -54,5 +47,7 @@ public class OnsiteOrder extends AuditActiveAbstract {
 
     @Column(columnDefinition = "boolean default false")
     private boolean markAsRead = false;
+
+
 
 }

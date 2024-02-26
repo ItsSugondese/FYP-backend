@@ -1,0 +1,16 @@
+
+]	java:S125B"<This block of commented-out lines of code should be removed.(ÇÉ„›şÿÿÿÿ8—“¶œŞ1
+X	java:S125V"<This block of commented-out lines of code should be removed.(·ÌÄû8¼ñÃ÷İ1
+h
+java:S6204`"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚
+h
+java:S6204|"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚
+n
+java:S1128"LRemove this unused import 'fyp.canteen.fypapi.service.food.FoodMenuService'.(¥ñ£Øùÿÿÿÿ8óêÆ›Ş1
+b
+java:S1128
+"ERemove this unused import 'fyp.canteen.fypcore.enums.DeliveryStatus'.(ÈÆ‘†8à¶œŞ1
+p
+java:S1128"SRemove this unused import 'fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder'.(Ğäç¸8»“¶œŞ1
+R
+java:S1128"0Remove this unused import 'java.time.LocalDate'.(›‘¬èıÿÿÿÿ8ôêÆ›Ş1

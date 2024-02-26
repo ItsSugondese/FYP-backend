@@ -12,14 +12,14 @@ import java.util.Map;
 
 public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder, Long> {
 
-    @Query(value = "  SELECT oo.id, oo.order_type as \"orderType\",  \n" +
-            "  case when Extract(day from (current_timestamp - oo.created_date)) > 0 then  Extract(day from (current_timestamp - oo.created_date)) ||  ' days ' else '' end\n" +
+    @Query(value = "  SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
+            "  case when Extract(day from (current_timestamp - oo.ordered_time)) > 0 then  Extract(day from (current_timestamp - oo.ordered_time)) ||  ' days ' else '' end\n" +
             "  || \n" +
-            "  case when Extract(hour from (current_timestamp - oo.created_date))>0 then Extract(hour from (current_timestamp - oo.created_date)) || ' hours ' else '' end \n" +
+            "  case when Extract(hour from (current_timestamp - oo.ordered_time))>0 then Extract(hour from (current_timestamp - oo.ordered_time)) || ' hours ' else '' end \n" +
             "  ||\n" +
-            "  case when Extract(minute from (current_timestamp - oo.created_date)) > 0 then Extract(minute from (current_timestamp - oo.created_date)) || ' min ' else '' end\n" +
+            "  case when Extract(minute from (current_timestamp - oo.ordered_time)) > 0 then Extract(minute from (current_timestamp - oo.ordered_time)) || ' min ' else '' end\n" +
             "  ||\n" +
-            "  case when Extract(second from (current_timestamp - oo.created_date))>0 then  CAST(EXTRACT(SECOND FROM date_trunc('second', CURRENT_TIMESTAMP - oo.created_date)) AS INTEGER)  || ' sec' else '' end\n" +
+            "  case when Extract(second from (current_timestamp - oo.ordered_time))>0 then  CAST(EXTRACT(SECOND FROM date_trunc('second', CURRENT_TIMESTAMP - oo.ordered_time)) AS INTEGER)  || ' sec' else '' end\n" +
             "  as \"orderedTime\",\n" +
             "  oo.approval_status as \"approvalStatus\", oo.total_price as \"totalPrice\", oo.user_id as \"userId\", \n" +
             "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\", oo.mark_as_read as \"markAsRead\" \n" +
@@ -28,20 +28,13 @@ public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder
             "where case when cast(?1 as date) is null then true else true end and \n" +
             "case when ?2 = 'PENDING' then oo.mark_as_read is false \n" +
             "   when ?2 = 'VIEWED' then oo.mark_as_read is true and oo.approval_status = 'PENDING' \n" +
-            "   when ?2 = 'DELIVERED' then oo.approval_status = 'APPROVED'\n" +
-            "   when ?2 = 'CANCELED' then oo.approval_status = 'REJECTED'\n" +
+            "   when ?2 = 'DELIVERED' then oo.approval_status = 'DELIVERED' and oo.pay_status = 'UNPAID' \n" +
+            "   when ?2 = 'CANCELED' then oo.approval_status = 'CANCELED'\n" +
+            "   when ?2 = 'PAID' then oo.approval_status = 'DELIVERED' and oo.pay_status <> 'UNPAID' \n" +
             "end and \n" +
             "case when ?3 = '-1' then true else u.full_name ilike concat('%',?3,'%') end",
 countQuery = "Select count(*) from (\n" +
-        " SELECT oo.id, oo.order_type as \"orderType\",  \n" +
-        "  case when Extract(day from (current_timestamp - oo.created_date)) > 0 then  Extract(day from (current_timestamp - oo.created_date)) ||  ' days ' else '' end\n" +
-        "  || \n" +
-        "  case when Extract(hour from (current_timestamp - oo.created_date))>0 then Extract(hour from (current_timestamp - oo.created_date)) || ' hours ' else '' end \n" +
-        "  ||\n" +
-        "  case when Extract(minute from (current_timestamp - oo.created_date)) > 0 then Extract(minute from (current_timestamp - oo.created_date)) || ' min ' else '' end\n" +
-        "  ||\n" +
-        "  case when Extract(second from (current_timestamp - oo.created_date))>0 then  CAST(EXTRACT(SECOND FROM date_trunc('second', CURRENT_TIMESTAMP - oo.created_date)) AS INTEGER)  || ' sec' else '' end\n" +
-        "  as \"orderedTime\",\n" +
+        " SELECT oo.id, \n" +
         "  oo.approval_status as \"approvalStatus\", oo.total_price as \"totalPrice\", oo.user_id as \"userId\", \n" +
         "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\" \n" +
         "FROM onsite_order oo  \n" +
@@ -49,8 +42,9 @@ countQuery = "Select count(*) from (\n" +
         "where case when cast(?1 as date) is null then true else true end and \n" +
         "case when ?2 = 'PENDING' then oo.mark_as_read is false \n" +
         "   when ?2 = 'VIEWED' then oo.mark_as_read is true and oo.approval_status = 'PENDING' \n" +
-        "   when ?2 = 'DELIVERED' then oo.approval_status = 'APPROVED'\n" +
-        "   when ?2 = 'CANCELED' then oo.approval_status = 'REJECTED'\n" +
+        "   when ?2 = 'DELIVERED' then oo.approval_status = 'DELIVERED' and oo.pay_status = 'UNPAID'\n" +
+        "   when ?2 = 'CANCELED' then oo.approval_status = 'CANCELED'\n" +
+        "   when ?2 = 'PAID' then oo.approval_status = 'DELIVERED' and oo.pay_status <> 'UNPAID' \n" +
         "end and  \n" +
         "case when ?3 = '-1' then true else u.full_name ilike concat('%',?3,'%') end) foo"
 //            "where oo.pay_status = 'UNPAID' "
