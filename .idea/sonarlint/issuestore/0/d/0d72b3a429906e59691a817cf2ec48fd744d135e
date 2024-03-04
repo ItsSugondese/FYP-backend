@@ -1,11 +1,15 @@
 
-T
-java:S6126"2Replace this String concatenation with Text block.(‰¯Éìýÿÿÿÿ8Ãîˆ¶Ù1
-`
-java:S1128">Remove this unused import 'org.apache.ibatis.annotations.One'.(±“Ç…ýÿÿÿÿ8úëÉ¤Þ1
-c
-java:S1128"ARemove this unused import 'org.apache.ibatis.annotations.Result'.(¹ª¯¡úÿÿÿÿ8úëÉ¤Þ1
-d
-java:S1128"BRemove this unused import 'org.apache.ibatis.annotations.Results'.(…¬ÃÞùÿÿÿÿ8ûëÉ¤Þ1
-^
-java:S1128"ARemove this unused import 'org.apache.ibatis.annotations.Select'.(ž²ß˜8üëÉ¤Þ1
+M
+java:S6126"2Replace this String concatenation with Text block.(‰¯Éìýÿÿÿÿ
+M
+java:S6126"2Replace this String concatenation with Text block.(‰¯Éìýÿÿÿÿ
+M
+java:S6126$"2Replace this String concatenation with Text block.(ÍÕ·‰þÿÿÿÿ
+Y
+java:S1128">Remove this unused import 'org.apache.ibatis.annotations.One'.(±“Ç…ýÿÿÿÿ
+\
+java:S1128"ARemove this unused import 'org.apache.ibatis.annotations.Result'.(¹ª¯¡úÿÿÿÿ
+]
+java:S1128"BRemove this unused import 'org.apache.ibatis.annotations.Results'.(…¬ÃÞùÿÿÿÿ
+W
+java:S1128"ARemove this unused import 'org.apache.ibatis.annotations.Select'.(ž²ß˜

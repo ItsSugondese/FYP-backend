@@ -3,6 +3,7 @@ package fyp.canteen.fypcore.pojo.ordermgmt;
 import fyp.canteen.fypcore.enums.PayStatus;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,8 @@ public class OnsiteOrderRequestPojo {
 
     private List<FoodOrderRequestPojo> foodOrderList = new ArrayList<>();
     private List<Long> removeFoodId = new ArrayList<>();
-
-    private Long onlineOrderId;
     private PayStatus payStatus;
     private Integer tableNumber;
     private double totalPrice;
+    private LocalDateTime orderedTime;
 }

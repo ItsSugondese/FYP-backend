@@ -9,6 +9,7 @@ import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.ApprovalStatus;
 import fyp.canteen.fypcore.enums.DeliveryStatus;
 import fyp.canteen.fypcore.enums.OrderType;
+import fyp.canteen.fypcore.enums.PayStatus;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnsiteOrder;
@@ -16,6 +17,7 @@ import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderRequestPojo;
 import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodMappingRequestPojo;
 import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodResponsePojo;
+import fyp.canteen.fypcore.pojo.pagination.OnsiteOrderOfUserPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.pagination.OnsiteOrderPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.pagination.OrderDetailsPaginationRequest;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
@@ -47,13 +49,13 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
 
     @Transactional
     @Override
-    public void saveOnsiteOrder(OnsiteOrderRequestPojo requestPojo, OrderType orderType) {
+    public void saveOnsiteOrder(OnsiteOrderRequestPojo requestPojo) {
         OnsiteOrder onsiteOrder = new OnsiteOrder();
 
         if(requestPojo.getId() != null)
             onsiteOrder = onsiteOrderRepo.findById(requestPojo.getId()).orElse(onsiteOrder);
 
-        if(onsiteOrder.getId() == null && requestPojo.getFoodOrderList().isEmpty() && orderType.equals(OrderType.ONSITE))
+        if(onsiteOrder.getId() == null && requestPojo.getFoodOrderList().isEmpty())
             throw new AppException("User must order something when making request");
         try {
             beanUtilsBean.copyProperties(onsiteOrder, requestPojo);
@@ -62,9 +64,7 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
         }
 
         onsiteOrder.setUser(User.builder().id(userDataConfig.userId()).build());
-        if(orderType.equals(OrderType.ONLINE)) {
-//            onsiteOrder.setOnlineOrder(OnlineOrder.builder().id(requestPojo.getOnlineOrderId()).build());
-        }
+
 
         onsiteOrder.setApprovalStatus(ApprovalStatus.PENDING);
         onsiteOrder = onsiteOrderRepo.save(onsiteOrder);
@@ -90,7 +90,42 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                     Map<String, Object> map = new HashMap<>(e);
                     map.put("orderFoodDetails", orderFoodMappingMapper.getAllFoodDetailsByOrderId( ((Long)e.get("id")),
                             true));
-                    map.put("remainingAmount", userPaymentDetailsRepo.getTotalRemainingAmountToPayOfUserByUserId(Long.parseLong(String.valueOf(e.get("userId")))));
+                    map.put("remainingAmount", userPaymentDetailsRepo.getTotalRemainingAmountWithUnpaidToPayOfUserByUserId(Long.parseLong(String.valueOf(e.get("userId")))));
+                    return map;
+                }
+        ).collect(Collectors.toList()));
+
+
+        return response;
+    }
+
+    @Override
+    public PaginationResponse getPaginatedOrderOfUser(OnsiteOrderOfUserPaginationRequestPojo requestPojo) {
+        PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getOnsiteOrderOfUserPaginated(
+                 requestPojo.getUserId(),
+                requestPojo.getPayStatus() == null ? null : requestPojo.getPayStatus().toString(),
+                requestPojo.getPageable()
+        ));
+//        PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getOnsiteOrderPaginated(
+//                requestPojo.getTimeRange(), requestPojo.isRead(), requestPojo.getPageable()
+//        ));
+        response.setContent(response.getContent().stream().map(
+                e -> {
+
+                    Map<String, Object> map = new HashMap<>(e);
+                    map.put("orderFoodDetails", orderFoodMappingMapper.getAllFoodDetailsByOrderId( ((Long)e.get("id")),
+                            true));
+
+                    double amount;
+                    PayStatus payStatus =  PayStatus.valueOf(String.valueOf(e.get("payStatus")).toUpperCase());
+                    if(payStatus == PayStatus.UNPAID)
+                        amount = Double.parseDouble(String.valueOf(e.get("totalPrice")));
+                    else if(payStatus == PayStatus.PAID)
+                        amount = 0D;
+                    else
+                        amount = userPaymentDetailsRepo.getTotalRemainingAmountOfOrderByOrderId(Long.parseLong(String.valueOf(e.get("id"))));
+
+                    map.put("remainingAmount", amount);
                     return map;
                 }
         ).collect(Collectors.toList()));

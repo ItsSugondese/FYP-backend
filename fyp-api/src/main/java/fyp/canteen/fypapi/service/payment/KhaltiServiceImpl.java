@@ -43,7 +43,7 @@ public class KhaltiServiceImpl implements KhatiService{
 
         if(responseEntity.getStatusCode() == HttpStatusCode.valueOf(200)) {
             try {
-                onsiteOrderService.saveOnsiteOrder(requestPojo.getOnsiteOrder(), OrderType.ONSITE);
+                onsiteOrderService.saveOnsiteOrder(requestPojo.getOnsiteOrder());
                 return objectMapper.readValue(responseEntity.getBody(), Map.class);
 
             } catch (Exception e) {

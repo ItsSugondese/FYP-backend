@@ -1,13 +1,15 @@
 package fyp.canteen.fypcore.pojo.ordermgmt;
 
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuRequestPojo;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class OrderFoodResponsePojo {
     private Long id;
     private Integer quantity;

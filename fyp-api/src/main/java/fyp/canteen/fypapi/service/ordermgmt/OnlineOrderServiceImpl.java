@@ -1,13 +1,18 @@
 package fyp.canteen.fypapi.service.ordermgmt;
 
+import fyp.canteen.fypapi.mapper.ordermgmt.OnlineOrderMapper;
 import fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper;
 import fyp.canteen.fypapi.repository.ordermgmt.OnlineOrderRepo;
+import fyp.canteen.fypcore.constants.Message;
+import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.ApprovalStatus;
+import fyp.canteen.fypcore.enums.OrderType;
+import fyp.canteen.fypcore.enums.PayStatus;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder;
+import fyp.canteen.fypcore.model.entity.ordermgmt.OrderFoodMapping;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
-import fyp.canteen.fypcore.pojo.ordermgmt.OnlineOrderRequestPojo;
-import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodMappingRequestPojo;
+import fyp.canteen.fypcore.pojo.ordermgmt.*;
 import fyp.canteen.fypcore.pojo.pagination.OnlineOrderPaginationRequestPojo;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
 import fyp.canteen.fypcore.utils.UserDataConfig;
@@ -15,12 +20,16 @@ import fyp.canteen.fypcore.utils.pagination.CustomPaginationHandler;
 import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -33,10 +42,12 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
     private final UserDataConfig userDataConfig;
     private final CustomPaginationHandler customPaginationHandler;
     private final OrderFoodMappingMapper orderFoodMappingMapper;
+    private final OnlineOrderMapper onlineOrderMapper;
+    private final OnsiteOrderService onsiteOrderService;
 
     @Override
     @Transactional
-    public Integer saveOnlineOrder(OnlineOrderRequestPojo requestPojo) {
+    public OnlineOrderResponsePojo saveOnlineOrder(OnlineOrderRequestPojo requestPojo) {
         OnlineOrder onlineOrder = new OnlineOrder();
 
         if (requestPojo.getId() != null)
@@ -44,6 +55,7 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
 
         if (onlineOrder.getId() == null) {
             onlineOrder.setOrderCode(LocalDate.now() + " " + (onlineOrderRepo.noOfOrders(LocalDate.now()) + 1));
+            onlineOrder.setUser(User.builder().id(userDataConfig.userId()).build());
             validationWhenIdIsNull(requestPojo);
         }
         try {
@@ -55,7 +67,6 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
         if (onlineOrder.getApprovalStatus() == null)
             onlineOrder.setApprovalStatus(ApprovalStatus.PENDING);
 
-        onlineOrder.setUser(User.builder().id(userDataConfig.userId()).build());
 
         onlineOrder = onlineOrderRepo.save(onlineOrder);
 
@@ -65,20 +76,32 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
                     .removeFoodId(requestPojo.getRemoveFoodId())
                     .build(), onlineOrder, null);
 
-        return Integer.parseInt((onlineOrder.getOrderCode().split(" "))[1]);
+
+//         Integer.parseInt((onlineOrder.getOrderCode().split(" "))[1]);
+
+        return OnlineOrderResponsePojo.builder()
+                .id(onlineOrder.getId())
+                .orderCode(onlineOrder.getOrderCode())
+                .arrivalTime(onlineOrder.getArrivalTime().format(DateTimeFormatter.ofPattern("hh:mm a")))
+                .profileUrl(onlineOrder.getUser().getProfilePath())
+                .totalPrice(onlineOrder.getTotalPrice())
+                .userId(onlineOrder.getUser().getId())
+                .fullName(onlineOrder.getUser().getFullName())
+                .email(onlineOrder.getUser().getEmail())
+                .build();
     }
 
     @Override
     public PaginationResponse getPaginatedOrderListByTime(OnlineOrderPaginationRequestPojo requestPojo) {
         PaginationResponse response = customPaginationHandler.getPaginatedData(onlineOrderRepo.getOnlineOrderPaginated(
-                requestPojo.getFromTime(), requestPojo.getToTime(), requestPojo.getPageable()));
+                requestPojo.getFromTime(), requestPojo.getToTime(), Pageable.unpaged()));
 
         response.setContent(response.getContent().stream().map(
                 e -> {
 
                     Map<String, Object> map = new HashMap<>(e);
-                   map.put("orderFoodDetails", orderFoodMappingMapper.getAllFoodDetailsByOrderId( ((Long)e.get("id")),
-                           true));
+                    map.put("orderFoodDetails", orderFoodMappingMapper.getAllFoodDetailsByOrderId(((Long) e.get("id")),
+                            true));
                     return map;
                 }
         ).collect(Collectors.toList()));
@@ -86,7 +109,46 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
         return response;
     }
 
-    private void validationWhenIdIsNull(OnlineOrderRequestPojo requestPojo){
+    @Override
+    @Transactional
+    public void convertOnlineToOnsite(Long id) {
+        OnlineOrder onlineOrder = findById(id);
+        List<OrderFoodMapping> orderFoodMappingList =  orderFoodMappingService.getAllOrderedFoodByOnlineOrder(onlineOrder);
+        onlineOrder.setApprovalStatus(ApprovalStatus.DELIVERED);
+        onlineOrder = onlineOrderRepo.saveAndFlush(onlineOrder);
+
+        onsiteOrderService.saveOnsiteOrder(OnsiteOrderRequestPojo.builder()
+                        .foodOrderList(orderFoodMappingList.stream().map(
+                                e -> FoodOrderRequestPojo.builder()
+                                        .quantity(e.getQuantity())
+                                        .foodId(e.getFoodMenu().getId())
+                                        .id(e.getId())
+                                        .build()
+                        ).collect(Collectors.toList()))
+                        .payStatus(PayStatus.UNPAID)
+                        .removeFoodId(new ArrayList<>())
+                        .orderedTime(onlineOrder.getCreatedDate().toLocalDateTime())
+                        .totalPrice(onlineOrder.getTotalPrice())
+                .build());
+    }
+
+    @Override
+    public OnlineOrderResponsePojo getOnlineOrderById(Long id) {
+//        return onlineOrderMapper.getOnlineOrderById(id).orElseThrow(() -> new AppException(Message.idNotFound(ModuleNameConstants.ONLINE_ORDER)));
+        return null;
+    }
+
+    @Override
+    public List<OnlineOrderResponsePojo> getUserOnlineOrder() {
+        return onlineOrderMapper.getTodayOrderOfUserByUserId(userDataConfig.userId());
+    }
+
+    @Override
+    public OnlineOrder findById(Long id) {
+        return onlineOrderRepo.findById(id).orElseThrow(() -> new AppException(Message.idNotFound(ModuleNameConstants.ONLINE_ORDER)));
+    }
+
+    private void validationWhenIdIsNull(OnlineOrderRequestPojo requestPojo) {
         if (requestPojo.getFoodOrderList().isEmpty())
             throw new AppException("Selecting food is compulsory when making orders.");
     }

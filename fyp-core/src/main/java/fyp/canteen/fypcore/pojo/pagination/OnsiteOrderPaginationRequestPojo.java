@@ -13,7 +13,7 @@ public class OnsiteOrderPaginationRequestPojo extends PaginationRequest {
     private boolean read = false;
     private String name = "-1";
     private OnsiteOrderFilter onsiteOrderFilter;
-
+    private Long userId = null;
     public enum OnsiteOrderFilter{
         PENDING, VIEWED, DELIVERED, CANCELED, PAID
     }

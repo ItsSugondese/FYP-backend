@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Map;
 
 public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder, Long> {
@@ -51,6 +52,35 @@ countQuery = "Select count(*) from (\n" +
             , nativeQuery = true)
     Page<Map<String, Object>> getOnsiteOrderPaginated(LocalTime timeRange, String showStatus, String name, Pageable pageable);
 
+    @Query(value = "  SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
+            "to_char(oo.ordered_time, 'YYYY-MM-DD HH:MI AM') as \"orderedTime\", \n" +
+            "  oo.approval_status as \"approvalStatus\", oo.total_price as \"totalPrice\", oo.user_id as \"userId\", \n" +
+            "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\", oo.mark_as_read as \"markAsRead\" \n" +
+            "FROM onsite_order oo  \n" +
+            "JOIN users u ON u.id = oo.user_id \n" +
+            "where u.id = ?1 and  oo.approval_status = 'DELIVERED' and  \n" +
+            "case when ?2 = 'UNPAID' then oo.pay_status = 'UNPAID' \n" +
+            "   when ?2 = 'PAID' then oo.pay_status = 'PAID' \n" +
+            "   when ?2 = 'PARTIAL_PAID' then  oo.pay_status = 'PARTIAL_PAID' \n" +
+            " else true\n" +
+            "end",
+countQuery = "select count(*) from (\n" +
+        "  SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
+        "oo.ordered_time as \"orderedTime\", \n" +
+        "  oo.approval_status as \"approvalStatus\", oo.total_price as \"totalPrice\", oo.user_id as \"userId\", \n" +
+        "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\", oo.mark_as_read as \"markAsRead\" \n" +
+        "FROM onsite_order oo  \n" +
+        "JOIN users u ON u.id = oo.user_id \n" +
+        "where u.id = ?1 and  oo.approval_status = 'DELIVERED' and  \n" +
+        "case when ?2 = 'UNPAID' then oo.pay_status = 'UNPAID' \n" +
+        "   when ?2 = 'PAID' then oo.pay_status = 'PAID' \n" +
+        "   when ?2 = 'PARTIAL_PAID' then  oo.pay_status = 'PARTIAL_PAID' \n" +
+        " else true\n" +
+        "end) foo"
+//            "where oo.pay_status = 'UNPAID' "
+            , nativeQuery = true)
+    Page<Map<String, Object>> getOnsiteOrderOfUserPaginated(Long id, String showStatus, Pageable pageable);
+
     @Query(value = "select oo.id, 'ONLINE_ORDER' as \"orderType\", u.profile_path as \"profileUrl\", to_char(oo.created_date, 'YYYY-MM-DD HH:MI AM') as date, oo.arrival_time as \"arrivalTime\" from online_order oo\n" +
             "join users u on u.id = oo.user_id \n" +
             "where oo.is_active and oo.user_id = ?3\n" +
@@ -70,4 +100,9 @@ countQuery = "Select count(*) from (\n" +
                     " onsite.created_date between ?1 and ?2) foo",
             nativeQuery = true)
     Page<Map<String, Object>> getUserOrderPaginated(LocalDate fromDate, LocalDate toDate, Long userId, Pageable pageable);
+
+
+    @Query(nativeQuery = true,
+            value = "select * from onsite_order oo where oo.is_active and oo.pay_status = 'UNPAID' and oo.approval_status = 'DELIVERED' and oo.user_id = ?1")
+    List<OnsiteOrder> findUnpaidOnsiteOrdersOfUserByUserId(Long userId);
 }
