@@ -1,0 +1,8 @@
+
+t
+java:S62043"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(Ýõ¬¹ýÿÿÿÿ8›—úÔà1
+X	java:S125!"<This block of commented-out lines of code should be removed.(òµÄÀ8ž—úÔà1
+]	java:S125-"<This block of commented-out lines of code should be removed.(ÐÌðûÿÿÿÿ8†ºÄÕà1
+w
+java:S1128
+"URemove this unused import 'fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodResponsePojo'.(È¯ÁÙùÿÿÿÿ8ÌÆºÕà1

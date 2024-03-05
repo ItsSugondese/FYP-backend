@@ -65,6 +65,13 @@ public class OnsiteOrderController extends BaseController {
         ));
     }
 
+    @GetMapping("/user-orders")
+    public ResponseEntity<GlobalApiResponse> getTodayOnsiteOrder(){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, onsiteOrderService.userTodayOnsiteOrders()
+        ));
+    }
+
     @GetMapping("/mark-as-read/{id}")
     public ResponseEntity<GlobalApiResponse> markOnsiteOrderAsRead(@PathVariable("id") Long id){
         onsiteOrderService.markOnsiteOrderAsRead(id);

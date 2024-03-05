@@ -94,7 +94,9 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
     @Override
     public PaginationResponse getPaginatedOrderListByTime(OnlineOrderPaginationRequestPojo requestPojo) {
         PaginationResponse response = customPaginationHandler.getPaginatedData(onlineOrderRepo.getOnlineOrderPaginated(
-                requestPojo.getFromTime(), requestPojo.getToTime(), Pageable.unpaged()));
+                null, null, requestPojo.getName(),Pageable.unpaged()));
+//        PaginationResponse response = customPaginationHandler.getPaginatedData(onlineOrderRepo.getOnlineOrderPaginated(
+//                requestPojo.getFromTime(), requestPojo.getToTime(), requestPojo.getName(),Pageable.unpaged()));
 
         response.setContent(response.getContent().stream().map(
                 e -> {
@@ -129,6 +131,7 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
                         .removeFoodId(new ArrayList<>())
                         .orderedTime(onlineOrder.getCreatedDate().toLocalDateTime())
                         .totalPrice(onlineOrder.getTotalPrice())
+                        .userId(onlineOrder.getUser().getId())
                 .build());
     }
 

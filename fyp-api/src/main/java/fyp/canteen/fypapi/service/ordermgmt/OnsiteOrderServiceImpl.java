@@ -1,11 +1,14 @@
 package fyp.canteen.fypapi.service.ordermgmt;
 
+import fyp.canteen.fypapi.mapper.ordermgmt.OnsiteOrderMapper;
 import fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper;
+import fyp.canteen.fypapi.repository.notification.NotificationRepo;
 import fyp.canteen.fypapi.repository.ordermgmt.OnsiteOrderRepo;
 import fyp.canteen.fypapi.repository.payment.UserPaymentDetailsRepo;
 import fyp.canteen.fypapi.service.food.FoodMenuService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
+import fyp.canteen.fypcore.constants.NotificationMessageConstants;
 import fyp.canteen.fypcore.enums.ApprovalStatus;
 import fyp.canteen.fypcore.enums.DeliveryStatus;
 import fyp.canteen.fypcore.enums.OrderType;
@@ -14,7 +17,9 @@ import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnsiteOrder;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
+import fyp.canteen.fypcore.model.notification.Notification;
 import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderRequestPojo;
+import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderResponsePojo;
 import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodMappingRequestPojo;
 import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodResponsePojo;
 import fyp.canteen.fypcore.pojo.pagination.OnsiteOrderOfUserPaginationRequestPojo;
@@ -46,6 +51,8 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     private final CustomPaginationHandler customPaginationHandler;
     private final OrderFoodMappingMapper orderFoodMappingMapper;
     private final UserPaymentDetailsRepo userPaymentDetailsRepo;
+    private final NotificationRepo notificationRepo;
+    private final OnsiteOrderMapper onsiteOrderMapper;
 
     @Transactional
     @Override
@@ -63,7 +70,10 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
             throw new AppException(e.getMessage(), e);
         }
 
-        onsiteOrder.setUser(User.builder().id(userDataConfig.userId()).build());
+        if(requestPojo.getUserId() == null)
+            onsiteOrder.setUser(User.builder().id(userDataConfig.userId()).build());
+        else
+            onsiteOrder.setUser(User.builder().id(requestPojo.getUserId()).build());
 
 
         onsiteOrder.setApprovalStatus(ApprovalStatus.PENDING);
@@ -89,7 +99,7 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
 
                     Map<String, Object> map = new HashMap<>(e);
                     map.put("orderFoodDetails", orderFoodMappingMapper.getAllFoodDetailsByOrderId( ((Long)e.get("id")),
-                            true));
+                            false));
                     map.put("remainingAmount", userPaymentDetailsRepo.getTotalRemainingAmountWithUnpaidToPayOfUserByUserId(Long.parseLong(String.valueOf(e.get("userId")))));
                     return map;
                 }
@@ -161,10 +171,24 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     }
 
     @Override
+    public List<OnsiteOrderResponsePojo> userTodayOnsiteOrders() {
+        return onsiteOrderMapper.getTodayOnsiteUserOrders(userDataConfig.userId());
+    }
+
+    @Override
+    @Transactional
     public void markOnsiteOrderAsRead(Long orderId) {
         OnsiteOrder onsiteOrder = findById(orderId);
         onsiteOrder.setMarkAsRead(true);
         onsiteOrderRepo.save(onsiteOrder);
+
+        notificationRepo.save(Notification.builder()
+                        .user(onsiteOrder.getUser())
+                        .message(NotificationMessageConstants.MARKED_AS_READ)
+                        .isSeen(false)
+                .build());
+
+
     }
 
     @Override

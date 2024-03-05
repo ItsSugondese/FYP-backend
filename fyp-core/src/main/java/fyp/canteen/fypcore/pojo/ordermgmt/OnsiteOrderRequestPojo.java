@@ -21,4 +21,5 @@ public class OnsiteOrderRequestPojo {
     private Integer tableNumber;
     private double totalPrice;
     private LocalDateTime orderedTime;
+    private Long userId;
 }

@@ -17,5 +17,6 @@ public class ModuleNameConstants {
     public static final String ONSITE_ORDER = "Onsite Order";
     public static final String TEMPORARY_ATTACHMENTS = "Temporary Attachments";
     public static final String ROLE = "Role";
+    public static final String NOTIFICATION = "Notification";
 
 }

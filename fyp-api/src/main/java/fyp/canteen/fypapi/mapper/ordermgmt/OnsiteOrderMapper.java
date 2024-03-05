@@ -1,9 +1,11 @@
 package fyp.canteen.fypapi.mapper.ordermgmt;
 
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnsiteOrder;
+import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderResponsePojo;
 import org.apache.ibatis.annotations.*;
 import org.springframework.security.core.parameters.P;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
@@ -15,4 +17,30 @@ public interface OnsiteOrderMapper {
                     one = @One(select = "fyp.canteen.fypapi.mapper.usermgmt.UserDetailMapper.getById"))
     })
     Optional<OnsiteOrder> getById(@Param("id") Long id);
+
+    @Select("  SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
+            "  case \n" +
+            "\t  when \n" +
+            "  \tExtract(day from (current_timestamp - oo.ordered_time)) > 0 then  Extract(day from (current_timestamp - oo.ordered_time)) ||  ' days ' ||\n" +
+            "\tExtract(hour from (current_timestamp - oo.ordered_time)) || ' hours'  \n" +
+            "  \t when\n" +
+            "  \t\t Extract(hour from (current_timestamp - oo.ordered_time))>0 then Extract(hour from (current_timestamp - oo.ordered_time)) || ' hours ' || \n" +
+            "  \t\tExtract(minute from (current_timestamp - oo.ordered_time)) || ' min'\n" +
+            "  \twhen \n" +
+            "  Extract(minute from (current_timestamp - oo.ordered_time)) > 0 then Extract(minute from (current_timestamp - oo.ordered_time)) || ' min ' \n" +
+            "else\n" +
+            " CAST(EXTRACT(SECOND FROM date_trunc('second', CURRENT_TIMESTAMP - oo.ordered_time)) AS INTEGER)  || ' sec' \n" +
+            "  end\n" +
+            "  as \"orderedTime\",\n" +
+            "  oo.approval_status as \"approvalStatus\", oo.total_price as \"totalPrice\", oo.user_id as \"userId\", \n" +
+            "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\", oo.mark_as_read as \"markAsRead\" \n" +
+            "FROM onsite_order oo  \n" +
+            "JOIN users u ON u.id = oo.user_id \n" +
+            "where oo.is_active and oo.user_id = #{id} and cast(oo.created_date as date) = (current_date - interval '1 day')")
+    @Results({
+            @Result(property = "id", column = "id"),
+            @Result(property = "orderFoodDetails", column = "id",
+                    many = @Many(select = "fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper.getAllOnsiteFoodDetailsByOrderId"))
+    })
+    List<OnsiteOrderResponsePojo> getTodayOnsiteUserOrders(Long id);
 }

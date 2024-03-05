@@ -14,13 +14,18 @@ import java.util.Map;
 public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder, Long> {
 
     @Query(value = "  SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
-            "  case when Extract(day from (current_timestamp - oo.ordered_time)) > 0 then  Extract(day from (current_timestamp - oo.ordered_time)) ||  ' days ' else '' end\n" +
-            "  || \n" +
-            "  case when Extract(hour from (current_timestamp - oo.ordered_time))>0 then Extract(hour from (current_timestamp - oo.ordered_time)) || ' hours ' else '' end \n" +
-            "  ||\n" +
-            "  case when Extract(minute from (current_timestamp - oo.ordered_time)) > 0 then Extract(minute from (current_timestamp - oo.ordered_time)) || ' min ' else '' end\n" +
-            "  ||\n" +
-            "  case when Extract(second from (current_timestamp - oo.ordered_time))>0 then  CAST(EXTRACT(SECOND FROM date_trunc('second', CURRENT_TIMESTAMP - oo.ordered_time)) AS INTEGER)  || ' sec' else '' end\n" +
+            "  case \n" +
+            "\t  when \n" +
+            "  \tExtract(day from (current_timestamp - oo.ordered_time)) > 0 then  Extract(day from (current_timestamp - oo.ordered_time)) ||  ' days ' ||\n" +
+            "\tExtract(hour from (current_timestamp - oo.ordered_time)) || ' hours'  \n" +
+            "  \t when\n" +
+            "  \t\t Extract(hour from (current_timestamp - oo.ordered_time))>0 then Extract(hour from (current_timestamp - oo.ordered_time)) || ' hours ' || \n" +
+            "  \t\tExtract(minute from (current_timestamp - oo.ordered_time)) || ' min'\n" +
+            "  \twhen \n" +
+            "  Extract(minute from (current_timestamp - oo.ordered_time)) > 0 then Extract(minute from (current_timestamp - oo.ordered_time)) || ' min ' \n" +
+            "else\n" +
+            " CAST(EXTRACT(SECOND FROM date_trunc('second', CURRENT_TIMESTAMP - oo.ordered_time)) AS INTEGER)  || ' sec' \n" +
+            "  end\n" +
             "  as \"orderedTime\",\n" +
             "  oo.approval_status as \"approvalStatus\", oo.total_price as \"totalPrice\", oo.user_id as \"userId\", \n" +
             "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\", oo.mark_as_read as \"markAsRead\" \n" +

@@ -1,0 +1,9 @@
+
+w
+java:S1104"ZMake MARKED_AS_READ a static final constant or non-public and provide accessors if needed.(¬£úÉ8üæòà1
+Q
+java:S1444"4Make this "public static MARKED_AS_READ" field final(¬£úÉ8üæòà1
+v
+java:S3008"YRename this field "MARKED_AS_READ" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¬£úÉ8üæòà1
+\
+java:S1118":Add a private constructor to hide the implicit public one.(ñŸ¿€üÿÿÿÿ8•üæòà1

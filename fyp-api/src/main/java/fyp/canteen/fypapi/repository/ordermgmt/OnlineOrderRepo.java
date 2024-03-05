@@ -31,11 +31,16 @@ public interface OnlineOrderRepo extends GenericSoftDeleteRepository<OnlineOrder
     @Query(value = "select oo.id, u.profile_path as \"profileUrl\",  oo.order_code , oo.total_price as \"totalPrice\",\n" +
             "to_char(oo.arrival_time, 'HH:mi am' ) as \"arrivalTime\", \n" +
             "    (string_to_array(oo.order_code , ' ')) [2] as \"orderCode\", oo.user_id as \"userId\", INITCAP(u.full_name) as \"fullName\", u.email \n" +
-            "   from online_order oo join users u on u.id = oo.user_id  where oo.is_active",
-            countQuery = "select count(*) from (select oo.id, oo.approval_status, oo.order_code ,\n" +
-                    "to_char(oo.arrival_time, 'HH:mi am' ) as arrival_time, \n" +
-                    "    (string_to_array(oo.order_code , ' ')) [2] as order_code, oo.user_id, u.full_name, u.email \n" +
-                    "   from online_order oo join users u on u.id = oo.user_id  where oo.is_active) a",
+            "   from online_order oo join users u on u.id = oo.user_id  where oo.is_active and oo.approval_status = 'PENDING' and \n" +
+            "case when cast(?1 as date) is null then true else true end and case when cast(?2 as date) is null then true else true end and \n" +
+            "case when ?3 = '-1' then true else (u.full_name ilike concat('%',?3,'%') or ?3 = (string_to_array(oo.order_code , ' ')) [2]) end",
+            countQuery = "select count(*) from (select oo.id, u.profile_path as \"profileUrl\",  oo.order_code , oo.total_price as \"totalPrice\",\n" +
+                    "to_char(oo.arrival_time, 'HH:mi am' ) as \"arrivalTime\", \n" +
+                    "    (string_to_array(oo.order_code , ' ')) [2] as \"orderCode\", oo.user_id as \"userId\", INITCAP(u.full_name) as \"fullName\", u.email \n" +
+                    "   from online_order oo join users u on u.id = oo.user_id  where oo.is_active and oo.approval_status = 'PENDING' and \n" +
+                    "case when cast(?1 as date) is null then true else true end and case when cast(?2 as date) is null then true else true end and \n" +
+                    "case when ?3 = '-1' then true else (u.full_name ilike concat('%',?3,'%') or ?3 = (string_to_array(oo.order_code , ' ')) [2]) end) a",
             nativeQuery = true)
-    Page<Map<String, Object>> getOnlineOrderPaginated(LocalTime fromTime, LocalTime toTime, Pageable pageable);
+    Page<Map<String, Object>> getOnlineOrderPaginated(LocalTime fromTime, LocalTime toTime,
+                                                      String name, Pageable pageable);
 }

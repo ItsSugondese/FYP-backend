@@ -1,0 +1,11 @@
+
+s
+java:S1192e"QDefine a constant instead of duplicating this literal "orderFoodDetails" 3 times.(æ’Üüýÿÿÿÿ8“ã–€á1
+X	java:S125`"<This block of commented-out lines of code should be removed.(·ÌÄû8Ãä–€á1
+o
+java:S6204j"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8Ää–€á1
+X	java:S125y"<This block of commented-out lines of code should be removed.(·ÌÄû8åä–€á1
+p
+java:S6204"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8çä–€á1
+p
+java:S6204©"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8å–€á1
