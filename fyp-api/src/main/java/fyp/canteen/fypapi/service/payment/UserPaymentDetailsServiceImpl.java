@@ -58,7 +58,7 @@ public class UserPaymentDetailsServiceImpl implements UserPaymentDetailsService{
             throw new AppException(e.getMessage(), e);
         }
 
-        userPaymentDetails.setUser(User.builder().id(requestPojo.getUserId()).build());
+        userPaymentDetails.setUser(onsiteOrder.getUser());
         userPaymentDetails.setOnsiteOrder(onsiteOrder);
 
         userPaymentDetailsRepo.save(userPaymentDetails);

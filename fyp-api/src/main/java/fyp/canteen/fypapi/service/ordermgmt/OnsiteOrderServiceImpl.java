@@ -172,7 +172,17 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
 
     @Override
     public List<OnsiteOrderResponsePojo> userTodayOnsiteOrders() {
-        return onsiteOrderMapper.getTodayOnsiteUserOrders(userDataConfig.userId());
+        List<OnsiteOrderResponsePojo> response =  onsiteOrderMapper.getTodayOnsiteUserOrders(userDataConfig.userId());
+        response.stream().peek(e -> {
+            PayStatus payStatus =  PayStatus.valueOf(e.getPayStatus().toUpperCase());
+            if(payStatus == PayStatus.UNPAID)
+                e.setRemainingAmount(e.getTotalPrice());
+            else if(payStatus == PayStatus.PAID)
+                e.setRemainingAmount(0D);
+            else
+                e.setRemainingAmount(userPaymentDetailsRepo.getTotalRemainingAmountOfOrderByOrderId(e.getId()));
+        }).collect(Collectors.toList());
+        return response;
     }
 
     @Override
@@ -189,6 +199,13 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                 .build());
 
 
+    }
+
+    @Override
+    public void setToPaid(Long orderId) {
+        OnsiteOrder onsiteOrder = findById(orderId);
+        onsiteOrder.setPayStatus(PayStatus.PAID);
+        onsiteOrderRepo.save(onsiteOrder);
     }
 
     @Override

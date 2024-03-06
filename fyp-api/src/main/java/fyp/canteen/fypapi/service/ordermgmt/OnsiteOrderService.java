@@ -22,5 +22,7 @@ public interface OnsiteOrderService {
     void markOnsiteOrderAsRead(Long orderId);
     PaginationResponse getPaginatedOrderHistoryDetails(OrderDetailsPaginationRequest requestPojo);
 
+    void setToPaid(Long orderId);
+
     OnsiteOrder findById(Long id);
 }

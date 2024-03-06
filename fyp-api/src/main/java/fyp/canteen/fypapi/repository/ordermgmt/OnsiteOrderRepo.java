@@ -28,7 +28,15 @@ public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder
             "  end\n" +
             "  as \"orderedTime\",\n" +
             "  oo.approval_status as \"approvalStatus\", oo.total_price as \"totalPrice\", oo.user_id as \"userId\", \n" +
-            "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\", oo.mark_as_read as \"markAsRead\" \n" +
+            "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\", oo.mark_as_read as \"markAsRead\", \n" +
+            "case\n" +
+            "   when oo.mark_as_read is false then 'Pending'\n" +
+            "   when oo.mark_as_read is true and oo.approval_status = 'PENDING' then 'Viewed'\n" +
+            "   when  oo.pay_status = 'PAID' then 'Paid'\n" +
+            "   when  oo.pay_status = 'PARTIAL_PAID' then 'Partial Paid'\n" +
+            "   when oo.approval_status = 'DELIVERED' and oo.pay_status = 'UNPAID' then 'Delivered'\n" +
+            "   when oo.approval_status = 'CANCELED' then 'canceled' \n" +
+            "end as \"orderStatus\"\n" +
             "FROM onsite_order oo  \n" +
             "JOIN users u ON u.id = oo.user_id \n" +
             "where case when cast(?1 as date) is null then true else true end and \n" +

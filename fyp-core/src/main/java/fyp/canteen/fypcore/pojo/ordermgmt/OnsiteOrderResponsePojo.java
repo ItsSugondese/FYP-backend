@@ -18,7 +18,9 @@ public class OnsiteOrderResponsePojo {
     private Boolean markAsRead;
     private String payStatusCheck;
     private Double remainingAmount;
-    private Integer id;
+    private Long id;
     private String payStatus;
     private String email;
+    private String orderStatus;
+    private Boolean feedbackStatus;
 }

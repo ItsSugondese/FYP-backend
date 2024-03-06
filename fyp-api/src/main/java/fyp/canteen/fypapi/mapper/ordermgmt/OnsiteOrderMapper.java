@@ -33,10 +33,22 @@ public interface OnsiteOrderMapper {
             "  end\n" +
             "  as \"orderedTime\",\n" +
             "  oo.approval_status as \"approvalStatus\", oo.total_price as \"totalPrice\", oo.user_id as \"userId\", \n" +
-            "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\", oo.mark_as_read as \"markAsRead\" \n" +
+            "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\", oo.mark_as_read as \"markAsRead\", \n" +
+            "case\n" +
+            "   when oo.approval_status = 'CANCELED' then 'canceled' \n" +
+            "   when  oo.pay_status = 'PAID' then 'Paid'\n" +
+            "   when  oo.pay_status = 'PARTIAL_PAID' then 'Partial Paid'\n" +
+            "   when oo.mark_as_read is false then 'Pending'\n" +
+            "   when oo.mark_as_read is true and oo.approval_status = 'PENDING' then 'Viewed'\n" +
+            "   when oo.approval_status = 'DELIVERED' and oo.pay_status = 'UNPAID' then 'Delivered'\n" +
+            "end as \"orderStatus\", \n" +
+            "case when oo.has_feedback then null\n" +
+            "when oo.approval_status = 'DELIVERED' and oo.approval_status  <> 'CANCELED' and \n" +
+            "oo.has_feedback is false and cast(oo.created_date as date) = current_date then true \n" +
+            "else false end as \"feedbackStatus\" \n" +
             "FROM onsite_order oo  \n" +
             "JOIN users u ON u.id = oo.user_id \n" +
-            "where oo.is_active and oo.user_id = #{id} and cast(oo.created_date as date) = (current_date - interval '1 day')")
+            "where oo.is_active and oo.user_id = #{id} and cast(oo.created_date as date) in ((current_date - interval '1 day'), current_date)")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "orderFoodDetails", column = "id",

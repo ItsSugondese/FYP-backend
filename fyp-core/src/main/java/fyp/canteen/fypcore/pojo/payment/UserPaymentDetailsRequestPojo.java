@@ -2,13 +2,15 @@ package fyp.canteen.fypcore.pojo.payment;
 
 import fyp.canteen.fypcore.enums.PaymentMode;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class UserPaymentDetailsRequestPojo {
     private Long id;
     @NotNull

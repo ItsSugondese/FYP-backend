@@ -9,5 +9,6 @@ import lombok.Setter;
 public class KhaltiTransactionVerificationRequestPojo {
     private String token;
     private Double amount;
-    private OnsiteOrderRequestPojo onsiteOrder;
+//    private OnsiteOrderRequestPojo onsiteOrder;
+    private Long onsiteOrderId;
 }
