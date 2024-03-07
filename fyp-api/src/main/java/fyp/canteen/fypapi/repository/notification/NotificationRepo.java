@@ -12,19 +12,21 @@ import java.util.Map;
 
 public interface NotificationRepo extends GenericSoftDeleteRepository<Notification, Long> {
     @Query(nativeQuery = true, value = "SELECT \n" +
-            "    to_char(n.created_date, 'YYYY-MM-DD HH:MI:SS') as \"date\", \n" +
+            "    to_char(n.created_date, 'YYYY-MM-DD HH:MI AM') as \"date\", \n" +
             "    n.is_seen as \"isSeen\",\n" +
             "    CASE \n" +
-            "        WHEN POSITION('\\n' IN n.message) > 0 THEN \n" +
-            "            SUBSTRING(n.message, 1, POSITION('\\n' IN n.message) - 1)\n" +
-            "        ELSE \n" +
-            "            n.message \n" +
-            "    END AS message \n" +
+            "         WHEN split_part(n.message, E'\\n', 1)   = '' THEN NULL \n" +
+            "         ELSE split_part(n.message, E'\\n', 1) \n" +
+            "       END as message,\n" +
+            "           CASE \n" +
+            "         WHEN split_part(n.message, E'\\n', 2)   = '' THEN NULL \n" +
+            "         ELSE split_part(n.message, E'\\n', 2) \n" +
+            "       END as remark \n" +
             "FROM \n" +
             "    notification n \n" +
             "    JOIN users u ON u.id  = n.user_id \n" +
             "WHERE \n" +
-            "    u.id = 2 AND n.is_active \n" +
+            "    u.id = ?1 AND n.is_active \n" +
             "ORDER BY \n" +
             "    is_seen ASC, \n" +
             "    n.created_date DESC",
@@ -41,7 +43,7 @@ public interface NotificationRepo extends GenericSoftDeleteRepository<Notificati
                     "    notification n \n" +
                     "    JOIN users u ON u.id  = n.user_id \n" +
                     "WHERE \n" +
-                    "    u.id = 2 AND n.is_active \n" +
+                    "    u.id = ?1 AND n.is_active \n" +
                     "ORDER BY \n" +
                     "    is_seen ASC, \n" +
                     "    n.created_date DESC) foo")

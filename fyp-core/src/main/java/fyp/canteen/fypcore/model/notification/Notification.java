@@ -17,7 +17,7 @@ public class Notification extends AuditActiveAbstract {
     @Id
     @SequenceGenerator(name = "notification_seq_gen", sequenceName = "notification_seq", allocationSize = 1, initialValue = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_seq_gen")
-    private Integer id;
+    private Long id;
 
     @Column(columnDefinition = "TEXT NOT NULL")
     private String message;
@@ -27,7 +27,7 @@ public class Notification extends AuditActiveAbstract {
     private User user;
 
     @Column(columnDefinition = "boolean default false")
-    private boolean isSeen;
+    private boolean isSeen  = false;
 
 }
 

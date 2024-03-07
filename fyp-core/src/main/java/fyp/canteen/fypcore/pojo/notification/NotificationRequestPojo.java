@@ -13,7 +13,7 @@ public class NotificationRequestPojo {
     private Long id;
     @NotNull
     private String message;
-    @NotNull
+
     private Long userId;
     private Integer refId;
     private String refLink;

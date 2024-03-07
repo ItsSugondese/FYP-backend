@@ -56,7 +56,7 @@ public class AuthController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> signIn(@RequestBody @Valid JwtRequest request){
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),CRUD.SAVE, authService.signIn(request)));
+        return ResponseEntity.ok(successResponse("Authentication successful",CRUD.SAVE, authService.signIn(request)));
     }
 
     @PostMapping("/forgot-password")

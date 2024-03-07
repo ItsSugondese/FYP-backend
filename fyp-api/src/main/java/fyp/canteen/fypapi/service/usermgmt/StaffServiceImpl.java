@@ -59,7 +59,7 @@ public class StaffServiceImpl  implements StaffService {
 
         if(!alreadyExists){
             user.setRole(userServiceHelper.getRoles(ModuleNameConstants.STAFF.toUpperCase()));
-            user.setUserType(UserType.STAFF);
+            user.setUserType(requestPojo.getUserType());
         }
 
         if(requestPojo.getProfileId() != null){

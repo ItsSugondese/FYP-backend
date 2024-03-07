@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
@@ -23,12 +26,16 @@ public class NotificationServiceImpl implements NotificationService {
     private final CustomPaginationHandler customPaginationHandler;
     @Override
     public void saveNotification(NotificationRequestPojo requestPojo) {
+        if(requestPojo.getUserId() == null)
+            throw new AppException("User id is must");
         Notification notification = new Notification();
         boolean exists;
         if(requestPojo.getId() != null)
             notification = notificationRepo.findById(requestPojo.getId()).orElse(notification);
 
         exists = notification.getId() != null;
+
+
 
         try{
             beanUtilsBean.copyProperties(notification, requestPojo);
@@ -40,6 +47,18 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setUser(User.builder().id(requestPojo.getUserId()).build());
 
         notificationRepo.save(notification);
+    }
+
+    @Override
+    public void saveNotificationForMultipleUser(NotificationRequestPojo requestPojo, List<Long> userIds) {
+        notificationRepo.saveAll(userIds.stream().map(
+                userId ->
+                      Notification.builder()
+                            .user(User.builder().id(userId).build())
+                            .message(requestPojo.getMessage())
+                            .isSeen(false)
+                            .build()
+        ).collect(Collectors.toList()));
     }
 
     @Override

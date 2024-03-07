@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +60,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public PaginationResponse getAllUsersPaginated(UserDetailPaginationRequest paginationRequest) {
-        return customPaginationHandler.getPaginatedData(userRepo.findAllUsers(paginationRequest.getUserType().toString(),
+        return customPaginationHandler.getPaginatedData(userRepo
+                .findAllUsers(paginationRequest.getUserType().stream().map(Enum::toString).collect(Collectors.toList()),
                 paginationRequest.getName(), paginationRequest.getPageable()));
     }
 
