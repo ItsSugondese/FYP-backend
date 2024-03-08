@@ -18,6 +18,7 @@ public class ModuleNameConstants {
     public static final String TEMPORARY_ATTACHMENTS = "Temporary Attachments";
     public static final String ROLE = "Role";
     public static final String NOTIFICATION = "Notification";
+    public static final String ADMIN_DASHBOARD = "Admin Dashboard";
     public static final String ANNOUNCEMENT = "Announcement";
 
 }
