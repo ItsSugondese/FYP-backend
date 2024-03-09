@@ -1,8 +1,13 @@
 package fyp.canteen.fypapi.service.dashboard.admin;
 
+import fyp.canteen.fypapi.mapper.foodmgmt.FoodMenuMapper;
+import fyp.canteen.fypapi.mapper.ordermgmt.OnlineOrderMapper;
+import fyp.canteen.fypapi.mapper.ordermgmt.OnsiteOrderMapper;
+import fyp.canteen.fypapi.mapper.payment.RevenueMapper;
 import fyp.canteen.fypapi.mapper.payment.UserPaymentDetailsMapper;
-import fyp.canteen.fypcore.pojo.dashboard.SalesDataRequestPojo;
-import fyp.canteen.fypcore.pojo.dashboard.data.SalesDataPojo;
+import fyp.canteen.fypapi.mapper.usermgmt.UserDetailMapper;
+import fyp.canteen.fypcore.pojo.dashboard.*;
+import fyp.canteen.fypcore.pojo.dashboard.data.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +19,47 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 public class AdminDashboardServiceImpl implements AdminDashboardService {
     private final UserPaymentDetailsMapper userPaymentDetailsMapper;
+    private final UserDetailMapper userDetailMapper;
+    private final OnsiteOrderMapper onsiteOrderMapper;
+    private final OnlineOrderMapper onlineOrderMapper;
+    private final RevenueMapper revenueMapper;
+    private final FoodMenuMapper foodMenuMapper;
+
+    @Override
+    public OrderDataPojo getOrderData(OrderDataRequestPojo requestPojo) {
+        OrderDataPojo orderDataPojo = new OrderDataPojo();
+        orderDataPojo.setOnsiteOrder(onsiteOrderMapper.getOnsiteOrderStatistics(requestPojo.getTimeDifference()));
+        orderDataPojo.setOnlineOrder(onlineOrderMapper.getOnlineOrderStatistics(requestPojo.getTimeDifference()));
+
+        orderDataPojo.setTotalOrder(orderDataPojo.getOnlineOrder().getTotal() + orderDataPojo.getOnsiteOrder().getTotal());
+        orderDataPojo.setTotalPending(orderDataPojo.getOnlineOrder().getPending() + orderDataPojo.getOnsiteOrder().getPending());
+        return orderDataPojo;
+    }
+
+    @Override
+    public RevenueDataPojo getRevenueData(RevenueDataRequestPojo requestPojo) {
+        return revenueMapper.revenueAmountStatistics(requestPojo.getFromDate(), requestPojo.getToDate());
+    }
+
+    @Override
+    public FoodMenuDataPojo getFoodMenuDataData(FoodMenuDataRequestPojo requestPojo) {
+        return foodMenuMapper.getFoodMenuStatistics(requestPojo.getFromDate(), requestPojo.getToDate());
+    }
+
+    @Override
+    public UserDataPojo getUserData(UserDataRequestPojo requestPojo) {
+        return userDetailMapper.userCountStatistics(requestPojo.getFromDate(), requestPojo.getToDate());
+    }
 
     @Override
     public SalesDataPojo getSalesData(SalesDataRequestPojo requestPojo) {
-        SalesDataPojo salesData = new SalesDataPojo();
+
+
         List<SalesDataPojo.FoodSalesData> foodSalesData = userPaymentDetailsMapper.getSalesData(
                 requestPojo.getFilterType().toString(),
                 requestPojo.getFromDate(),
-                requestPojo.getToDate()
+                requestPojo.getToDate(),
+                requestPojo.getFoodType() == null ? null : requestPojo.getFoodType().toString().toUpperCase()
         );
 
         boolean willHaveOthers = requestPojo.getLimit() != null && foodSalesData.size() > requestPojo.getLimit();
@@ -49,8 +87,12 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
                     salesList.add(foodSalesData.get(i).getSalesIncome());
                     quantityList.add(foodSalesData.get(i).getQuantity());
                 } else if (willHaveOthers && (i >= requestPojo.getLimit())) {
+
                     if (i == requestPojo.getLimit()) {
-                        label.add("Others");
+                        if (requestPojo.getLimit() == 0)
+                            label.add("All");
+                        else
+                            label.add("Others");
                     }
                     otherSales += foodSalesData.get(i).getSalesIncome();
                     otherQuantity += foodSalesData.get(i).getQuantity();
@@ -62,22 +104,15 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
             salesList.add(otherSales);
             quantityList.add(otherQuantity);
         }
-//        foodSalesData.forEach(
-//                e -> {
-//                    sales.set(sales.get() + e.getSalesIncome());
-//                    quantity.set(quantity.get() + e.getQuantity());
-//                    label.add(e.getName());
-//                    salesList.add(e.getSalesIncome());
-//                    quantityList.add(e.getQuantity());
-//                }
-//        );
 
-        salesData.setQuantityData(quantityList);
-        salesData.setLabels(label);
-        salesData.setSalesData(salesList);
 
-        salesData.setTotalSales(sales);
-        salesData.setTotalQuantity(quantity);
-        return salesData;
+        return SalesDataPojo.builder()
+                .quantityData(quantityList)
+                .labels(label)
+                .salesData(salesList)
+                .totalSales(sales)
+                .totalQuantity(quantity)
+                .totalMenu(foodSalesData.size())
+                .build();
     }
 }

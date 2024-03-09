@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FoodMenuPojo {
+public class OnlineOrderDataPojo {
     private Integer total;
-    private Integer latest;
+    private Integer approved;
+    private Integer pending;
 }

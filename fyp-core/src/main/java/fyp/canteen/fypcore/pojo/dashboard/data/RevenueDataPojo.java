@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class RevenueDataPojo {
-    private BigDecimal totalSales;
+    private BigDecimal revenue;
     private BigDecimal paidAmount;
-    private BigDecimal amountLeftToPay;
+    private BigDecimal leftToPay;
 }

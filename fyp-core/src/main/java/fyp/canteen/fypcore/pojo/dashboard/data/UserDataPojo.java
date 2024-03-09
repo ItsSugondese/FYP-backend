@@ -6,8 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDataPojo {
-    private Integer total;
+    private Integer totalUser;
     private Integer internal;
     private Integer external;
-    private Integer latest;
+    private Integer latestUser;
+    private Integer totalStaff;
+    private Integer latestStaff;
 }

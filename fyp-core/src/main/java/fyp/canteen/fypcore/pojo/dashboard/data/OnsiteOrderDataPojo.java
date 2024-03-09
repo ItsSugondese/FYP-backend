@@ -5,7 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StaffDataPojo {
+public class OnsiteOrderDataPojo {
     private Integer total;
-    private Integer latest;
+    private Integer delivered;
+    private Integer pending;
+    private Integer canceled;
 }

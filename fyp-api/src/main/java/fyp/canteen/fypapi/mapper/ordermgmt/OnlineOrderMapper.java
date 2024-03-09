@@ -1,5 +1,7 @@
 package fyp.canteen.fypapi.mapper.ordermgmt;
 
+import fyp.canteen.fypcore.pojo.dashboard.data.OnlineOrderDataPojo;
+import fyp.canteen.fypcore.pojo.dashboard.data.OnsiteOrderDataPojo;
 import fyp.canteen.fypcore.pojo.ordermgmt.OnlineOrderResponsePojo;
 import org.apache.ibatis.annotations.*;
 
@@ -32,4 +34,13 @@ public interface OnlineOrderMapper {
                     many = @Many(select = "fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper.getAllOnlineFoodDetailsByOrderId"))
     })
     List<OnlineOrderResponsePojo> getTodayOrderOfUserByUserId(Long userId);
+
+
+    @Select("SELECT \n" +
+            "count(*) as total,\n" +
+            "coalesce(sum(case when oo.approval_status = 'DELIVERED' then 1 else 0 end), 0) as approved,\n" +
+            "coalesce(sum(case when oo.approval_status = 'PENDING' then 1 else 0 end),0) as pending\n" +
+            "FROM online_order  oo\n" +
+            "where case when  oo.arrival_time + make_interval(mins := #{minDifference}) < oo.arrival_time  then (cast('00:00' as time) - interval '1 millisecond') else oo.arrival_time + make_interval(mins := #{minDifference}) end > current_time")
+    OnlineOrderDataPojo getOnlineOrderStatistics(@Param("minDifference") Integer minDifference);
 }

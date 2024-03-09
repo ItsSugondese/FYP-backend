@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class OrderDataPojo {
     private Integer totalOrder;
-    private Integer delivered;
-    private Integer canceled;
+    private Integer totalPending;
+    private OnsiteOrderDataPojo onsiteOrder;
+    private OnlineOrderDataPojo onlineOrder;
 }

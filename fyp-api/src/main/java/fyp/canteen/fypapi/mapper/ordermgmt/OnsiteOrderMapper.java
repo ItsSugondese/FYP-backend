@@ -1,6 +1,7 @@
 package fyp.canteen.fypapi.mapper.ordermgmt;
 
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnsiteOrder;
+import fyp.canteen.fypcore.pojo.dashboard.data.OnsiteOrderDataPojo;
 import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderResponsePojo;
 import org.apache.ibatis.annotations.*;
 import org.springframework.security.core.parameters.P;
@@ -55,4 +56,13 @@ public interface OnsiteOrderMapper {
                     many = @Many(select = "fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper.getAllOnsiteFoodDetailsByOrderId"))
     })
     List<OnsiteOrderResponsePojo> getTodayOnsiteUserOrders(Long id);
+
+    @Select("SELECT count(*) as total, " +
+            "coalesce(sum(case when oo.approval_status = 'DELIVERED' then 1 else 0 end),0) as delivered, " +
+            "coalesce(sum(case when oo.approval_status = 'PENDING' then 1 else 0 end), 0) as pending, " +
+            "coalesce(sum(case when oo.approval_status = 'CANCELED' then 1 else 0 end), 0) as canceled " +
+            "FROM onsite_order oo " +
+            "WHERE oo.created_date between current_timestamp - make_interval(mins := #{minDifference})  and CURRENT_TIMESTAMP")
+    OnsiteOrderDataPojo getOnsiteOrderStatistics(@Param("minDifference") Integer minDifference);
+
 }

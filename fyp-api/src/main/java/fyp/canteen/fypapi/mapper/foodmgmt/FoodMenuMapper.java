@@ -1,8 +1,10 @@
 package fyp.canteen.fypapi.mapper.foodmgmt;
 
+import fyp.canteen.fypcore.pojo.dashboard.data.FoodMenuDataPojo;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuRequestPojo;
 import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,11 @@ public interface FoodMenuMapper {
             "from food_menu fm where fm.is_active and fm.id = #{id}")
     Optional<FoodMenuRequestPojo> getFoodMenuById(@Param("id") Long id);
 
+    @Select("select count(*) as total ,\n" +
+            "sum(case when cast(fm.created_date as date) between cast(#{fromDate} as date) and cast(#{toDate} as date) then 1 else 0 end) as latest\n" +
+            "from food_menu fm where fm.is_active ")
+    FoodMenuDataPojo getFoodMenuStatistics(@Param("fromDate") LocalDate fromDate,
+                                           @Param("toDate") LocalDate toDate);
 
 
 

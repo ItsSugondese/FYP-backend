@@ -14,7 +14,7 @@ public interface UserPaymentDetailsMapper {
     @Select( "select foo.*, foo.onsite_order_id as orderId from (select upd.onsite_order_id as orderId  from user_payment_details upd\n" +
             "join onsite_order oo on oo.id = upd.onsite_order_id  \n" +
             "where  oo.pay_status = 'PARTIAL_PAID' and oo.user_id = #{id} group by upd.onsite_order_id ) aa\n" +
-            "join lateral (select upd2.*  from user_payment_details upd2 \n" +
+            "join lateral (select upd2.*  from user_payment_details upd2 where upd2.onsite_order_id = aa.orderId \n" +
             "order by created_date desc limit 1)\n" +
             "foo on foo.onsite_order_id = aa.orderId")
     @Results({
@@ -37,7 +37,7 @@ public interface UserPaymentDetailsMapper {
             "    SELECT \n" +
             "        sum(child.quantity) AS quantity, \n" +
             "        child.\"name\", \n" +
-            "        SUM(child.paid) AS salesIncome \n" +
+            "        SUM(child.paid * child.quantity) AS salesIncome \n" +
             "    FROM (\n" +
             "        SELECT  \n" +
             "            upd.onsite_order_id AS ooi\n" +
@@ -46,7 +46,7 @@ public interface UserPaymentDetailsMapper {
             "            JOIN onsite_order oo ON oo.id = upd.onsite_order_id \n" +
             "        WHERE \n" +
             "            oo.pay_status <> 'PARTIAL_PAID'\n" +
-            "            AND CAST(upd.created_date AS DATE) BETWEEN CAST(#{fromDate} AS DATE) AND CAST(#{toDate} AS DATE)\n" +
+            "            AND CAST(oo.created_date AS DATE) BETWEEN CAST(#{fromDate} AS DATE) AND CAST(#{toDate} AS DATE)\n" +
             "        GROUP BY \n" +
             "            upd.onsite_order_id\n" +
             "    ) aa\n" +
@@ -61,7 +61,8 @@ public interface UserPaymentDetailsMapper {
             "            order_food_mapping ofm \n" +
             "            JOIN food_menu fm ON fm.id = ofm.food_id \n" +
             "        WHERE \n" +
-            "            ofm.onsite_order_id = aa.ooi\n" +
+            "            ofm.onsite_order_id = aa.ooi and\n" +
+            "case when cast(#{foodType} as text) is null then true else fm.food_type = #{foodType} end \n" +
             "    ) child ON aa.ooi = child.ooi\n" +
             "    GROUP BY  \n" +
             "        child.\"name\"\n" +
@@ -70,5 +71,6 @@ public interface UserPaymentDetailsMapper {
             "    CASE WHEN #{filterType} = 'SALES' THEN salesIncome ELSE quantity END DESC")
     List<SalesDataPojo.FoodSalesData> getSalesData(@Param("filterType") String filterType,
                                @Param("fromDate") LocalDate fromDate,
-                               @Param("toDate") LocalDate toDate);
+                               @Param("toDate") LocalDate toDate,
+                               @Param("foodType") String foodType);
 }
