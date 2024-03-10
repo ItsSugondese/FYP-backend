@@ -1,0 +1,12 @@
+
+Y
+java:S1710"7Remove the 'Results' wrapper from this annotation group(°­óŠùÿÿÿÿ8ø°»¿à1
+]	java:S125"<This block of commented-out lines of code should be removed.(¿ûËðþÿÿÿÿ8ý°»¿à1
+T
+java:S6126"2Replace this String concatenation with Text block.(„©ÉŒýÿÿÿÿ8þ°»¿à1
+T
+java:S6126'"2Replace this String concatenation with Text block.(¥¢°áúÿÿÿÿ8“²¼Ÿâ1
+u
+java:S1128"XRemove this unused import 'fyp.canteen.fypcore.pojo.dashboard.data.OnsiteOrderDataPojo'.(’ÚãØ8ÔÙ“¡â1
+Q
+java:S1128	"/Remove this unused import 'java.util.Optional'.(¨˜ëÝüÿÿÿÿ8ÕÙ“¡â1

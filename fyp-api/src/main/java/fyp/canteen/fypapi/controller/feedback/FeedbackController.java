@@ -63,5 +63,15 @@ public class FeedbackController extends BaseController {
         ));
     }
 
+    @GetMapping("/available-to-give")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> getFoodMenuToFeedback(){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), CRUD.GET,
+                feedbackService.getAllFoodAvaiableForFeedbacksList()
+        ));
+    }
+
 
 }

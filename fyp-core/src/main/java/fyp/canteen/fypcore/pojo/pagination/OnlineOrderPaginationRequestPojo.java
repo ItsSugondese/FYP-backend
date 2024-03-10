@@ -10,10 +10,6 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class OnlineOrderPaginationRequestPojo extends PaginationRequest {
-    private LocalTime fromTime;
-    private LocalTime toTime;
-//    private LocalTime fromTime = LocalTime.parse("00:00:00");
-//    private LocalTime toTime = LocalTime.parse("23:59:59");
-//
+    private Integer minDifference = 30;
     private String name = "-1";
 }

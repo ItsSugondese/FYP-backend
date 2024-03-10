@@ -89,11 +89,10 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     @Override
     public PaginationResponse getPaginatedOrderListByTime(OnsiteOrderPaginationRequestPojo requestPojo) {
         PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getOnsiteOrderPaginated(
-                null, requestPojo.getOnsiteOrderFilter().toString(), requestPojo.getName(), Pageable.unpaged()
+                requestPojo.getMinuteRange(),
+                requestPojo.getOnsiteOrderFilter().toString(), requestPojo.getName(), Pageable.unpaged()
         ));
-//        PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getOnsiteOrderPaginated(
-//                requestPojo.getTimeRange(), requestPojo.isRead(), requestPojo.getPageable()
-//        ));
+
         response.setContent(response.getContent().stream().map(
                 e -> {
 

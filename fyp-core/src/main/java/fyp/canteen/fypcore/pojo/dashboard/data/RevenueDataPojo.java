@@ -11,4 +11,5 @@ public class RevenueDataPojo {
     private BigDecimal revenue;
     private BigDecimal paidAmount;
     private BigDecimal leftToPay;
+    private Integer deliveredOrder;
 }

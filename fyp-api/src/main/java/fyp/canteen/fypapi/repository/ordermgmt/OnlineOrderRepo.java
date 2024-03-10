@@ -31,16 +31,26 @@ public interface OnlineOrderRepo extends GenericSoftDeleteRepository<OnlineOrder
     @Query(value = "select oo.id, u.profile_path as \"profileUrl\",  oo.order_code , oo.total_price as \"totalPrice\",\n" +
             "to_char(oo.arrival_time, 'HH:mi am' ) as \"arrivalTime\", \n" +
             "    (string_to_array(oo.order_code , ' ')) [2] as \"orderCode\", oo.user_id as \"userId\", INITCAP(u.full_name) as \"fullName\", u.email \n" +
-            "   from online_order oo join users u on u.id = oo.user_id  where oo.is_active and oo.approval_status = 'PENDING' and \n" +
-            "case when cast(?1 as date) is null then true else true end and case when cast(?2 as date) is null then true else true end and \n" +
-            "case when ?3 = '-1' then true else (u.full_name ilike concat('%',?3,'%') or ?3 = (string_to_array(oo.order_code , ' ')) [2]) end",
+            "   from online_order oo join users u on u.id = oo.user_id  where oo.is_active and oo.approval_status = 'PENDING' and  \n" +
+            "cast(oo.created_date as date) = current_date and  \n" +
+            "case \n" +
+            "\twhen  oo.arrival_time + make_interval(0, 0, 0, 0, 0, ?1, 0) < oo.arrival_time  \n" +
+            "\t\tthen (cast('00:00' as time) - interval '1 millisecond') \n" +
+            "\t\telse oo.arrival_time + make_interval(0, 0, 0, 0, 0, ?1, 0) \n" +
+            "end > current_time  and \n" +
+            "case when ?2 = '-1' then true else (u.full_name ilike concat('%',?2,'%') or ?2 = (string_to_array(oo.order_code , ' ')) [2]) end",
             countQuery = "select count(*) from (select oo.id, u.profile_path as \"profileUrl\",  oo.order_code , oo.total_price as \"totalPrice\",\n" +
                     "to_char(oo.arrival_time, 'HH:mi am' ) as \"arrivalTime\", \n" +
                     "    (string_to_array(oo.order_code , ' ')) [2] as \"orderCode\", oo.user_id as \"userId\", INITCAP(u.full_name) as \"fullName\", u.email \n" +
-                    "   from online_order oo join users u on u.id = oo.user_id  where oo.is_active and oo.approval_status = 'PENDING' and \n" +
-                    "case when cast(?1 as date) is null then true else true end and case when cast(?2 as date) is null then true else true end and \n" +
-                    "case when ?3 = '-1' then true else (u.full_name ilike concat('%',?3,'%') or ?3 = (string_to_array(oo.order_code , ' ')) [2]) end) a",
+                    "   from online_order oo join users u on u.id = oo.user_id  where oo.is_active and oo.approval_status = 'PENDING' and  \n" +
+                    "cast(oo.created_date as date) = current_date and  \n" +
+                    "case \n" +
+                    "\twhen  oo.arrival_time + make_interval(0, 0, 0, 0, 0, ?1, 0) < oo.arrival_time  \n" +
+                    "\t\tthen (cast('00:00' as time) - interval '1 millisecond') \n" +
+                    "\t\telse oo.arrival_time + make_interval(0, 0, 0, 0, 0, ?1, 0) \n" +
+                    "end > current_time  and \n" +
+                    "case when ?2 = '-1' then true else (u.full_name ilike concat('%',?2,'%') or ?2 = (string_to_array(oo.order_code , ' ')) [2]) end) a",
             nativeQuery = true)
-    Page<Map<String, Object>> getOnlineOrderPaginated(LocalTime fromTime, LocalTime toTime,
+    Page<Map<String, Object>> getOnlineOrderPaginated(Integer minDiff,
                                                       String name, Pageable pageable);
 }

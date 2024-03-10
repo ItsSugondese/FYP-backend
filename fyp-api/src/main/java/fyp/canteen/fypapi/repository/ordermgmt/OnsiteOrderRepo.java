@@ -39,7 +39,7 @@ public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder
             "end as \"orderStatus\"\n" +
             "FROM onsite_order oo  \n" +
             "JOIN users u ON u.id = oo.user_id \n" +
-            "where case when cast(?1 as date) is null then true else true end and \n" +
+            "where oo.created_date between current_timestamp - make_interval(0, 0, 0, 0, 0, ?1, 0) and CURRENT_TIMESTAMP and \n" +
             "case when ?2 = 'PENDING' then oo.mark_as_read is false \n" +
             "   when ?2 = 'VIEWED' then oo.mark_as_read is true and oo.approval_status = 'PENDING' \n" +
             "   when ?2 = 'DELIVERED' then oo.approval_status = 'DELIVERED' and oo.pay_status = 'UNPAID' \n" +
@@ -53,7 +53,7 @@ countQuery = "Select count(*) from (\n" +
         "INITCAP(u.full_name) as \"fullName\", u.email, u.profile_path as \"profileUrl\" \n" +
         "FROM onsite_order oo  \n" +
         "JOIN users u ON u.id = oo.user_id \n" +
-        "where case when cast(?1 as date) is null then true else true end and \n" +
+        "oo.created_date between current_timestamp - make_interval(0, 0, 0, 0, 0, ?1, 0) and CURRENT_TIMESTAMP and \n" +
         "case when ?2 = 'PENDING' then oo.mark_as_read is false \n" +
         "   when ?2 = 'VIEWED' then oo.mark_as_read is true and oo.approval_status = 'PENDING' \n" +
         "   when ?2 = 'DELIVERED' then oo.approval_status = 'DELIVERED' and oo.pay_status = 'UNPAID'\n" +
@@ -63,7 +63,7 @@ countQuery = "Select count(*) from (\n" +
         "case when ?3 = '-1' then true else u.full_name ilike concat('%',?3,'%') end) foo"
 //            "where oo.pay_status = 'UNPAID' "
             , nativeQuery = true)
-    Page<Map<String, Object>> getOnsiteOrderPaginated(LocalTime timeRange, String showStatus, String name, Pageable pageable);
+    Page<Map<String, Object>> getOnsiteOrderPaginated(Integer minute, String showStatus, String name, Pageable pageable);
 
     @Query(value = "  SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
             "to_char(oo.ordered_time, 'YYYY-MM-DD HH:MI AM') as \"orderedTime\", \n" +

@@ -6,10 +6,7 @@ import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.feedback.Feedback;
 import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
-import fyp.canteen.fypcore.pojo.feedback.FeedbackPaginationRequest;
-import fyp.canteen.fypcore.pojo.feedback.FeedbackRequestPojo;
-import fyp.canteen.fypcore.pojo.feedback.FeedbackStatisticsRequestPojo;
-import fyp.canteen.fypcore.pojo.feedback.FeedbackStatisticsResponsePojo;
+import fyp.canteen.fypcore.pojo.feedback.*;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
 import fyp.canteen.fypcore.utils.UserDataConfig;
 import fyp.canteen.fypcore.utils.data.DateRangeHolder;
@@ -20,6 +17,8 @@ import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +55,11 @@ public class FeedbackServiceImpl implements FeedbackService{
         FromToDateGenerator.getFromToDate(DateTypeEnum.DAY, 1, paginationRequest);
         return customPaginationHandler.getPaginatedData(feedbackRepo.getAllFeedbackPaginated(paginationRequest.getFoodId(),
                 paginationRequest.getFromDate(), paginationRequest.getToDate(), paginationRequest.getPageable()));
+    }
+
+    @Override
+    public List<FoodMenuToFeedbackResponsePojo> getAllFoodAvaiableForFeedbacksList() {
+        return feedbackDetailMapper.getAllListOfMenuToFeedback(userDataConfig.userId());
     }
 
     @Override

@@ -94,9 +94,8 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
     @Override
     public PaginationResponse getPaginatedOrderListByTime(OnlineOrderPaginationRequestPojo requestPojo) {
         PaginationResponse response = customPaginationHandler.getPaginatedData(onlineOrderRepo.getOnlineOrderPaginated(
-                null, null, requestPojo.getName(),Pageable.unpaged()));
-//        PaginationResponse response = customPaginationHandler.getPaginatedData(onlineOrderRepo.getOnlineOrderPaginated(
-//                requestPojo.getFromTime(), requestPojo.getToTime(), requestPojo.getName(),Pageable.unpaged()));
+                requestPojo.getMinDifference(), requestPojo.getName(),Pageable.unpaged()));
+
 
         response.setContent(response.getContent().stream().map(
                 e -> {
