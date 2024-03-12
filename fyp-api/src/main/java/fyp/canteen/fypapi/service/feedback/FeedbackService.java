@@ -14,4 +14,6 @@ public interface FeedbackService {
     FeedbackStatisticsResponsePojo getFeedbackDataDetails(FeedbackStatisticsRequestPojo dateRangeHolder);
 
     List<FoodMenuToFeedbackResponsePojo> getAllFoodAvaiableForFeedbacksList();
+    FeedbackRequestPojo getFeedbackGivenOnFoodByUserToday(Long foodId);
+    void deleteFeedbackById(Long feedbackId);
 }

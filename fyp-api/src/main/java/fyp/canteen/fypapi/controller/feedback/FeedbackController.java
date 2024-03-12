@@ -73,5 +73,26 @@ public class FeedbackController extends BaseController {
         ));
     }
 
+    @GetMapping("/view-feedback-user/{foodId}")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> getFoodMenuToFeedback(@PathVariable("foodId") Long id){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), CRUD.GET,
+                feedbackService.getFeedbackGivenOnFoodByUserToday(id)
+        ));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> deleteFeedback(@PathVariable("id") Long id){
+        feedbackService.deleteFeedbackById(id);
+        return ResponseEntity.ok(successResponse(moduleName + " removed successfully.", CRUD.SAVE,
+                null
+        ));
+    }
+
 
 }

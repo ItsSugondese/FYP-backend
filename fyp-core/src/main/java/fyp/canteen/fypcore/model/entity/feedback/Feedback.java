@@ -35,4 +35,8 @@ public class Feedback extends AuditActiveAbstract {
     @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_feedbacks_user"))
     private User user;
 
+    @Column(columnDefinition = "BOOLEAN NOT NULL DEFAULT false")
+    private boolean isAnon;
+
+
 }

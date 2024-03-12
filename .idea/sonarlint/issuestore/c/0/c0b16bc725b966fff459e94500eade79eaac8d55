@@ -1,0 +1,69 @@
+
+`	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(†Ã¿úÿÿÿÿ
+`	java:S112:"FDefine and throw a dedicated exception instead of using a generic one.(ŒÚ„§ÿÿÿÿÿ
+[	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(öÏ¡Ü
+`	java:S112A"FDefine and throw a dedicated exception instead of using a generic one.(†Ã¿úÿÿÿÿ
+`	java:S112U"FDefine and throw a dedicated exception instead of using a generic one.(ŒÚ„§ÿÿÿÿÿ
+`	java:S112>"FDefine and throw a dedicated exception instead of using a generic one.(®”­øûÿÿÿÿ
+[	java:S112h"FDefine and throw a dedicated exception instead of using a generic one.(…¥£
+[	java:S112Z"FDefine and throw a dedicated exception instead of using a generic one.(ÃòŒ¼
+[	java:S112t"FDefine and throw a dedicated exception instead of using a generic one.(…¥£
+`	java:S112m"FDefine and throw a dedicated exception instead of using a generic one.(˜—Ùµûÿÿÿÿ
+a	java:S112‘"FDefine and throw a dedicated exception instead of using a generic one.(æ†€Ôùÿÿÿÿ
+\	java:S112š"FDefine and throw a dedicated exception instead of using a generic one.(Ş¢à£
+\	java:S112Æ"FDefine and throw a dedicated exception instead of using a generic one.(éÊ‰
+[	java:S112Ó"FDefine and throw a dedicated exception instead of using a generic one.(©Ê£:
+a	java:S112–"FDefine and throw a dedicated exception instead of using a generic one.(í×ºşÿÿÿÿ
+a	java:S112ı"FDefine and throw a dedicated exception instead of using a generic one.(‘ƒ˜Òÿÿÿÿÿ
+a	java:S112³"FDefine and throw a dedicated exception instead of using a generic one.(Ğ—€ûÿÿÿÿ
+a	java:S112›"FDefine and throw a dedicated exception instead of using a generic one.(ğ©ùÇúÿÿÿÿ
+a	java:S112Ë"FDefine and throw a dedicated exception instead of using a generic one.(Ğ—€ûÿÿÿÿ
+\	java:S112·"FDefine and throw a dedicated exception instead of using a generic one.(ó´®Ÿ
+a	java:S112Ü"FDefine and throw a dedicated exception instead of using a generic one.(ìû—©ıÿÿÿÿ
+a	java:S112Ğ"FDefine and throw a dedicated exception instead of using a generic one.(Àœüÿÿÿÿ
+e
+java:S11925"JDefine a constant instead of duplicating this literal "extension" 3 times.(à âùùÿÿÿÿ
+m
+java:S1192‡"VDefine a constant instead of duplicating this literal "attachment; filename=" 3 times.(Ù‡æì
+`
+java:S1192."KDefine a constant instead of duplicating this literal "yyyy-MM-dd" 6 times.(¬ü¯-
+d
+java:S1192R"IDefine a constant instead of duplicating this literal "fileType" 7 times.(°ç¼íúÿÿÿÿ
+œ
+java:S1862Œ"„This branch can not be reached because the condition duplicates a previous condition in the same sequence of "if/else if" statements(ôÁÌ
+c
+java:S2095f"MUse try-with-resources or close this "FileInputStream" in a "finally" clause.(…Ğ¢
+c
+java:S2095r"MUse try-with-resources or close this "FileInputStream" in a "finally" clause.(…Ğ¢
+G
+java:S1481+",Remove this unused "company" local variable.(İˆÔãüÿÿÿÿ
+N
+java:S1854^"8Remove this useless assignment to local variable "date".(ì€òÛ
+?
+java:S1481^")Remove this unused "date" local variable.(ì€òÛ
+E
+java:S1874`"/Remove this use of "isEmpty"; it is deprecated.(ñ¸÷˜
+E
+java:S1874o"/Remove this use of "isEmpty"; it is deprecated.(ñ¸÷˜
+m
+java:S3776y"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(ƒ…‹Âùÿÿÿÿ
+i
+java:S3776”"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(äÄŸ³
+T	java:S106˜"9Replace this use of System.out or System.err by a logger.(Ê×º²ıÿÿÿÿ
+F
+java:S1874š"/Remove this use of "isEmpty"; it is deprecated.(Ş¢à£
+Q
+java:S2204Å":Use ".get()" to retrieve the value and compare it instead.(šÚÓ
+]
+java:S1854×"ARemove this useless assignment to local variable "permanentPath".(…Ì‹¯şÿÿÿÿ
+N
+java:S1481×"2Remove this unused "permanentPath" local variable.(…Ì‹¯şÿÿÿÿ
+F
+java:S1874ç"/Remove this use of "isEmpty"; it is deprecated.(ñ¸÷˜
+W	java:S125ÿ"<This block of commented-out lines of code should be removed.(Â¹÷ÿÿÿÿÿ
+R	java:S125¯"<This block of commented-out lines of code should be removed.(‹·çÃ
+H
+java:S1481Ò",Remove this unused "company" local variable.(œóÚÄşÿÿÿÿ
+V	java:S899Ù";Do something with the "boolean" value returned by "delete".(²Œ­ûÿÿÿÿ
+j
+java:S4042Ù"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(²Œ­ûÿÿÿÿ

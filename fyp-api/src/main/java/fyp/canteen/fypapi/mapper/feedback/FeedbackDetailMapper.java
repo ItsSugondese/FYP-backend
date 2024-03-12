@@ -1,5 +1,6 @@
 package fyp.canteen.fypapi.mapper.feedback;
 
+import fyp.canteen.fypcore.pojo.feedback.FeedbackRequestPojo;
 import fyp.canteen.fypcore.pojo.feedback.FeedbackStatisticsResponsePojo;
 import fyp.canteen.fypcore.pojo.feedback.FoodMenuToFeedbackResponsePojo;
 import org.apache.ibatis.annotations.Mapper;
@@ -38,26 +39,30 @@ public interface FeedbackDetailMapper {
                                                          @Param("toDate") LocalDate toDate);
 
 
-    @Select("SELECT\n" +
+    @Select(" SELECT\n" +
             "    foodId.foodname AS \"foodName\",\n" +
             "    foodId.food_id AS \"foodId\",\n" +
             "    foodId.pictureId AS \"pictureId\",\n" +
+            "    foodId.price,\n" +
+            "    foodId.food_type as foodtype,\n" +
             "    COALESCE(feedback.isGiven, FALSE) AS \"isGiven\"\n" +
             "FROM\n" +
             "    (\n" +
             "        SELECT\n" +
             "            orderFood.food_id,\n" +
             "            orderfood.foodname,\n" +
-            "            orderfood.pictureId\n" +
+            "            orderfood.pictureId,\n" +
+            "            orderfood.price,\n" +
+            "            orderfood.food_type\n" +
             "        FROM\n" +
             "            (\n" +
             "                SELECT\n" +
             "                    oo.id\n" +
             "                FROM\n" +
             "                    onsite_order oo\n" +
-            "                WHERE\n" +
+            "                WHERE oo.is_active and\n" +
             "                    oo.user_id = #{userId}\n" +
-            "                    AND CAST(oo.created_date AS DATE) = CURRENT_DATE - INTERVAL '1 day'\n" +
+            "                    AND CAST(oo.created_date AS DATE) = CURRENT_DATE\n" +
             "                    AND oo.approval_status = 'DELIVERED'\n" +
             "            ) onsite\n" +
             "        JOIN LATERAL\n" +
@@ -66,6 +71,8 @@ public interface FeedbackDetailMapper {
             "                    ofm.onsite_order_id AS osid,\n" +
             "                    ofm.food_id,\n" +
             "                    fm.\"name\" AS foodname,\n" +
+            "                    fm.\"cost\" as price,\n" +
+            "                    fm.food_type,\n" +
             "                    (\n" +
             "                        SELECT\n" +
             "                            fmp.id\n" +
@@ -84,7 +91,9 @@ public interface FeedbackDetailMapper {
             "        GROUP BY\n" +
             "            orderFood.food_id,\n" +
             "            orderFood.foodname,\n" +
-            "            orderfood.pictureId\n" +
+            "            orderfood.pictureId,\n" +
+            "            orderfood.price,\n" +
+            "            orderfood.food_type\n" +
             "    ) foodId\n" +
             "LEFT JOIN LATERAL\n" +
             "    (\n" +
@@ -94,8 +103,13 @@ public interface FeedbackDetailMapper {
             "        FROM\n" +
             "            feedback f\n" +
             "        WHERE\n" +
-            "            CAST(f.created_date AS DATE) = CURRENT_DATE - INTERVAL '1 day'\n" +
-            "            AND f.food_id = foodId.food_id\n" +
+            "            CAST(f.created_date AS DATE) = CURRENT_DATE \n" +
+            "            AND f.food_id = foodId.food_id and f.is_active\n" +
             "    ) feedback ON feedback.fid = foodId.food_id")
     List<FoodMenuToFeedbackResponsePojo> getAllListOfMenuToFeedback(@Param("userId") Long userId);
+
+
+    @Select("select f.id, f.feedback_status as feedbackStatus, f.feedbacks, f.is_anon as isAnonymous\n" +
+            "from feedback f where f.food_id = #{foodId} and f.user_id = #{userId} and cast(f.created_date as date) = current_date")
+    FeedbackRequestPojo userOnFoodFeedbackToday(Long userId, Long foodId);
 }

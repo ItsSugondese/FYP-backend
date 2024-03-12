@@ -4,12 +4,13 @@ import fyp.canteen.fypcore.generics.api.GenericSoftDeleteRepository;
 import fyp.canteen.fypcore.model.entity.feedback.Feedback;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.Map;
 
-public interface FeedbackRepo extends GenericSoftDeleteRepository<Feedback, Long> {
+public interface FeedbackRepo extends JpaRepository<Feedback, Long> {
 
     @Query(nativeQuery = true, value = "select f.id,  to_char(f.created_date, 'YYYY-MM-DD HH:MI AM') as date, f.feedbacks, INITCAP(f.feedback_status) as \"feedbackStatus\", \n" +
             "case when user_id is not null then false else true end as \"isAnonymous\", INITCAP(u.full_name) as username, \n" +

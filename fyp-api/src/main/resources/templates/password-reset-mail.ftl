@@ -21,7 +21,7 @@
 <body style="height: 100%;">
 <div style="width: 824px; margin:0 auto; padding-top:80px; height: 100%;">
     <div style="padding: 24px 32px; height: 100%;">
-        <table align="center" width="100%" style="height: auto;">
+        <customTable align="center" width="100%" style="height: auto;">
             <tbody>
             <tr style="margin-bottom: 40px;">
                 <td style="text-align: center">
@@ -55,7 +55,7 @@
             </tr>
 
             </tbody>
-        </table>
+        </customTable>
     </div>
 
 </div>

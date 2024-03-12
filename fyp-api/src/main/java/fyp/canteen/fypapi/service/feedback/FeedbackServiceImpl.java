@@ -44,7 +44,7 @@ public class FeedbackServiceImpl implements FeedbackService{
 
         feedback.setFoodMenu(FoodMenu.builder().id(requestPojo.getFoodId()).build());
 
-        if(!requestPojo.getIsAnonymous())
+            feedback.setAnon(requestPojo.getIsAnonymous());
             feedback.setUser(User.builder().id(userDataConfig.userId()).build());
 
         feedbackRepo.save(feedback);
@@ -66,5 +66,15 @@ public class FeedbackServiceImpl implements FeedbackService{
     public FeedbackStatisticsResponsePojo getFeedbackDataDetails(FeedbackStatisticsRequestPojo dateRangeHolder) {
         FromToDateGenerator.getFromToDate(DateTypeEnum.DAY, 1, dateRangeHolder);
         return feedbackDetailMapper.getFeedbackStatistics(dateRangeHolder.getFoodId(), dateRangeHolder.getFromDate(), dateRangeHolder.getToDate());
+    }
+
+    @Override
+    public FeedbackRequestPojo getFeedbackGivenOnFoodByUserToday(Long foodId) {
+        return feedbackDetailMapper.userOnFoodFeedbackToday(userDataConfig.userId(), foodId);
+    }
+
+    @Override
+    public void deleteFeedbackById(Long feedbackId) {
+         feedbackRepo.deleteById(feedbackId);
     }
 }

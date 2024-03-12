@@ -41,6 +41,6 @@ public interface OnlineOrderMapper {
             "coalesce(sum(case when oo.approval_status = 'DELIVERED' then 1 else 0 end), 0) as approved,\n" +
             "coalesce(sum(case when oo.approval_status = 'PENDING' then 1 else 0 end),0) as pending\n" +
             "FROM online_order  oo\n" +
-            "where case when  oo.arrival_time + make_interval(mins := #{minDifference}) < oo.arrival_time  then (cast('00:00' as time) - interval '1 millisecond') else oo.arrival_time + make_interval(mins := #{minDifference}) end > current_time")
+            "where cast(oo.created_date as date) = current_date and case when  oo.arrival_time + make_interval(mins := #{minDifference}) < oo.arrival_time  then (cast('00:00' as time) - interval '1 millisecond') else oo.arrival_time + make_interval(mins := #{minDifference}) end > current_time")
     OnlineOrderDataPojo getOnlineOrderStatistics(@Param("minDifference") Integer minDifference);
 }
