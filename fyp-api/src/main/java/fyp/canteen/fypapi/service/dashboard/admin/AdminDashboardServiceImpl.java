@@ -5,6 +5,7 @@ import fyp.canteen.fypapi.mapper.ordermgmt.OnlineOrderMapper;
 import fyp.canteen.fypapi.mapper.ordermgmt.OnsiteOrderMapper;
 import fyp.canteen.fypapi.mapper.payment.RevenueMapper;
 import fyp.canteen.fypapi.mapper.payment.UserPaymentDetailsMapper;
+import fyp.canteen.fypapi.mapper.table.TableMapper;
 import fyp.canteen.fypapi.mapper.usermgmt.UserDetailMapper;
 import fyp.canteen.fypcore.pojo.dashboard.*;
 import fyp.canteen.fypcore.pojo.dashboard.data.*;
@@ -24,6 +25,7 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
     private final OnlineOrderMapper onlineOrderMapper;
     private final RevenueMapper revenueMapper;
     private final FoodMenuMapper foodMenuMapper;
+    private final TableMapper tableMapper;
 
     @Override
     public OrderDataPojo getOrderData(OrderDataRequestPojo requestPojo) {
@@ -49,6 +51,11 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
     @Override
     public UserDataPojo getUserData(UserDataRequestPojo requestPojo) {
         return userDetailMapper.userCountStatistics(requestPojo.getFromDate(), requestPojo.getToDate());
+    }
+
+    @Override
+    public TableDataPojo getTableData(TableDataRequestPojo requestPojo) {
+        return tableMapper.getTableDataStatistics(requestPojo.getFromDate(), requestPojo.getToDate());
     }
 
     @Override

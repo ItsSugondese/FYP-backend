@@ -25,6 +25,7 @@ import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodResponsePojo;
 import fyp.canteen.fypcore.pojo.pagination.OnsiteOrderOfUserPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.pagination.OnsiteOrderPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.pagination.OrderDetailsPaginationRequest;
+import fyp.canteen.fypcore.pojo.pagination.OrderHistoryPaginationRequest;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
 import fyp.canteen.fypcore.utils.UserDataConfig;
 import fyp.canteen.fypcore.utils.pagination.CustomPaginationHandler;
@@ -36,6 +37,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,9 +91,44 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
 
     @Override
     public PaginationResponse getPaginatedOrderListByTime(OnsiteOrderPaginationRequestPojo requestPojo) {
+//        PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getOnsiteOrderPaginated(
+//                requestPojo.getMinuteRange(),
+//                requestPojo.getOnsiteOrderFilter().toString(), requestPojo.getName(), Pageable.unpaged()
+//        ));
+
+        LocalDateTime fromDT = LocalDateTime.now().minusMinutes(requestPojo.getMinuteRange());
+        LocalDateTime toDT = LocalDateTime.now();
         PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getOnsiteOrderPaginated(
-                requestPojo.getMinuteRange(),
-                requestPojo.getOnsiteOrderFilter().toString(), requestPojo.getName(), Pageable.unpaged()
+                fromDT,
+                requestPojo.getOnsiteOrderFilter().toString(), requestPojo.getName(),
+                toDT,
+                Pageable.unpaged()
+        ));
+
+        response.setContent(response.getContent().stream().map(
+                e -> {
+
+                    Map<String, Object> map = new HashMap<>(e);
+                    map.put("orderFoodDetails", orderFoodMappingMapper.getAllFoodDetailsByOrderId( ((Long)e.get("id")),
+                            false));
+                    map.put("remainingAmount", userPaymentDetailsRepo.getTotalRemainingAmountWithUnpaidToPayOfUserByUserId(Long.parseLong(String.valueOf(e.get("userId")))));
+                    return map;
+                }
+        ).collect(Collectors.toList()));
+
+
+        return response;
+    }
+
+    @Override
+    public PaginationResponse getPaginatedOrderHistoryOfAllUsers(OrderHistoryPaginationRequest requestPojo) {
+        LocalDateTime fromDT = LocalDateTime.of(requestPojo.getFromDate(), LocalTime.MIDNIGHT);
+        LocalDateTime toDT = LocalDateTime.of(requestPojo.getToDate(), LocalTime.MAX);
+        PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getOnsiteOrderPaginated(
+                fromDT,
+                "ALL", requestPojo.getName(),
+                toDT,
+                requestPojo.getPageable()
         ));
 
         response.setContent(response.getContent().stream().map(

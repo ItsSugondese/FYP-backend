@@ -65,6 +65,11 @@ public class UserServiceImpl implements UserService{
                 paginationRequest.getName(), paginationRequest.getPageable()));
     }
 
+    @Override
+    public PaginationResponse getAllUserFinanceDataPaginated(UserFinanceDataPaginationRequest paginationRequest) {
+        return customPaginationHandler.getPaginatedData(userRepo.getAllUserFinanceData(paginationRequest.getFromDate(),
+                paginationRequest.getToDate(), paginationRequest.getName(), paginationRequest.getPageable()));
+    }
 
     @Override
     public UserDetailResponsePojo getSingleUserById(Long id) {

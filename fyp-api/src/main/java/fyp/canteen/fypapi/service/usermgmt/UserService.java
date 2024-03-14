@@ -18,5 +18,6 @@ public interface UserService {
     UserDetailResponsePojo getSingleUserWithoutId();
 
     PaginationResponse getAllUsersPaginated(UserDetailPaginationRequest paginationRequest);
+    PaginationResponse getAllUserFinanceDataPaginated(UserFinanceDataPaginationRequest paginationRequest);
 
 }

@@ -68,4 +68,12 @@ public class AdminDashboardController extends BaseController {
                 adminDashboardService.getFoodMenuDataData(request)));
     }
 
+    @PostMapping("/table-data")
+    @Operation(summary = "Get All notification of particular member")
+    public ResponseEntity<GlobalApiResponse> getTableData(@RequestBody TableDataRequestPojo request) {
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET,
+                adminDashboardService.getTableData(request)));
+    }
+
 }

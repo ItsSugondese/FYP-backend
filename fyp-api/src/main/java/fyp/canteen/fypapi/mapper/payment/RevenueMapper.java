@@ -21,7 +21,7 @@ public interface RevenueMapper {
             "\t\t\tselect  upd.onsite_order_id as orderId  from user_payment_details upd\n" +
             "\t\t\tjoin onsite_order oo on oo.id = upd.onsite_order_id  \n" +
             "\t\t\twhere oo.pay_status = 'PARTIAL_PAID' \n" +
-            "\t\t\tand cast(oo.created_date as date) between  current_date  and current_date  \n" +
+            "\t\t\tand cast(oo.created_date as date) between  cast(#{fromDate} as date)  and cast(#{toDate} as date)  \n" +
             "\t\t\tgroup by upd.onsite_order_id \n" +
             "\t\t) aa\n" +
             "\t\t\tjoin lateral \n" +
@@ -35,7 +35,7 @@ public interface RevenueMapper {
             "\t\tcount(*) as delivered\n" +
             "\t\tfrom onsite_order oo2 \n" +
             "\t\twhere oo2.is_active and  oo2.pay_status in ('PAID', 'UNPAID')   and oo2.approval_status = 'DELIVERED' \n" +
-            "\t\tand cast(oo2.created_date as date) between  current_date and current_date \n" +
+            "\t\tand cast(oo2.created_date as date) between  cast(#{fromDate} as date)  and cast(#{toDate} as date) \n" +
             "\t\tgroup by oo2.user_id\n" +
             "\t) suu \n" +
             "\tgroup by suu.user_id\n" +

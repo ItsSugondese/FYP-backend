@@ -3,6 +3,8 @@ package fyp.canteen.fypcore.model.entity.tablemodel;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "custom_table", uniqueConstraints = {@UniqueConstraint(name = "unique_table_number", columnNames = {"tableNumber"})})
 @AllArgsConstructor
@@ -19,4 +21,5 @@ public class CustomTable {
     private Integer tableNumber;
     private String guid;
     private String qrPath;
+    private LocalDateTime createdDate = LocalDateTime.now();
 }

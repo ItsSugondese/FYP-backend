@@ -13,6 +13,7 @@ import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderRequestPojo;
 import fyp.canteen.fypcore.pojo.pagination.OnsiteOrderOfUserPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.pagination.OnsiteOrderPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.pagination.OrderDetailsPaginationRequest;
+import fyp.canteen.fypcore.pojo.pagination.OrderHistoryPaginationRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -55,6 +56,13 @@ public class OnsiteOrderController extends BaseController {
     public ResponseEntity<GlobalApiResponse> getOnsiteOrderPaginated(@RequestBody OnsiteOrderPaginationRequestPojo requestPojo){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
                 CRUD.GET, onsiteOrderService.getPaginatedOrderListByTime(requestPojo)
+        ));
+    }
+
+    @PostMapping("/order-history/paginated")
+    public ResponseEntity<GlobalApiResponse> getAllOrderHistoryPaginated(@RequestBody OrderHistoryPaginationRequest requestPojo){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, onsiteOrderService.getPaginatedOrderHistoryOfAllUsers(requestPojo)
         ));
     }
 

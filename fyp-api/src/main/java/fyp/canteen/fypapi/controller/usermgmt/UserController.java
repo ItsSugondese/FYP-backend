@@ -9,6 +9,7 @@ import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.usermgmt.UserDetailPaginationRequest;
+import fyp.canteen.fypcore.pojo.usermgmt.UserFinanceDataPaginationRequest;
 import fyp.canteen.fypcore.pojo.usermgmt.disable.UserDisableHistoryPaginationRequest;
 import fyp.canteen.fypcore.pojo.usermgmt.disable.UserDisableHistoryRequestPojo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +42,16 @@ public class UserController extends BaseController {
     public ResponseEntity<GlobalApiResponse> getFoodMenu(@RequestBody UserDetailPaginationRequest requestPojo){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 CRUD.GET, userService.getAllUsersPaginated(requestPojo)
+        ));
+    }
+
+    @PostMapping("/finance/paginated")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> getAllUsersFinanaceData(@RequestBody UserFinanceDataPaginationRequest requestPojo){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
+                CRUD.GET, userService.getAllUserFinanceDataPaginated(requestPojo)
         ));
     }
 

@@ -13,4 +13,5 @@ public interface AdminDashboardService {
 
     RevenueDataPojo getRevenueData(RevenueDataRequestPojo requestPojo);
     FoodMenuDataPojo getFoodMenuDataData(FoodMenuDataRequestPojo requestPojo);
+    TableDataPojo getTableData(TableDataRequestPojo requestPojo);
 }
