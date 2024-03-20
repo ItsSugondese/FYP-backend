@@ -6,6 +6,7 @@ public class ModuleNameConstants {
     public static final String USER = "User";
     public static final String USER_PROFILE = "User-Profile";
     public static final String STAFF = "Staff";
+    public static final String EXTERNAL_USER = "External_User";
     public static final String AUTH = "Authentication";
     public static final String FOOD_MENU = "Food Menu";
     public static final String COMPANY = "Company";

@@ -66,7 +66,7 @@ public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder
 //            , nativeQuery = true)
 //    Page<Map<String, Object>> getOnsiteOrderPaginated(Integer minute, String showStatus, String name, Pageable pageable);
 
-    @Query(value = "  SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
+    @Query(value = "  SELECT oo.id, to_char(oo.created_date, 'YYYY-MM-DD HH:MI AM') as date, INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
             "  case \n" +
             "\t  when \n" +
             "  \tExtract(day from (current_timestamp - oo.ordered_time)) > 0 then  Extract(day from (current_timestamp - oo.ordered_time)) ||  ' days ' ||\n" +
@@ -100,7 +100,8 @@ public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder
             "   when ?2 = 'PAID' then oo.approval_status = 'DELIVERED' and oo.pay_status <> 'UNPAID'  \n" +
             " else oo.approval_status = 'DELIVERED' \n" +
             "end and \n" +
-            "case when ?3 = '-1' then true else u.full_name ilike concat('%',?3,'%') end",
+            "case when ?3 = '-1' then true else u.full_name ilike concat('%',?3,'%') end and \n" +
+            "case when ?5 is null then true else oo.pay_status = ?5 end",
 countQuery = "Select count(*) from (\n" +
         " SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
         "  case \n" +
@@ -128,9 +129,11 @@ countQuery = "Select count(*) from (\n" +
         "   when ?2 = 'PAID' then oo.approval_status = 'DELIVERED' and oo.pay_status <> 'UNPAID' \n" +
         "else oo.approval_status = 'DELIVERED' \n" +
         "end and \n" +
-        "case when ?3 = '-1' then true else u.full_name ilike concat('%',?3,'%') end) foo"
+        "case when ?3 = '-1' then true else u.full_name ilike concat('%',?3,'%') end and \n" +
+        "case when ?5 is null then true else oo.pay_status = ?5 end) foo"
             , nativeQuery = true)
     Page<Map<String, Object>> getOnsiteOrderPaginated(LocalDateTime fromDT, String showStatus, String name, LocalDateTime toDT,
+                                                      String payStatus,
                                                       Pageable pageable);
 
 

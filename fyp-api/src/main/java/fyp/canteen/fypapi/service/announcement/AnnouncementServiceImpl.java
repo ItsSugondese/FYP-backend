@@ -5,6 +5,7 @@ import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.notification.NotificationService;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.notification.Announcement;
+import fyp.canteen.fypcore.pojo.announcement.AnnouncementPaginationRequest;
 import fyp.canteen.fypcore.pojo.announcement.AnnouncementRequestPojo;
 import fyp.canteen.fypcore.pojo.notification.NotificationRequestPojo;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
@@ -52,7 +53,10 @@ public class AnnouncementServiceImpl implements AnnouncementService{
     }
 
     @Override
-    public PaginationResponse announcementPaginated(PaginationRequest paginationRequest) {
-        return customPaginationHandler.getPaginatedData(announcementRepo.getAllAnnouncementPaginated(paginationRequest.getPageable()));
+    public PaginationResponse announcementPaginated(AnnouncementPaginationRequest paginationRequest) {
+        return customPaginationHandler.getPaginatedData(announcementRepo
+                .getAllAnnouncementPaginated(paginationRequest.getFromDate(), paginationRequest.getToDate(),
+                        paginationRequest.getName(),
+                        paginationRequest.getPageable()));
     }
 }

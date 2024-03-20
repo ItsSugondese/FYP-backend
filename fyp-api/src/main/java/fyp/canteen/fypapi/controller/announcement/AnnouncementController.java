@@ -7,6 +7,7 @@ import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.CRUD;
 import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
+import fyp.canteen.fypcore.pojo.announcement.AnnouncementPaginationRequest;
 import fyp.canteen.fypcore.pojo.announcement.AnnouncementRequestPojo;
 import fyp.canteen.fypcore.utils.pagination.PaginationRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +38,7 @@ public class AnnouncementController extends BaseController {
 
     @PostMapping("/paginated")
     @Operation(summary = "Get All notification of particular member")
-    public ResponseEntity<GlobalApiResponse> getAllANnouncemeentPaginated(@RequestBody PaginationRequest request) {
+    public ResponseEntity<GlobalApiResponse> getAllANnouncemeentPaginated(@RequestBody AnnouncementPaginationRequest request) {
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
                 CRUD.GET,
                 announcementService.announcementPaginated(request)));

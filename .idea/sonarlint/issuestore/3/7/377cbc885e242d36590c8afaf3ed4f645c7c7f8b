@@ -1,31 +1,21 @@
 
 r
-java:S1192r"PDefine a constant instead of duplicating this literal "remainingAmount" 3 times.(ƒ•¾‹ùÿÿÿÿ8‚ª´ñã1
+java:S1192s"PDefine a constant instead of duplicating this literal "remainingAmount" 3 times.(ƒ•¾‹ùÿÿÿÿ8‚ª´ñã1
 s
-java:S1192p"QDefine a constant instead of duplicating this literal "orderFoodDetails" 4 times.(æ’Üüýÿÿÿÿ8Êù™ñã1
+java:S1192q"QDefine a constant instead of duplicating this literal "orderFoodDetails" 4 times.(æ’Üüýÿÿÿÿ8Êù™ñã1
 X	java:S125a"<This block of commented-out lines of code should be removed.(·ÌÄû8Éü™ñã1
 o
-java:S6204u"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8Ìü™ñã1
+java:S6204v"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8Ìü™ñã1
 p
-java:S6204"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8çü™ñã1
-Y	java:S125ž"<This block of commented-out lines of code should be removed.(·ÌÄû8çü™ñã1
+java:S6204‘"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8çü™ñã1
+Y	java:S125 "<This block of commented-out lines of code should be removed.(·ÌÄû8çü™ñã1
 p
-java:S6204²"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8÷ü™ñã1
+java:S6204´"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8÷ü™ñã1
 p
-java:S6204Î"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8Žý™ñã1
+java:S6204Ð"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8Žý™ñã1
 I
-java:S2201Ý"+The return value of "collect" must be used.(œçÖß8Žý™ñã1
+java:S2201ß"+The return value of "collect" must be used.(œçÖß8Žý™ñã1
 p
-java:S6204Ý"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(œçÖß8Ç«´ñã1
+java:S6204ß"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(œçÖß8Ç«´ñã1
 D
-java:S3864Õ"!Remove this use of "Stream.peek".(¡ÄÜúÿÿÿÿ8ý™ñã1
-n
-java:S1128"LRemove this unused import 'fyp.canteen.fypapi.service.food.FoodMenuService'.(¥ñ£Øùÿÿÿÿ8þ€èñã1
-b
-java:S1128"ERemove this unused import 'fyp.canteen.fypcore.enums.DeliveryStatus'.(ÈÆ‘†8þ€èñã1
-b
-java:S1128"@Remove this unused import 'fyp.canteen.fypcore.enums.OrderType'.(ÏÿÜºüÿÿÿÿ8þ€èñã1
-p
-java:S1128"SRemove this unused import 'fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder'.(Ðäç¸8þ€èñã1
-R
-java:S1128'"0Remove this unused import 'java.time.LocalDate'.(›‘¬èýÿÿÿÿ8þ€èñã1
+java:S3864×"!Remove this use of "Stream.peek".(¡ÄÜúÿÿÿÿ8ý™ñã1

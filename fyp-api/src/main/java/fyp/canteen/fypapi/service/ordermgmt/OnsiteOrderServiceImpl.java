@@ -102,6 +102,7 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                 fromDT,
                 requestPojo.getOnsiteOrderFilter().toString(), requestPojo.getName(),
                 toDT,
+                null,
                 Pageable.unpaged()
         ));
 
@@ -128,6 +129,7 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                 fromDT,
                 "ALL", requestPojo.getName(),
                 toDT,
+                requestPojo.getPayStatus() == null? null : requestPojo.getPayStatus().toString(),
                 requestPojo.getPageable()
         ));
 
