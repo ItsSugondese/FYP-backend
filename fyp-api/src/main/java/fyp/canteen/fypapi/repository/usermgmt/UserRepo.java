@@ -23,15 +23,53 @@ public interface UserRepo extends GenericSoftDeleteRepository<User, Long> {
 
 
     @Query(nativeQuery = true,
-            value = "select u.id, INITCAP(u.full_name) as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
-            "u.profile_path as \"profilePath\", u.contact_number as \"contactNumber\", \n" +
-            "case when u.user_type = 'EXTERNAL_USER' then true else false end as \"isExternal\"\n" +
+            value = "select * from(select u.id, INITCAP(u.full_name) as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
+                    "u.profile_path as \"profilePath\", u.contact_number as \"contactNumber\", \n" +
+                    "case when u.user_type = 'EXTERNAL_USER' then true else false end as \"isExternal\"\n" +
                     "from users u where u.is_active and u.user_type in ?1 and \n" +
-            "case when ?2 = '-1' then true else u.full_name ilike concat('%',?2,'%') end order by u.last_modified_date desc",
-     countQuery= "select count(*) from (select u.id, INITCAP(u.full_name) as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
-            "u.profile_path as \"profilePath\", u.contact_number as \"contactNumber\" from users u where u.is_active and u.user_type in ?1 and \n" +
-            "case when ?2 = '-1' then true else u.full_name ilike concat('%',?2,'%') end order by u.last_modified_date desc) foo")
-    Page<Map<String, Object>> findAllUsers(List<String> userType, String name, Pageable pageable);
+                    "case when ?2 = '-1' then true else u.full_name ilike concat('%',?2,'%') end \n" +
+                    "order by u.last_modified_date desc) parent\n" +
+                    "join lateral (\n" +
+                    "select coalesce ((select sum(totalSum) from ((select sum(foo.due_amount) as totalSum from \n" +
+                    "(select  upd.onsite_order_id as orderId  from user_payment_details upd\n" +
+                    "join onsite_order oo on oo.id = upd.onsite_order_id  \n" +
+                    "where oo.user_id =  parent.id and  oo.pay_status = 'PARTIAL_PAID'  group by upd.onsite_order_id ) aa\n" +
+                    "join lateral (select upd2.*  from user_payment_details upd2 where upd2.onsite_order_id = aa.orderId \n" +
+                    "order by created_date desc limit 1\n" +
+                    ") \n" +
+                    "foo on foo.onsite_order_id = aa.orderId)\n" +
+                    "union\n" +
+                    "(select sum(oo2.total_price) as totalSum from onsite_order oo2 where oo2.user_id  = parent.id and oo2.is_active  and oo2.pay_status = 'UNPAID' and oo2.approval_status = 'DELIVERED')\n" +
+                    ") foo), 0) as \"remainingAmount\") child on true\n" +
+                    "where case \n" +
+                    "\twhen ?3 = 'PAID' then child.\"remainingAmount\" = 0\n" +
+                    "\twhen ?3 = 'UNPAID' then child.\"remainingAmount\" > 0\n" +
+                    "\telse true\n" +
+                    "end",
+     countQuery= "select count(*) from (select * from(select u.id, INITCAP(u.full_name) as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
+             "u.profile_path as \"profilePath\", u.contact_number as \"contactNumber\", \n" +
+             "case when u.user_type = 'EXTERNAL_USER' then true else false end as \"isExternal\"\n" +
+             "from users u where u.is_active and u.user_type in ?1 and \n" +
+             "case when ?2 = '-1' then true else u.full_name ilike concat('%',?2,'%') end \n" +
+             "order by u.last_modified_date desc) parent\n" +
+             "join lateral (\n" +
+             "select coalesce ((select sum(totalSum) from ((select sum(foo.due_amount) as totalSum from \n" +
+             "(select  upd.onsite_order_id as orderId  from user_payment_details upd\n" +
+             "join onsite_order oo on oo.id = upd.onsite_order_id  \n" +
+             "where oo.user_id =  parent.id and  oo.pay_status = 'PARTIAL_PAID'  group by upd.onsite_order_id ) aa\n" +
+             "join lateral (select upd2.*  from user_payment_details upd2 where upd2.onsite_order_id = aa.orderId \n" +
+             "order by created_date desc limit 1\n" +
+             ") \n" +
+             "foo on foo.onsite_order_id = aa.orderId)\n" +
+             "union\n" +
+             "(select sum(oo2.total_price) as totalSum from onsite_order oo2 where oo2.user_id  = parent.id and oo2.is_active  and oo2.pay_status = 'UNPAID' and oo2.approval_status = 'DELIVERED')\n" +
+             ") foo), 0) as \"remainingAmount\") child on true\n" +
+             "where case \n" +
+             "\twhen ?3 = 'PAID' then child.\"remainingAmount\" = 0\n" +
+             "\twhen ?3 = 'UNPAID' then child.\"remainingAmount\" > 0\n" +
+             "\telse true\n" +
+             "end) foo")
+    Page<Map<String, Object>> findAllUsers(List<String> userType, String name, String payStatus, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select u.id, INITCAP(u.full_name) as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
             "u.profile_path as \"profilePath\", u.contact_number as \"contactNumber\" from users u where u.is_active and u.user_type = 'STAFF'")

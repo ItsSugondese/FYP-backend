@@ -1,5 +1,6 @@
 package fyp.canteen.fypcore.pojo.usermgmt;
 
+import fyp.canteen.fypcore.enums.PayStatus;
 import fyp.canteen.fypcore.enums.UserType;
 import fyp.canteen.fypcore.utils.pagination.PaginationRequest;
 import lombok.Getter;
@@ -12,4 +13,5 @@ import java.util.List;
 public class UserDetailPaginationRequest extends PaginationRequest {
     private List<UserType> userType;
     private String name = "-1";
+    private PayStatus payStatus = null;
 }

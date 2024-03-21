@@ -11,5 +11,5 @@ import lombok.Setter;
 public class  FoodMenuPaginationRequestPojo extends PaginationRequest {
     private String name = "-1";
     private FoodType foodType = null;
-    private FoodFilter filter = FoodFilter.ALL;
+    private Boolean filter = null;
 }
