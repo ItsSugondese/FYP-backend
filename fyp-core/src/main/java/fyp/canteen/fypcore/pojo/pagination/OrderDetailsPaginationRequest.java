@@ -9,8 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class OrderDetailsPaginationRequest extends PaginationRequest {
-    private LocalDate fromDate = LocalDate.now().minusDays(1);
-    private LocalDate toDate = LocalDate.now();
+    private boolean today = false;
 
     public enum OrderTimeType{
         TODAY, SPECIFY

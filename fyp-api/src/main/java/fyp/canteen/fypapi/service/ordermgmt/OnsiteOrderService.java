@@ -20,7 +20,7 @@ public interface OnsiteOrderService {
     PaginationResponse getPaginatedOrderListByTime(OnsiteOrderPaginationRequestPojo requestPojo);
     PaginationResponse getPaginatedOrderHistoryOfAllUsers(OrderHistoryPaginationRequest requestPojo);
     PaginationResponse getPaginatedOrderOfUser(OnsiteOrderOfUserPaginationRequestPojo requestPojo);
-    List<OnsiteOrderResponsePojo> userTodayOnsiteOrders();
+
     void markOnsiteOrderAsRead(Long orderId);
     PaginationResponse getPaginatedOrderHistoryDetails(OrderDetailsPaginationRequest requestPojo);
 

@@ -5,21 +5,16 @@ import fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper;
 import fyp.canteen.fypapi.repository.notification.NotificationRepo;
 import fyp.canteen.fypapi.repository.ordermgmt.OnsiteOrderRepo;
 import fyp.canteen.fypapi.repository.payment.UserPaymentDetailsRepo;
-import fyp.canteen.fypapi.service.food.FoodMenuService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.constants.NotificationMessageConstants;
 import fyp.canteen.fypcore.enums.ApprovalStatus;
-import fyp.canteen.fypcore.enums.DeliveryStatus;
-import fyp.canteen.fypcore.enums.OrderType;
 import fyp.canteen.fypcore.enums.PayStatus;
 import fyp.canteen.fypcore.exception.AppException;
-import fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnsiteOrder;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import fyp.canteen.fypcore.model.notification.Notification;
 import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderRequestPojo;
-import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderResponsePojo;
 import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodMappingRequestPojo;
 import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodResponsePojo;
 import fyp.canteen.fypcore.pojo.pagination.OnsiteOrderOfUserPaginationRequestPojo;
@@ -195,34 +190,12 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     public PaginationResponse getPaginatedOrderHistoryDetails(OrderDetailsPaginationRequest requestPojo) {
         PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getUserOrderPaginated(requestPojo.getFromDate(),
                 requestPojo.getToDate(),
-                userDataConfig.userId(), requestPojo.getPageable()));
+                userDataConfig.userId(), requestPojo.isToday()? Pageable.unpaged():  requestPojo.getPageable()));
 
-        response.setContent(response.getContent().stream().map(
-                e -> {
-                    Map<String, Object> map = new HashMap<>(e);
-                    List<OrderFoodResponsePojo> orderFoodResponsePojos = orderFoodMappingMapper.getAllFoodDetailsByOrderId(((Long) e.get("id")),
-                            true);
-                    map.put("orderFoodDetails", orderFoodResponsePojos);
-                    return map;
-                }
-        ).collect(Collectors.toList()));
+        setPaginationResponseWithExtraResponseDataForUserHistory(response);
         return  response;
     }
 
-    @Override
-    public List<OnsiteOrderResponsePojo> userTodayOnsiteOrders() {
-        List<OnsiteOrderResponsePojo> response =  onsiteOrderMapper.getTodayOnsiteUserOrders(userDataConfig.userId());
-        response.stream().peek(e -> {
-            PayStatus payStatus =  PayStatus.valueOf(e.getPayStatus().toUpperCase());
-            if(payStatus == PayStatus.UNPAID)
-                e.setRemainingAmount(e.getTotalPrice());
-            else if(payStatus == PayStatus.PAID)
-                e.setRemainingAmount(0D);
-            else
-                e.setRemainingAmount(userPaymentDetailsRepo.getTotalRemainingAmountOfOrderByOrderId(e.getId()));
-        }).collect(Collectors.toList());
-        return response;
-    }
 
     @Override
     @Transactional
@@ -250,5 +223,29 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     @Override
     public OnsiteOrder findById(Long id) {
         return onsiteOrderRepo.findById(id).orElseThrow(() -> new AppException(Message.idNotFound(ModuleNameConstants.ONSITE_ORDER)));
+    }
+
+
+    private void setPaginationResponseWithExtraResponseDataForUserHistory(PaginationResponse response) {
+        response.setContent(response.getContent().stream().map(
+                e -> {
+                    Map<String, Object> map = new HashMap<>(e);
+                    PayStatus payStatus =  PayStatus.valueOf(String.valueOf(e.get("payStatus")).toUpperCase());
+                    double totalPrice = Double.parseDouble(String.valueOf(e.get("totalPrice")));
+
+                    if(payStatus == PayStatus.UNPAID)
+                        map.put("remainingAmount", totalPrice);
+                    else if(payStatus == PayStatus.PAID) {
+                        map.put("remainingAmount", 0D);
+                    }
+                    else {
+                        map.put("remainingAmount", userPaymentDetailsRepo.getTotalRemainingAmountOfOrderByOrderId(Long.parseLong(String.valueOf(e.get("id")))));
+                    }
+                    List<OrderFoodResponsePojo> orderFoodResponsePojos = orderFoodMappingMapper.getAllFoodDetailsByOrderId(((Long) e.get("id")),
+                            false);
+                    map.put("orderFoodDetails", orderFoodResponsePojos);
+                    return map;
+                }
+        ).collect(Collectors.toList()));
     }
 }

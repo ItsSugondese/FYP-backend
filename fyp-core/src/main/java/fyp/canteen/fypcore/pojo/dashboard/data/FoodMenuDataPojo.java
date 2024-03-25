@@ -8,4 +8,7 @@ import lombok.Setter;
 public class FoodMenuDataPojo {
     private Integer total;
     private Integer latest;
+    private Integer today;
+    private Integer notToday;
+
 }

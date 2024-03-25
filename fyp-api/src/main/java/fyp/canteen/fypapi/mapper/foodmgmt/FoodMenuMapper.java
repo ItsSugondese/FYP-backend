@@ -26,6 +26,8 @@ public interface FoodMenuMapper {
     Optional<FoodMenuRequestPojo> getFoodMenuById(@Param("id") Long id);
 
     @Select("select count(*) as total ,\n" +
+            "sum(case when fm.is_available_today then 1 else 0 end) as today,\n" +
+            "sum(case when not fm.is_available_today then 1 else 0 end)  as \"notToday\", \n" +
             "sum(case when cast(fm.created_date as date) between cast(#{fromDate} as date) and cast(#{toDate} as date) then 1 else 0 end) as latest\n" +
             "from food_menu fm where fm.is_active ")
     FoodMenuDataPojo getFoodMenuStatistics(@Param("fromDate") LocalDate fromDate,
