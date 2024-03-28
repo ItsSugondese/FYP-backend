@@ -1,6 +1,9 @@
 package fyp.canteen.fypapi.service.ordermgmt;
 
+import fyp.canteen.fypapi.repository.ordermgmt.OnlineOrderRepo;
 import fyp.canteen.fypapi.repository.ordermgmt.OrderFoodMappingRepo;
+import fyp.canteen.fypcore.constants.Message;
+import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder;
@@ -10,6 +13,7 @@ import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodMappingRequestPojo;
 import fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodResponsePojo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,8 @@ import java.util.stream.Collectors;
 public class OrderFoodMappingServiceImpl implements OrderFoodMappingService{
 
     private final OrderFoodMappingRepo orderFoodMappingRepo;
+    private final OnlineOrderRepo onlineOrderRepo;
+
     @Override
     public void saveOrderFoodMapping(OrderFoodMappingRequestPojo requestPojo, OnlineOrder onlineOrder, OnsiteOrder onsiteOrder) {
         orderFoodMappingRepo.saveAllAndFlush(Optional.ofNullable(requestPojo.getFoodOrderList()).orElse(new ArrayList<>())
@@ -64,9 +70,25 @@ public class OrderFoodMappingServiceImpl implements OrderFoodMappingService{
     }
 
     @Override
-    public void removeOrderFoodById(Long id) {
-        orderFoodMappingRepo.deleteById(id);
+    public OrderFoodMapping findById(Long id) {
+        return orderFoodMappingRepo.findById(id)
+                .orElseThrow(() -> new AppException(Message.idNotFound(ModuleNameConstants.ORDER_FOOD_MAPPING)));
     }
+
+    @Override
+    @Transactional
+    public void removeOrderFoodById(Long id) {
+        OrderFoodMapping orderFoodMapping = findById(id);
+        OnlineOrder onlineOrder = orderFoodMapping.getOnlineOrder();
+
+
+
+        orderFoodMappingRepo.deleteById(id);
+
+        onlineOrder.setTotalPrice(onlineOrder.getTotalPrice() - (orderFoodMapping.getFoodMenu().getCost() * orderFoodMapping.getQuantity()));
+        onlineOrderRepo.save(onlineOrder);
+    }
+
 
     @Override
     public List<OrderFoodMapping> getAllOrderedFoodByOnlineOrder(OnlineOrder onlineOrder) {

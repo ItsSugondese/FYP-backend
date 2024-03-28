@@ -115,6 +115,9 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
     public void convertOnlineToOnsite(Long id) {
         OnlineOrder onlineOrder = findById(id);
         List<OrderFoodMapping> orderFoodMappingList =  orderFoodMappingService.getAllOrderedFoodByOnlineOrder(onlineOrder);
+
+        if(orderFoodMappingList.isEmpty())
+            throw new AppException("No Food Is ordered");
         onlineOrder.setApprovalStatus(ApprovalStatus.DELIVERED);
         onlineOrder = onlineOrderRepo.saveAndFlush(onlineOrder);
 

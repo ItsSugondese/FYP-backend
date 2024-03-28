@@ -1,7 +1,7 @@
 
-O
-java:S6126"2Replace this String concatenation with Text block.(ëÆ±É8ª¯Å Õ1
-T
-java:S6126"2Replace this String concatenation with Text block.(ÙäĞ¢üÿÿÿÿ8„’î²Ú1
-u
-java:S1128"YRemove this unused import 'fyp.canteen.fypcore.generics.api.GenericSoftDeleteRepository'.(öûT8®İ¡Œã1
+H
+java:S6126"2Replace this String concatenation with Text block.(ëÆ±É
+M
+java:S6126"2Replace this String concatenation with Text block.(ÙäĞ¢üÿÿÿÿ
+n
+java:S1128"YRemove this unused import 'fyp.canteen.fypcore.generics.api.GenericSoftDeleteRepository'.(öûT

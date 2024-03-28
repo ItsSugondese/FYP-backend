@@ -12,6 +12,7 @@ public interface OrderFoodMappingService {
     void saveOrderFoodMapping(OrderFoodMappingRequestPojo requestPojo, OnlineOrder onlineOrder, OnsiteOrder onsiteOrder);
 
     List<OrderFoodMapping> getAllOrderedFoodByOnlineOrder(OnlineOrder onlineOrder);
+    OrderFoodMapping findById(Long id);
     void removeOrderFoodList(List<Long> ids);
     void removeOrderFoodById(Long id);
 }

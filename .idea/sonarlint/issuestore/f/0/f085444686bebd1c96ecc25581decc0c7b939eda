@@ -1,0 +1,11 @@
+
+[
+java:S1128	"@Remove this unused import 'fyp.canteen.fypcore.enums.OrderType'.(ÏÿÜºüÿÿÿÿ
+b
+java:S1128"LRemove this unused import 'io.swagger.v3.oas.annotations.media.ArraySchema'.(‚ñãØ
+c
+java:S1128"HRemove this unused import 'io.swagger.v3.oas.annotations.media.Content'.(±øýÊüÿÿÿÿ
+b
+java:S1128"GRemove this unused import 'io.swagger.v3.oas.annotations.media.Schema'.(“è«øüÿÿÿÿ
+E
+java:S1128"*Remove this unused import 'java.util.Map'.(¼è½Òþÿÿÿÿ

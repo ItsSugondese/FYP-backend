@@ -101,10 +101,13 @@ public class UserPaymentDetailsServiceImpl implements UserPaymentDetailsService{
                 updatePreviousTransactions(partialPaidPaymentData, dueAmount, tempOnsiteOrder, PayStatus.PAID);
             } else if (remainingCashAfterCurrent == dueAmount) {
                 dueAmount = 0;
+                remainingCashAfterCurrent = 0;
                 updatePreviousTransactions(partialPaidPaymentData, dueAmount, tempOnsiteOrder, PayStatus.PAID);
                 break;
             } else {
                 dueAmount -= remainingCashAfterCurrent;
+                remainingCashAfterCurrent = 0;
+
                 updatePreviousTransactions(partialPaidPaymentData, dueAmount, tempOnsiteOrder, PayStatus.PARTIAL_PAID);
                 break;
             }

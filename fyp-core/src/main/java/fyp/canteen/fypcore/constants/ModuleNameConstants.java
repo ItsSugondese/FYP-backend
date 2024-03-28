@@ -22,5 +22,6 @@ public class ModuleNameConstants {
     public static final String TABLE = "Table";
     public static final String ADMIN_DASHBOARD = "Admin Dashboard";
     public static final String ANNOUNCEMENT = "Announcement";
+    public static final String ORDER_FOOD_MAPPING = "Ordered Food";
 
 }

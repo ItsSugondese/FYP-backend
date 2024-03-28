@@ -101,7 +101,8 @@ public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder
             " else oo.approval_status = 'DELIVERED' \n" +
             "end and \n" +
             "case when ?3 = '-1' then true else u.full_name ilike concat('%',?3,'%') end and \n" +
-            "case when ?5 is null then true else oo.pay_status = ?5 end",
+            "case when ?5 is null then true else oo.pay_status = ?5 end \n" +
+            "order by oo.ordered_time asc",
 countQuery = "Select count(*) from (\n" +
         " SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
         "  case \n" +
@@ -130,7 +131,8 @@ countQuery = "Select count(*) from (\n" +
         "else oo.approval_status = 'DELIVERED' \n" +
         "end and \n" +
         "case when ?3 = '-1' then true else u.full_name ilike concat('%',?3,'%') end and \n" +
-        "case when ?5 is null then true else oo.pay_status = ?5 end) foo"
+        "case when ?5 is null then true else oo.pay_status = ?5 end \n" +
+        "order by oo.ordered_time asc) foo"
             , nativeQuery = true)
     Page<Map<String, Object>> getOnsiteOrderPaginated(LocalDateTime fromDT, String showStatus, String name, LocalDateTime toDT,
                                                       String payStatus,
