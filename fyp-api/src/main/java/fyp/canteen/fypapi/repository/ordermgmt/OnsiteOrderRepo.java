@@ -169,7 +169,7 @@ countQuery = "select count(*) from (\n" +
             , nativeQuery = true)
     Page<Map<String, Object>> getOnsiteOrderOfUserPaginated(Long id, String showStatus, Pageable pageable);
 
-    @Query(value = "  SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
+    @Query(value = "  SELECT oo.id, to_char(oo.created_date, 'YYYY-MM-DD HH:MI AM') as \"date\",  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
             "  case \n" +
             "\t  when \n" +
             "  \tExtract(day from (current_timestamp - oo.ordered_time)) > 0 then  Extract(day from (current_timestamp - oo.ordered_time)) ||  ' days ' ||\n" +
@@ -199,7 +199,10 @@ countQuery = "select count(*) from (\n" +
             "else false end as \"feedbackStatus\" \n" +
             "FROM onsite_order oo  \n" +
             "JOIN users u ON u.id = oo.user_id \n" +
-            "where oo.is_active and oo.user_id = ?3 and cast(oo.created_date as date) between ?1 and ?2 \n" +
+            "where oo.is_active and oo.user_id = ?3 and \n" +
+            "case when ?4 is null  then cast(oo.created_date as date) between ?1 and ?2 \n" +
+            "when ?4 = 'PAID' then (cast(oo.created_date as date) between ?1 and ?2) and oo.pay_status = ?4 \n" +
+            "else oo.pay_status = ?4 end \n" +
             "order by oo.created_date desc",
             countQuery = "select count(*) from (\n" +
                     "  SELECT oo.id,  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
@@ -232,10 +235,13 @@ countQuery = "select count(*) from (\n" +
                     "else false end as \"feedbackStatus\" \n" +
                     "FROM onsite_order oo  \n" +
                     "JOIN users u ON u.id = oo.user_id \n" +
-                    "where oo.is_active and oo.user_id = ?3 and cast(oo.created_date as date) between ?1 and ?2 \n" +
+                    "where oo.is_active and oo.user_id = ?3 and \n" +
+                    "case when ?4 is null  then cast(oo.created_date as date) between ?1 and ?2 \n" +
+                    "when ?4 = 'PAID' then (cast(oo.created_date as date) between ?1 and ?2) and oo.pay_status = ?4 \n" +
+                    "else oo.pay_status = ?4 end \n" +
                     "order by oo.created_date desc) foo",
             nativeQuery = true)
-    Page<Map<String, Object>> getUserOrderPaginated(LocalDate fromDate, LocalDate toDate, Long userId, Pageable pageable);
+    Page<Map<String, Object>> getUserOrderPaginated(LocalDate fromDate, LocalDate toDate, Long userId, String payStatus, Pageable pageable);
 
 
     @Query(nativeQuery = true,

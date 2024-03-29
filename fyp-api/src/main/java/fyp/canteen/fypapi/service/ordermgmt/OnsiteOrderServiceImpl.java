@@ -190,7 +190,9 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     public PaginationResponse getPaginatedOrderHistoryDetails(OrderDetailsPaginationRequest requestPojo) {
         PaginationResponse response =  customPaginationHandler.getPaginatedData(onsiteOrderRepo.getUserOrderPaginated(requestPojo.getFromDate(),
                 requestPojo.getToDate(),
-                userDataConfig.userId(), requestPojo.isToday()? Pageable.unpaged():  requestPojo.getPageable()));
+                userDataConfig.userId(),
+                requestPojo.getPayStatus() == null? null : requestPojo.getPayStatus().name(),
+                requestPojo.isToday()? Pageable.unpaged():  requestPojo.getPageable()));
 
         setPaginationResponseWithExtraResponseDataForUserHistory(response);
         return  response;
@@ -233,6 +235,7 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                     PayStatus payStatus =  PayStatus.valueOf(String.valueOf(e.get("payStatus")).toUpperCase());
                     double totalPrice = Double.parseDouble(String.valueOf(e.get("totalPrice")));
 
+                    map.put("payStatus", payStatus.getText());
                     if(payStatus == PayStatus.UNPAID)
                         map.put("remainingAmount", totalPrice);
                     else if(payStatus == PayStatus.PAID) {
