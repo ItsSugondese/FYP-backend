@@ -192,6 +192,7 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                 requestPojo.getToDate(),
                 userDataConfig.userId(),
                 requestPojo.getPayStatus() == null? null : requestPojo.getPayStatus().name(),
+                requestPojo.isToday(),
                 requestPojo.isToday()? Pageable.unpaged():  requestPojo.getPageable()));
 
         setPaginationResponseWithExtraResponseDataForUserHistory(response);

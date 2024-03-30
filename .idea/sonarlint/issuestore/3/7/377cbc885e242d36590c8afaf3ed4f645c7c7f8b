@@ -1,17 +1,17 @@
 
 r
-java:S1192n"PDefine a constant instead of duplicating this literal "remainingAmount" 6 times.(ƒ•¾‹ùÿÿÿÿ8 å„Ûè1
+java:S1192n"PDefine a constant instead of duplicating this literal "remainingAmount" 6 times.(ƒ•¾‹ùÿÿÿÿ8çâíè1
 h
-java:S1192¤"JDefine a constant instead of duplicating this literal "payStatus" 3 times.(“ğË8 å„Ûè1
+java:S1192¤"JDefine a constant instead of duplicating this literal "payStatus" 3 times.(“ğË8ïâíè1
 s
-java:S1192l"QDefine a constant instead of duplicating this literal "orderFoodDetails" 4 times.(æ’Üüıÿÿÿÿ8¡å„Ûè1
-X	java:S125\"<This block of commented-out lines of code should be removed.(·ÌÄû8õç„Ûè1
+java:S1192l"QDefine a constant instead of duplicating this literal "orderFoodDetails" 4 times.(æ’Üüıÿÿÿÿ8ïâíè1
+X	java:S125\"<This block of commented-out lines of code should be removed.(·ÌÄû8ôåíè1
 o
-java:S6204q"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8øç„Ûè1
+java:S6204q"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8úåíè1
 p
-java:S6204Œ"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8Šè„Ûè1
-Y	java:S125›"<This block of commented-out lines of code should be removed.(·ÌÄû8•è„Ûè1
+java:S6204Œ"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8¯æíè1
+Y	java:S125›"<This block of commented-out lines of code should be removed.(·ÌÄû8¼æíè1
 p
-java:S6204¯"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8–è„Ûè1
+java:S6204¯"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8½æíè1
 p
-java:S6204ü"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8±è„Ûè1
+java:S6204ı"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8ñæíè1

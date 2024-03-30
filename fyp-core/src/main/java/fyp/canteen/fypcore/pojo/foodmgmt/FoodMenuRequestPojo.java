@@ -32,4 +32,5 @@ public class FoodMenuRequestPojo {
     private FoodType foodType;
 
     private Long photoId;
+    private Boolean isAuto;
 }

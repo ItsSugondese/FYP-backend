@@ -35,6 +35,9 @@ public class FoodMenu extends AuditActiveAbstract {
     @Column( name = "is_available_today")
     private Boolean isAvailableToday = true;
 
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isAuto = false;
+
 
 }
 

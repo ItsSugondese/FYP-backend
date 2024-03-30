@@ -10,6 +10,10 @@ import lombok.Setter;
 @Setter
 public class  FoodMenuPaginationRequestPojo extends PaginationRequest {
     private String name = "-1";
-    private FoodType foodType = null;
+    private FoodTypeForMenuPaginated foodType = null;
     private Boolean filter = null;
+
+    public enum FoodTypeForMenuPaginated{
+        MEAL, DRINKS, MISC, AUTO;
+    }
 }

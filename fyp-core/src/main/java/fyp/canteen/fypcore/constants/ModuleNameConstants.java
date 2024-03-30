@@ -11,6 +11,7 @@ public class ModuleNameConstants {
     public static final String FOOD_MENU = "Food Menu";
     public static final String COMPANY = "Company";
     public static final String FEEDBACK = "Feedback";
+    public static final String INVENTORY = "Inventory";
     public static final String ENUMS = "Enums";
     public static final String ONLINE_ORDER = "Online Order";
     public static final String PAYMENT = "Payment";

@@ -35,7 +35,7 @@ public class KhaltiController extends BaseController {
     @Operation(summary = "Use this api to verify transaction made using khalti in frontend",
             responses = {@ApiResponse(responseCode = "200")})
     public ResponseEntity<GlobalApiResponse> verifyTransaction(@RequestBody @Valid KhaltiTransactionVerificationRequestPojo requestPojo){
-        return ResponseEntity.ok(successResponse("Transaction has been verified successfully",
+        return ResponseEntity.ok(successResponse("Transaction successful",
                 CRUD.SAVE, khatiService.verifyTransaction(requestPojo)));
     }
 }
