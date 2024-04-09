@@ -10,6 +10,7 @@ import fyp.canteen.fypcore.generics.controller.BaseController;
 import fyp.canteen.fypcore.pojo.GlobalApiResponse;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuRequestPojo;
+import fyp.canteen.fypcore.pojo.inventory.InventoryFoodPaginationRequest;
 import fyp.canteen.fypcore.pojo.inventory.InventoryMenuRequestPojo;
 import fyp.canteen.fypcore.utils.pagination.PaginationRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,10 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -51,5 +49,22 @@ public class InventoryController  extends BaseController {
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))})})
     public ResponseEntity<GlobalApiResponse> getFoodMenuPaginated(@RequestBody PaginationRequest requestPojo){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),CRUD.GET, inventoryMenuMappingService.getInventoryMenuMappingPaginated(requestPojo)));
+    }
+
+    @PostMapping("/food-menu/paginated")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Boolean.class)))})})
+    public ResponseEntity<GlobalApiResponse> getFoodMenuInventoryLogPaginated(@RequestBody InventoryFoodPaginationRequest requestPojo){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),CRUD.GET, inventoryMenuMappingService.getInventoryDataOfFoodPaginated(requestPojo)));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Boolean.class)))})})
+    public ResponseEntity<GlobalApiResponse> deleteLog(@PathVariable("id") Long id){
+        inventoryMenuMappingService.deleteInventoryLogById(id);
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),CRUD.GET, null));
     }
 }

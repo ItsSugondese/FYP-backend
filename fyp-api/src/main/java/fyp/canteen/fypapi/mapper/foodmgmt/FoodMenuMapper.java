@@ -2,6 +2,7 @@ package fyp.canteen.fypapi.mapper.foodmgmt;
 
 import fyp.canteen.fypcore.pojo.dashboard.data.FoodMenuDataPojo;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuRequestPojo;
+import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuResponsePojo;
 import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDate;
@@ -19,11 +20,11 @@ public interface FoodMenuMapper {
     List<FoodMenuRequestPojo> getAllFoodMenu(String type);
 
 
-    @Select("select fm.id as id, fm.\"name\" as name, fm.food_type as \"foodType\", fm.\"cost\" as cost, fm.description as description, INITCAP(fm.food_type) as \"foodType\",  \n" +
+    @Select("select fm.id as id, fm.\"name\" as name, INITCAP(fm.food_type) as \"foodType\", fm.\"cost\" as cost, fm.description as description,  \n" +
             "(select fmp.id  from food_menu_picture fmp where fmp.is_active and fmp.food_menu_id = fm.id) as photoId,\n" +
-            "fm.is_available_today as isAvailableToday, fm.is_auto as auto  \n" +
+            "fm.is_available_today as \"isAvailable\", fm.is_auto as auto  \n" +
             "from food_menu fm where fm.is_active and fm.id = #{id}")
-    Optional<FoodMenuRequestPojo> getFoodMenuById(@Param("id") Long id);
+    Optional<FoodMenuResponsePojo> getFoodMenuById(@Param("id") Long id);
 
     @Select("select count(*) as total ,\n" +
             "sum(case when fm.is_available_today then 1 else 0 end) as today,\n" +

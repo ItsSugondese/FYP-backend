@@ -1,7 +1,37 @@
-//package fyp.canteen.fypcore.pojo.foodmgmt;
-//
-//public class FoodMenuResponsePojo {
-//    private Long id;
-//    private String name;
-//    private Stri
-//}
+package fyp.canteen.fypcore.pojo.foodmgmt;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import fyp.canteen.fypcore.enums.FoodType;
+import lombok.*;
+
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@JsonIgnoreProperties
+public class FoodMenuResponsePojo {
+
+    private Long id;
+
+    @NotNull
+    private String name;
+
+    private String description;
+
+    @NotNull
+    private Double cost;
+
+    @NotNull
+    private String foodType;
+
+    private Long photoId;
+    private Boolean isAuto;
+    private Boolean isAvailable;
+}

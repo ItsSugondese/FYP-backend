@@ -17,7 +17,9 @@ public interface UserDetailMapper {
 
     @Select("select u.id, INITCAP(u.full_name) as \"fullName\", u.account_non_locked as \"accountNonLocked\", u.email, \n" +
             "u.profile_path as \"profilePath\", to_char(u.created_date, 'YYYY-MM-DD HH:MI AM') as \"startedWorkingOn\", \n" +
-            " u.contact_number as \"contactNumber\", u.user_type as \"userType\"  from users u where u.id = #{id}")
+            " u.contact_number as \"contactNumber\", u.user_type as \"userType\", \n" +
+            "case when u.user_type = 'EXTERNAL_USER' then true else false end as \"isExternal\"\n" +
+            "  from users u where u.id = #{id}")
     Optional<UserDetailResponsePojo> getSingleUser(Long id);
 
     @Select("select u.full_name  \n" +

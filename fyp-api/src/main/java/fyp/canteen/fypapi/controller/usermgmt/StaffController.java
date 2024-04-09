@@ -63,10 +63,10 @@ public class StaffController extends BaseController {
     @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
-    public ResponseEntity<GlobalApiResponse> getFoodPicture(@PathVariable("id") Long id, HttpServletResponse response){
+    public void getFoodPicture(@PathVariable("id") Long id, HttpServletResponse response){
         staffService.getStaffPhoto(response, id);
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
-                CRUD.GET, true));
+//        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+//                CRUD.GET, true));
     }
 
     @GetMapping("/{id}")

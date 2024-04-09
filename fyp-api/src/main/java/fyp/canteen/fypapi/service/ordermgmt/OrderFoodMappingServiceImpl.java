@@ -2,6 +2,7 @@ package fyp.canteen.fypapi.service.ordermgmt;
 
 import fyp.canteen.fypapi.repository.ordermgmt.OnlineOrderRepo;
 import fyp.canteen.fypapi.repository.ordermgmt.OrderFoodMappingRepo;
+import fyp.canteen.fypapi.service.food.FoodMenuService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.exception.AppException;
@@ -27,6 +28,7 @@ public class OrderFoodMappingServiceImpl implements OrderFoodMappingService{
 
     private final OrderFoodMappingRepo orderFoodMappingRepo;
     private final OnlineOrderRepo onlineOrderRepo;
+    private final FoodMenuService foodMenuService;
 
     @Override
     public void saveOrderFoodMapping(OrderFoodMappingRequestPojo requestPojo, OnlineOrder onlineOrder, OnsiteOrder onsiteOrder) {
@@ -39,6 +41,9 @@ public class OrderFoodMappingServiceImpl implements OrderFoodMappingService{
 //                            OrderFoodMapping orderFoodMapping = orderFoodMappingRepo.findByFoodIdAndOrderId(e.getFoodId(), onlineOrder.getId(), orderUserMapping.getId());
 
 
+                            FoodMenu foodMenu = foodMenuService.findById(e.getFoodId());
+                            if(Boolean.FALSE.equals(foodMenu.getIsAvailableToday()))
+                                throw new AppException(foodMenu.getName() + " isn't available to order.");
                             orderFoodMapping.setFoodMenu(FoodMenu.builder().id(e.getFoodId()).build());
                             orderFoodMapping.setQuantity(e.getQuantity());
                             if(onlineOrder != null) {

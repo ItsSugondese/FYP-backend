@@ -106,6 +106,7 @@ public class StaffServiceImpl  implements StaffService {
         try {
             if(photoPath != null)
                 genericFileUtil.getFileFromFilePath(photoPath, response);
+
         }catch (Exception e){
             throw new AppException(e.getMessage(), e);
         }

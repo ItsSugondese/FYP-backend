@@ -4,6 +4,7 @@ import fyp.canteen.fypcore.enums.pojo.FoodFilter;
 import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuPaginationRequestPojo;
 import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuRequestPojo;
+import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuResponsePojo;
 import fyp.canteen.fypcore.pojo.foodmgmt.ToggleAvailableTodayRequestPojo;
 import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +20,7 @@ public interface FoodMenuService {
 
     void getFoodPhoto(HttpServletResponse response, Long id);
 
-    FoodMenuRequestPojo getFoodMenuById(Long id);
+    FoodMenuResponsePojo getFoodMenuById(Long id);
 
     FoodMenu findById(Long id);
 }

@@ -3,15 +3,11 @@ package fyp.canteen.fypcore.pojo.inventory;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
-
 @Getter
 @Setter
-public class InventoryMenuRequestPojo {
+public class InventoryMenuResponsePojo {
     private Long id;
-    @NotNull
     private Integer stock;
-    @NotNull
-    private Long foodId;
+    private String date;
     private Integer remainingQuantity;
 }

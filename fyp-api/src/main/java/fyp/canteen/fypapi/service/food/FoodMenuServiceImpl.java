@@ -8,10 +8,7 @@ import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypapi.repository.foodmgmt.FoodMenuRepo;
 import fyp.canteen.fypcore.enums.FoodType;
 import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
-import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuPaginationRequestPojo;
-import fyp.canteen.fypcore.pojo.foodmgmt.FoodMenuRequestPojo;
-import fyp.canteen.fypcore.pojo.foodmgmt.FoodPictureRequestPojo;
-import fyp.canteen.fypcore.pojo.foodmgmt.ToggleAvailableTodayRequestPojo;
+import fyp.canteen.fypcore.pojo.foodmgmt.*;
 import fyp.canteen.fypcore.utils.NullAwareBeanUtilsBean;
 import fyp.canteen.fypcore.utils.pagination.CustomPaginationHandler;
 import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
@@ -93,7 +90,7 @@ public class FoodMenuServiceImpl implements FoodMenuService{
     }
 
     @Override
-    public FoodMenuRequestPojo getFoodMenuById(Long id) {
+    public FoodMenuResponsePojo getFoodMenuById(Long id) {
         return foodMenuMapper.getFoodMenuById(id).orElseThrow(
                 () -> new AppException(Message.idNotFound(ModuleNameConstants.FOOD_MENU))
         );
