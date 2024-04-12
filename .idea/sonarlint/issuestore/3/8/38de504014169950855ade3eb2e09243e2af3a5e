@@ -1,0 +1,13 @@
+
+]	java:S125R"<This block of commented-out lines of code should be removed.(Íº²Ïıÿÿÿÿ8›Úšöì1
+o
+java:S6204n"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8£Úšöì1
+u
+java:S6204…"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ãúÛ÷üÿÿÿÿ8­Úšöì1
+Y	java:S125•"<This block of commented-out lines of code should be removed.(”ğ²8¸Úšöì1
+k
+java:S4034¬"HReplace this "filter().findFirst().isPresent()" chain with "anyMatch()".(ÂÕ†Éøÿÿÿÿ8ÆÚšöì1
+b
+java:S1128	"@Remove this unused import 'fyp.canteen.fypcore.enums.OrderType'.(ÏÿÜºüÿÿÿÿ8Ï²í‚í1
+N
+java:S1128"1Remove this unused import 'java.math.BigInteger'.(»Çâ€8Ğ²í‚í1

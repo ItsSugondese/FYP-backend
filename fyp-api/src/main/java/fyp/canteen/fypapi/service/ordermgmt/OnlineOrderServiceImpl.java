@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +58,7 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
             onlineOrder.setOrderCode(LocalDate.now() + " " + (onlineOrderRepo.noOfOrders(LocalDate.now()) + 1));
             onlineOrder.setUser(User.builder().id(userDataConfig.userId()).build());
             validationWhenIdIsNull(requestPojo);
+            validation();
         }
         try {
             beanUtilsBean.copyProperties(onlineOrder, requestPojo);
@@ -138,6 +140,11 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
     }
 
     @Override
+    public List<OrderFoodResponsePojo> getOrderSummary(LocalTime fromTime, LocalTime toTime) {
+        return onlineOrderMapper.getOnlineOrderSummary(fromTime, toTime);
+    }
+
+    @Override
     public OnlineOrderResponsePojo getOnlineOrderById(Long id) {
 //        return onlineOrderMapper.getOnlineOrderById(id).orElseThrow(() -> new AppException(Message.idNotFound(ModuleNameConstants.ONLINE_ORDER)));
         return null;
@@ -156,5 +163,14 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
     private void validationWhenIdIsNull(OnlineOrderRequestPojo requestPojo) {
         if (requestPojo.getFoodOrderList().isEmpty())
             throw new AppException("Selecting food is compulsory when making orders.");
+    }
+
+
+
+    private void validation(){
+        List<OnlineOrderResponsePojo> orders = getUserOnlineOrder();
+        if(orders.stream().filter(e-> e.getApprovalStatus().equals(ApprovalStatus.PENDING)).findFirst().isPresent())
+            throw new AppException("Please edit existing order there is already one pending");
+
     }
 }

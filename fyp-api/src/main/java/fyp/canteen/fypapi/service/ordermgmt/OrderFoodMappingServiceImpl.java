@@ -44,8 +44,9 @@ public class OrderFoodMappingServiceImpl implements OrderFoodMappingService{
                             FoodMenu foodMenu = foodMenuService.findById(e.getFoodId());
                             if(Boolean.FALSE.equals(foodMenu.getIsAvailableToday()))
                                 throw new AppException(foodMenu.getName() + " isn't available to order.");
-                            orderFoodMapping.setFoodMenu(FoodMenu.builder().id(e.getFoodId()).build());
+                            orderFoodMapping.setFoodMenu(foodMenu);
                             orderFoodMapping.setQuantity(e.getQuantity());
+                            orderFoodMapping.setTotalCost(e.getQuantity() * foodMenu.getCost());
                             if(onlineOrder != null) {
                                 if((onsiteOrder != null || (orderFoodMapping.getId()!= null && !Objects.equals(orderFoodMapping.getOnlineOrder().getId(), onlineOrder.getId()))))
                                     throw new AppException("The order you're trying to update is  made by someone else");

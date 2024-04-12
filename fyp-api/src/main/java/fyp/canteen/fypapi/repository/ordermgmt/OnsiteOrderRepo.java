@@ -93,7 +93,7 @@ public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder
             "FROM onsite_order oo  \n" +
             "JOIN users u ON u.id = oo.user_id \n" +
             "where oo.created_date between ?1 and ?4 and \n" +
-            "case when ?2 = 'PENDING' then oo.mark_as_read is false \n" +
+            "case when ?2 = 'PENDING' then oo.mark_as_read is false and oo.approval_status = 'PENDING' \n" +
             "   when ?2 = 'VIEWED' then oo.mark_as_read is true and oo.approval_status = 'PENDING' \n" +
             "   when ?2 = 'DELIVERED' then oo.approval_status = 'DELIVERED' and oo.pay_status = 'UNPAID' \n" +
             "   when ?2 = 'CANCELED' then oo.approval_status = 'CANCELED'\n" +
@@ -123,7 +123,7 @@ countQuery = "Select count(*) from (\n" +
         "FROM onsite_order oo  \n" +
         "JOIN users u ON u.id = oo.user_id \n" +
         "where oo.created_date between ?1 and ?4 and \n" +
-        "case when ?2 = 'PENDING' then oo.mark_as_read is false \n" +
+        "case when ?2 = 'PENDING' then oo.mark_as_read is false and oo.approval_status = 'PENDING'\n" +
         "   when ?2 = 'VIEWED' then oo.mark_as_read is true and oo.approval_status = 'PENDING' \n" +
         "   when ?2 = 'DELIVERED' then oo.approval_status = 'DELIVERED' and oo.pay_status = 'UNPAID' \n" +
         "   when ?2 = 'CANCELED' then oo.approval_status = 'CANCELED'\n" +

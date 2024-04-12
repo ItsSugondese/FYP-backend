@@ -5,6 +5,8 @@ import fyp.canteen.fypapi.config.security.CustomUserDetailsService;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.usermgmt.UserService;
 import fyp.canteen.fypcore.config.security.JwtUtil;
+import fyp.canteen.fypcore.enums.Device;
+import fyp.canteen.fypcore.enums.UserType;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.auth.Role;
 import fyp.canteen.fypcore.pojo.jwt.JwtRequest;
@@ -39,6 +41,10 @@ public class JwtService {
 
         User user = userService.findUserByEmail(userEmail);
 
+        if(jwtRequest.getDevice().equals(Device.PHONE)){
+            if(user.getUserType().equals(UserType.ADMIN))
+                throw new AppException("Only users and staff are eligible to use the app");
+        }
         String newGeneratedToken = jwtUtil.generateToken(userDetailsService.loadUserByUsername(userEmail),
                 user);
 

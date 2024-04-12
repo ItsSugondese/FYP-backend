@@ -50,7 +50,7 @@ public class WebSecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(
                         auth -> auth.requestMatchers("/canteen/authenticate", "/authenticate", "/addUser", "/canteen/login-with-google", "/login-with-google",
                                         "/auth/**", "/test/**", "/test", "/auth/validate-token", "/auth/reset-password",
-                                        "/auth/forgot-password").permitAll()
+                                        "/auth/forgot-password", "/report/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(eh -> eh .authenticationEntryPoint(jwtAuthenticationEntryPoint))

@@ -97,6 +97,11 @@ public class FoodMenuServiceImpl implements FoodMenuService{
     }
 
     @Override
+    public void deleteSingleMenu(Long id) {
+        foodMenuRepo.deleteById(id);
+    }
+
+    @Override
     public FoodMenu findById(Long id) {
         return foodMenuRepo.findById(id).orElseThrow(() -> new AppException(Message.idNotFound(ModuleNameConstants.FOOD_MENU)));
     }

@@ -19,6 +19,7 @@ public interface FoodMenuService {
     List<FoodMenuRequestPojo> getAllFoodMenu(FoodFilter foodFilter);
 
     void getFoodPhoto(HttpServletResponse response, Long id);
+    void deleteSingleMenu(Long id);
 
     FoodMenuResponsePojo getFoodMenuById(Long id);
 

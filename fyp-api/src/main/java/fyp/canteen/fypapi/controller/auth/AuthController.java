@@ -1,6 +1,7 @@
 package fyp.canteen.fypapi.controller.auth;
 
 import fyp.canteen.fypapi.service.auth.AuthService;
+import fyp.canteen.fypapi.service.usermgmt.UserService;
 import fyp.canteen.fypapi.service.usermgmt.UserServiceHelper;
 import fyp.canteen.fypapi.service.usermgmt.UserServiceImpl;
 import fyp.canteen.fypcore.constants.Message;
@@ -34,10 +35,12 @@ public class AuthController extends BaseController {
 
     private final AuthService authService;
     private final UserServiceHelper userServiceHelper;
+    private final UserService userService;
 
-    public AuthController(AuthService authService, UserServiceHelper userServiceHelper){
+    public AuthController(AuthService authService, UserServiceHelper userServiceHelper, UserService userService){
         this.authService = authService;
         this.userServiceHelper = userServiceHelper;
+        this.userService = userService;
         this.moduleName = ModuleNameConstants.AUTH;
 
     }
@@ -50,6 +53,8 @@ public class AuthController extends BaseController {
     public ResponseEntity<GlobalApiResponse> signInWithGoogle(@RequestBody String credential){
         return ResponseEntity.ok(successResponse("Authentication successful", CRUD.SAVE, authService.signInWithGoogle(credential)));
     }
+
+
 
     @PostMapping("/login")
     @Operation(summary = "Use this api to save ", responses = {@ApiResponse(responseCode = "200",
@@ -64,6 +69,7 @@ public class AuthController extends BaseController {
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> signIn(@RequestBody @Valid ResetPasswordDetailRequestPojo request){
+        userService.findUserByEmail(request.getUserEmail());
         CompletableFuture<String> futureResult = CompletableFuture.supplyAsync(() -> {
             // Simulate a long-running computation
             userServiceHelper.resetPasswordMailSendHelper(

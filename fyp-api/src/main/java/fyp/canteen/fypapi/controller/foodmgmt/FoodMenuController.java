@@ -76,6 +76,15 @@ public class FoodMenuController extends BaseController {
         foodMenuService.getFoodPhoto(response, id);
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), CRUD.GET, true));
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> deleteMenu(@PathVariable("id") Long id){
+        foodMenuService.deleteSingleMenu(id);
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), CRUD.GET, true));
+    }
 }
 
 

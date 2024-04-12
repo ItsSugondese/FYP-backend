@@ -18,11 +18,9 @@ public interface RevenueMapper {
             "\t (sum(suu.\"dueAmount\") + sum(suu.\"paidAmount\")) as \"totalTransaction\", sum(suu.delivered) as delivered from (\n" +
             "\t\tselect sum(case when foo.row_num = 1 then foo.due_amount end) as \"dueAmount\", sum(foo.paid_amount) as \"paidAmount\", \n" +
             "\t\tfoo.user_id, sum(case when foo.row_num = 1 then 1 else 0 end) as delivered  from (\n" +
-            "\t\t\tselect  upd.onsite_order_id as orderId  from user_payment_details upd\n" +
-            "\t\t\tjoin onsite_order oo on oo.id = upd.onsite_order_id  \n" +
+            "\t\t\tselect  oo.id as orderId  from onsite_order oo  \n" +
             "\t\t\twhere oo.pay_status = 'PARTIAL_PAID' \n" +
             "\t\t\tand cast(oo.created_date as date) between  cast(#{fromDate} as date)  and cast(#{toDate} as date)  \n" +
-            "\t\t\tgroup by upd.onsite_order_id \n" +
             "\t\t) aa\n" +
             "\t\t\tjoin lateral \n" +
             "\t\t\t\t(select upd2.*, ROW_NUMBER() OVER (ORDER BY created_date DESC) AS row_num from user_payment_details upd2 where upd2.onsite_order_id = aa.orderId \n" +

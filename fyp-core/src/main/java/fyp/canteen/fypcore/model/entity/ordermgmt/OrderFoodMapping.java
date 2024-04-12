@@ -32,4 +32,6 @@ public class OrderFoodMapping {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    private Double totalCost;
 }

@@ -14,6 +14,7 @@ public class ModuleNameConstants {
     public static final String INVENTORY = "Inventory";
     public static final String ENUMS = "Enums";
     public static final String ONLINE_ORDER = "Online Order";
+    public static final String REPORT = "Report";
     public static final String PAYMENT = "Payment";
     public static final String KHALTI = "Khalti";
     public static final String ONSITE_ORDER = "Onsite Order";

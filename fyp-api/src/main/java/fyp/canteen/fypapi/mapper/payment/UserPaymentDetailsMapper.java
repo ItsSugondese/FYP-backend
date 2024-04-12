@@ -37,18 +37,14 @@ public interface UserPaymentDetailsMapper {
             "    SELECT \n" +
             "        sum(child.quantity) AS quantity, \n" +
             "        child.\"name\", \n" +
-            "        SUM(child.paid * child.quantity) AS salesIncome \n" +
+            "        sum(child.salesIncome) as salesIncome \n" +
             "    FROM (\n" +
             "        SELECT  \n" +
-            "            upd.onsite_order_id AS ooi\n" +
+            "            oo.id AS ooi\n" +
             "        FROM \n" +
-            "            user_payment_details upd \n" +
-            "            JOIN onsite_order oo ON oo.id = upd.onsite_order_id \n" +
-            "        WHERE \n" +
-            "            oo.pay_status <> 'PARTIAL_PAID'\n" +
+            "            onsite_order oo \n" +
+            "        WHERE  oo.approval_status = 'DELIVERED'  \n" +
             "            AND CAST(oo.created_date AS DATE) BETWEEN CAST(#{fromDate} AS DATE) AND CAST(#{toDate} AS DATE)\n" +
-            "        GROUP BY \n" +
-            "            upd.onsite_order_id\n" +
             "    ) aa\n" +
             "    JOIN LATERAL (\n" +
             "        SELECT   \n" +
@@ -56,7 +52,7 @@ public interface UserPaymentDetailsMapper {
             "            fm.id AS menuId, \n" +
             "            fm.\"name\", \n" +
             "            ofm.id, \n" +
-            "            fm.\"cost\" AS paid \n" +
+            "           ofm.total_cost AS salesIncome  \n" +
             "        FROM \n" +
             "            order_food_mapping ofm \n" +
             "            JOIN food_menu fm ON fm.id = ofm.food_id \n" +

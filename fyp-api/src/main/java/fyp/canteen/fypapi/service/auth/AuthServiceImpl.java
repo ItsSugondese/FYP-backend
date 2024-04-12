@@ -2,11 +2,14 @@ package fyp.canteen.fypapi.service.auth;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import fyp.canteen.fypapi.repository.company.CompanyRepo;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.jwt.JwtService;
 import fyp.canteen.fypapi.service.usermgmt.UserService;
+import fyp.canteen.fypcore.enums.Device;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.enums.UserType;
+import fyp.canteen.fypcore.model.entity.company.Company;
 import fyp.canteen.fypcore.pojo.jwt.JwtRequest;
 import fyp.canteen.fypcore.pojo.jwt.JwtResponse;
 import fyp.canteen.fypcore.pojo.usermgmt.UserDetailsRequestPojo;
@@ -23,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final GoogleIdTokenVerifier googleIdTokenVerifier;
     private final JwtService jwtService;
     private final PasswordEncoder encoder;
+    private final CompanyRepo companyRepo;
     private final String appClient = "746907184110-46l1lat1ds4e1fvk6vhd2dn9j8f97hp7.apps.googleusercontent.com";
 
 
@@ -47,7 +51,8 @@ public class AuthServiceImpl implements AuthService {
             }
             try {
                 // Use the user information to generate a JWT or perform other actions
-                return generateToken(JwtRequest.builder().userEmail(email).userPassword(password).build());
+                return generateToken(JwtRequest.builder().userEmail(email).userPassword(password)
+                        .device(Device.WEBSITE).build());
             } catch (Exception e) {
                 throw new AppException(e.getMessage(), e);
             }
@@ -66,10 +71,7 @@ public class AuthServiceImpl implements AuthService {
     private JwtResponse generateToken(JwtRequest request){
         try {
             // Use the user information to generate a JWT or perform other actions
-            return jwtService.createJwtToken(JwtRequest.builder()
-                    .userEmail(request.getUserEmail())
-                    .userPassword(request.getUserPassword())
-                    .build());
+            return jwtService.createJwtToken(request);
         } catch (Exception e) {
             throw new AppException(e.getMessage(), e);
         }

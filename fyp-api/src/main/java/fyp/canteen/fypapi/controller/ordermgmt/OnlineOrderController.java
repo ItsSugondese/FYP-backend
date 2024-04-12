@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalTime;
 import java.util.Map;
 
 @RestController
@@ -44,10 +45,11 @@ public class OnlineOrderController extends BaseController {
 
     @PostMapping
     @Operation(summary = "Use this api to save/update food menu details", responses = {@ApiResponse(responseCode = "200")})
-    public ResponseEntity<GlobalApiResponse> saveFoodMenu(@RequestBody @Valid OnlineOrderRequestPojo requestPojo){
+    public ResponseEntity<GlobalApiResponse> saveOnlineOrder(@RequestBody @Valid OnlineOrderRequestPojo requestPojo){
         OnlineOrderResponsePojo onlineOrder = onlineOrderService.saveOnlineOrder(requestPojo);
         onlineOrder.setOrderFoodDetails(orderFoodMappingMapper.getAllFoodDetailsByOrderId(onlineOrder.getId(),
                 true));
+        onlineOrder.setOrderCode(onlineOrder.getOrderCode().split(" ")[1]);
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 CRUD.SAVE, onlineOrder));
     }
@@ -78,6 +80,15 @@ public class OnlineOrderController extends BaseController {
         onlineOrderService.convertOnlineToOnsite(id);
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
                 CRUD.GET,null));
+    }
+
+    @GetMapping("/summary/{fromTime}/{toTime}")
+    @Operation(summary = "Use this api to paginated online order list", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> orderSummary(@PathVariable("fromTime")LocalTime fromTime, @PathVariable("toTime") LocalTime toTime){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET,onlineOrderService.getOrderSummary(fromTime, toTime)));
     }
 
     @GetMapping("/{id}")

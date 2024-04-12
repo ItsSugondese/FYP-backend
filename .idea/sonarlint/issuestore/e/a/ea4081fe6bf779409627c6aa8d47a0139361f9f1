@@ -1,0 +1,11 @@
+
+j
+java:S6201A"HReplace this instanceof check and cast with 'instanceof Integer integer'(ÕÊÙËüÿÿÿÿ8£ÄıŒí1
+j
+java:S6201C"HReplace this instanceof check and cast with 'instanceof Boolean boolean'(Ğö­ùÿÿÿÿ8«ÄıŒí1
+N
+java:S1602S",Remove useless curly braces around statement(èŒÃüùÿÿÿÿ8ëÄıŒí1
+j
+java:S6201^"HReplace this instanceof check and cast with 'instanceof Integer integer'(ÕÊÙËüÿÿÿÿ8òÄıŒí1
+j
+java:S6201`"HReplace this instanceof check and cast with 'instanceof Boolean boolean'(Ğö­ùÿÿÿÿ8óÄıŒí1
