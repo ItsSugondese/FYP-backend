@@ -30,7 +30,7 @@ public class TableController extends BaseController {
 
     @PostMapping
     @Operation(summary = "Save table")
-    public ResponseEntity<GlobalApiResponse> getAllNotificationOfMember(@RequestBody @Valid TableRequestPojo request) {
+    public ResponseEntity<GlobalApiResponse> saveTable(@RequestBody @Valid TableRequestPojo request) {
         tableService.saveTable(request);
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 CRUD.SAVE,

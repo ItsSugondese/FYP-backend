@@ -1,5 +1,6 @@
 package fyp.canteen.fypapi.controller.payment;
 
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
 import fyp.canteen.fypapi.service.payment.KhatiService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
@@ -25,9 +26,11 @@ import javax.validation.Valid;
 public class KhaltiController extends BaseController {
 
     private final KhatiService khatiService;
+    private final AdminDashboardService adminDashboardService;
 
-    public KhaltiController(KhatiService khatiService) {
+    public KhaltiController(KhatiService khatiService, AdminDashboardService adminDashboardService) {
         this.khatiService = khatiService;
+        this.adminDashboardService = adminDashboardService;
         this.moduleName = ModuleNameConstants.KHALTI;
     }
 
@@ -35,7 +38,9 @@ public class KhaltiController extends BaseController {
     @Operation(summary = "Use this api to verify transaction made using khalti in frontend",
             responses = {@ApiResponse(responseCode = "200")})
     public ResponseEntity<GlobalApiResponse> verifyTransaction(@RequestBody @Valid KhaltiTransactionVerificationRequestPojo requestPojo){
+        Object verfiy = khatiService.verifyTransaction(requestPojo);
+        adminDashboardService.pingSalesDataSocket();
         return ResponseEntity.ok(successResponse("Transaction successful",
-                CRUD.SAVE, khatiService.verifyTransaction(requestPojo)));
+                CRUD.SAVE, verfiy));
     }
 }

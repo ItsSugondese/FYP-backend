@@ -1,7 +1,12 @@
 
-t
-java:S6204?"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(Ýõ¬¹ýÿÿÿÿ8Í¼­Ží1
-X	java:S125)"<This block of commented-out lines of code should be removed.(òµÄÀ8Ó¼­Ží1
-]	java:S1259"<This block of commented-out lines of code should be removed.(ÐÌðûÿÿÿÿ8Ú¼­Ží1
-w
-java:S1128"URemove this unused import 'fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodResponsePojo'.(È¯ÁÙùÿÿÿÿ8Ïå­Ží1
+s	java:S135Q"YReduce the total number of break and continue statements in this loop to use at most one.(”ºšÂûÿÿÿÿ
+>
+java:S54116"(Use a primitive boolean expression here.(Ø¹ƒÁ
+m
+java:S3776)"RRefactor this method to reduce its Cognitive Complexity from 34 to the 15 allowed.(¾†Üèûÿÿÿÿ
+m
+java:S6204i"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(Ýõ¬¹ýÿÿÿÿ
+Q	java:S1250"<This block of commented-out lines of code should be removed.(òµÄÀ
+V	java:S125J"<This block of commented-out lines of code should be removed.(ÐÌðûÿÿÿÿ
+p
+java:S1128"URemove this unused import 'fyp.canteen.fypcore.pojo.ordermgmt.OrderFoodResponsePojo'.(È¯ÁÙùÿÿÿÿ

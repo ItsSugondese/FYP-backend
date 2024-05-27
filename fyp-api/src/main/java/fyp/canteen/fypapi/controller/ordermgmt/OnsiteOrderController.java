@@ -1,6 +1,8 @@
 package fyp.canteen.fypapi.controller.ordermgmt;
 
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
 import fyp.canteen.fypapi.service.ordermgmt.OnsiteOrderService;
+import fyp.canteen.fypapi.service.table.TableService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
@@ -32,9 +34,14 @@ import java.util.Map;
 public class OnsiteOrderController extends BaseController {
 
     private final OnsiteOrderService onsiteOrderService;
+    private final TableService tableService;
+    private final AdminDashboardService adminDashboardService;
 
-    public OnsiteOrderController(OnsiteOrderService onsiteOrderService) {
+    public OnsiteOrderController(OnsiteOrderService onsiteOrderService, TableService tableService,
+                                 AdminDashboardService adminDashboardService) {
         this.onsiteOrderService = onsiteOrderService;
+        this.tableService = tableService;
+        this.adminDashboardService = adminDashboardService;
         this.moduleName = ModuleNameConstants.ONSITE_ORDER;
     }
 
@@ -42,14 +49,17 @@ public class OnsiteOrderController extends BaseController {
     @Operation(summary = "Use this api to save/update onsite order", responses = {@ApiResponse(responseCode = "200")})
     public ResponseEntity<GlobalApiResponse> saveOnsiteOrder(@RequestBody @Valid OnsiteOrderRequestPojo requestPojo){
         onsiteOrderService.saveOnsiteOrder(requestPojo);
+        adminDashboardService.sendFoodMenuDataSocket();
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 CRUD.SAVE, true));
     }
-    @GetMapping("/verify-onsite")
+    @GetMapping("/verify-onsite/{code}")
     @Operation(summary = "Use verfiy the QR code value",
             responses = {@ApiResponse(responseCode = "200")})
-    public String getOnsiteUrl(){
-        return "/onsite-order/verify";
+    public ResponseEntity<GlobalApiResponse> getOnsiteUrl(@PathVariable("code") String code){
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, tableService.verifyOnsite(code)
+        ));
     }
 
     @PostMapping("/paginated")

@@ -32,7 +32,9 @@ public class ReportServiceImpl implements ReportService {
     private final UserRepo userRepo;
 
     @Override
-    public void generateRevenueReport(HttpServletResponse response, RevenueDataRequestPojo requestPojo) {
+    public boolean generateRevenueReport(HttpServletResponse response, RevenueDataRequestPojo requestPojo) {
+        if(requestPojo.getFromDate() == null || requestPojo.getToDate() == null)
+            throw new AppException("Providing date range is must to generate report");
         RevenueDataPojo data = adminDashboardService.getRevenueData(requestPojo);
 
 
@@ -50,6 +52,8 @@ public class ReportServiceImpl implements ReportService {
         } catch (Exception e) {
             throw new AppException(e.getMessage(), e);
         }
+
+        return  true;
     }
 
     @Override

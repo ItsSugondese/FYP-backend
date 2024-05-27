@@ -1,36 +1,38 @@
 
 m
-java:S6204A"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(“Ğµıÿÿÿÿ
-‚
-java:S1128"lRemove this unused import 'fyp.canteen.fypapi.mapper.temporaryattachments.TemporaryAttachmentsDetailMapper'.(œŒ¶ç
-l
-java:S1128"QRemove this unused import 'fyp.canteen.fypapi.mapper.usermgmt.StaffDetailMapper'.(Àüóÿÿÿÿÿ
-^
-java:S1128"HRemove this unused import 'fyp.canteen.fypapi.service.auth.RoleService'.(òş£¸
-p
-java:S1128	"ZRemove this unused import 'fyp.canteen.fypapi.service.resetpassword.ResetPasswordService'.(¹Õå
-d
+java:S6204C"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(“Ğµıÿÿÿÿ
+‰
+java:S1128"lRemove this unused import 'fyp.canteen.fypapi.mapper.temporaryattachments.TemporaryAttachmentsDetailMapper'.(œŒ¶ç8ñ…™…û1
+s
+java:S1128"QRemove this unused import 'fyp.canteen.fypapi.mapper.usermgmt.StaffDetailMapper'.(Àüóÿÿÿÿÿ8ñ…™…û1
+{
+java:S1128"YRemove this unused import 'fyp.canteen.fypapi.repository.payment.UserPaymentDetailsRepo'.(âæ¸Ğÿÿÿÿÿ8ñ…™…û1
+e
+java:S1128"HRemove this unused import 'fyp.canteen.fypapi.service.auth.RoleService'.(òş£¸8ñ…™…û1
+w
 java:S1128
-"NRemove this unused import 'fyp.canteen.fypapi.utils.email.EmailServiceHelper'.(Œ™á¶
-V
-java:S1128"@Remove this unused import 'fyp.canteen.fypcore.enums.PayStatus'.(ğêş–
-Z
-java:S1128"?Remove this unused import 'fyp.canteen.fypcore.enums.UserType'.(«¸³°şÿÿÿÿ
-[
-java:S1128"@Remove this unused import 'fyp.canteen.fypcore.model.auth.Role'.(ùÍ†›şÿÿÿÿ
-j
-java:S1128"ORemove this unused import 'fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu'.(ÿ£´Ğÿÿÿÿÿ
-l
-java:S1128"VRemove this unused import 'fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenuPicture'.(¿€íò
-‡
-java:S1128"qRemove this unused import 'fyp.canteen.fypcore.pojo.temporaryattachments.TemporaryAttachmentsDetailResponsePojo'.(˜ÙÂ‡
-o
-java:S1128"TRemove this unused import 'fyp.canteen.fypcore.utils.genericfile.FilePathConstants'.(ß¤ëÓûÿÿÿÿ
-m
-java:S1128"RRemove this unused import 'fyp.canteen.fypcore.utils.genericfile.FilePathMapping'.(ÆÁÌƒıÿÿÿÿ
-m
-java:S1128"RRemove this unused import 'fyp.canteen.fypcore.utils.genericfile.GenericFileUtil'.(Ø°¥Ÿÿÿÿÿÿ
-`
-java:S1128"ERemove this unused import 'jakarta.servlet.http.HttpServletResponse'.(ÂÓÕÇÿÿÿÿÿ
-<
-java:S1128""&Remove this unused import 'java.util'.(Î€ŒÙ
+"ZRemove this unused import 'fyp.canteen.fypapi.service.resetpassword.ResetPasswordService'.(¹Õå8ñ…™…û1
+k
+java:S1128"NRemove this unused import 'fyp.canteen.fypapi.utils.email.EmailServiceHelper'.(Œ™á¶8ñ…™…û1
+]
+java:S1128"@Remove this unused import 'fyp.canteen.fypcore.enums.PayStatus'.(ğêş–8ò…™…û1
+a
+java:S1128"?Remove this unused import 'fyp.canteen.fypcore.enums.UserType'.(«¸³°şÿÿÿÿ8ë†™…û1
+b
+java:S1128"@Remove this unused import 'fyp.canteen.fypcore.model.auth.Role'.(ùÍ†›şÿÿÿÿ8‡™…û1
+q
+java:S1128"ORemove this unused import 'fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu'.(ÿ£´Ğÿÿÿÿÿ8‡™…û1
+s
+java:S1128"VRemove this unused import 'fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenuPicture'.(¿€íò8‡™…û1
+
+java:S1128"qRemove this unused import 'fyp.canteen.fypcore.pojo.temporaryattachments.TemporaryAttachmentsDetailResponsePojo'.(˜ÙÂ‡8‡™…û1
+v
+java:S1128"TRemove this unused import 'fyp.canteen.fypcore.utils.genericfile.FilePathConstants'.(ß¤ëÓûÿÿÿÿ8‡™…û1
+t
+java:S1128"RRemove this unused import 'fyp.canteen.fypcore.utils.genericfile.FilePathMapping'.(ÆÁÌƒıÿÿÿÿ8‚‡™…û1
+t
+java:S1128"RRemove this unused import 'fyp.canteen.fypcore.utils.genericfile.GenericFileUtil'.(Ø°¥Ÿÿÿÿÿÿ8‚‡™…û1
+g
+java:S1128"ERemove this unused import 'jakarta.servlet.http.HttpServletResponse'.(ÂÓÕÇÿÿÿÿÿ8‚‡™…û1
+C
+java:S1128#"&Remove this unused import 'java.util'.(Î€ŒÙ8‚‡™…û1

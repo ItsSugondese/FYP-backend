@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface FoodMenuService {
-    void saveFoodMenu(FoodMenuRequestPojo requestPojo);
+    FoodMenu saveFoodMenu(FoodMenuRequestPojo requestPojo);
     PaginationResponse getFoodMenuPageable(FoodMenuPaginationRequestPojo requestPojo);
     void toggleAvailability(ToggleAvailableTodayRequestPojo requestPojo);
 

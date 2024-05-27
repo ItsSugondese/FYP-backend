@@ -48,7 +48,7 @@ public interface OnlineOrderMapper {
 
     @Select("select child.id, child.\"name\" as foodName, sum(child.quantity) as quantity, child.\"photoId\" from (\n" +
             "select oo.id from online_order oo where oo.approval_status = 'PENDING' and oo.is_active\n" +
-            "and oo.created_date::date = current_date - interval '10 Day' and \n" +
+            "and oo.created_date::date = current_date  and \n" +
             "oo.arrival_time between cast(#{fromTime} as time) and cast(#{toTime} as time)) parent\n" +
             "join lateral (select fm.id, fm.\"name\", ofm.quantity, \n" +
             "(select fmp.id  from food_menu_picture fmp where fmp.is_active and fmp.food_menu_id = fm.id) as \"photoId\" \n" +

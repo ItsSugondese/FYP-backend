@@ -1,5 +1,6 @@
 package fyp.canteen.fypapi.controller.foodmgmt;
 
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
 import fyp.canteen.fypapi.service.food.FoodMenuService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
@@ -30,8 +31,10 @@ import javax.validation.Valid;
 public class FoodMenuController extends BaseController {
 
     private final FoodMenuService foodMenuService;
-    public FoodMenuController(FoodMenuService foodMenuService){
+    private final AdminDashboardService adminDashboardService;
+    public FoodMenuController(FoodMenuService foodMenuService, AdminDashboardService adminDashboardService){
         this.foodMenuService = foodMenuService;
+        this.adminDashboardService = adminDashboardService;
         this.moduleName = ModuleNameConstants.FOOD_MENU;
     }
     @PostMapping
@@ -40,6 +43,7 @@ public class FoodMenuController extends BaseController {
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> saveFoodMenu(@RequestBody @Valid FoodMenuRequestPojo requestPojo){
         foodMenuService.saveFoodMenu(requestPojo);
+        adminDashboardService.sendFoodMenuDataSocket();
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName), CRUD.SAVE, true));
     }
 
@@ -57,6 +61,7 @@ public class FoodMenuController extends BaseController {
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))})})
     public ResponseEntity<GlobalApiResponse> getFoodMenuPageable(@RequestBody @Valid ToggleAvailableTodayRequestPojo requestPojo){
         foodMenuService.toggleAvailability(requestPojo);
+        adminDashboardService.sendFoodMenuDataSocket();
         return ResponseEntity.ok(successResponse("Availability saved successfully",CRUD.SAVE,  null));
     }
 
@@ -83,6 +88,7 @@ public class FoodMenuController extends BaseController {
             @ArraySchema(schema = @Schema(implementation = Boolean.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
     public ResponseEntity<GlobalApiResponse> deleteMenu(@PathVariable("id") Long id){
         foodMenuService.deleteSingleMenu(id);
+        adminDashboardService.sendFoodMenuDataSocket();
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName), CRUD.GET, true));
     }
 }

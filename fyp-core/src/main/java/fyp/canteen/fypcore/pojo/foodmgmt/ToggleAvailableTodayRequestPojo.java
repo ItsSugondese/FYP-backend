@@ -1,12 +1,14 @@
 package fyp.canteen.fypcore.pojo.foodmgmt;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ToggleAvailableTodayRequestPojo {
     @NotNull
     private Long foodId;

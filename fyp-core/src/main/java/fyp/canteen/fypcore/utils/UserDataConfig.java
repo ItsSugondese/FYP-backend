@@ -1,6 +1,7 @@
 package fyp.canteen.fypcore.utils;
 
 import fyp.canteen.fypcore.config.security.JwtUtil;
+import fyp.canteen.fypcore.enums.UserType;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,4 +26,10 @@ public class UserDataConfig {
     public Long userId(){
         return Long.parseLong(jwtUtil.getTokenBody((request.getHeader("Authorization")).substring(7)).get("userId").toString());
     }
+
+    public UserType userType(){
+        return Enum.valueOf(UserType.class, jwtUtil.getTokenBody((request.getHeader("Authorization")).substring(7)).get("userType").toString());
+    }
+
+
 }

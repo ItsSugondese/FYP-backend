@@ -23,11 +23,11 @@
     <div style="padding: 24px 32px; height: 100%;">
         <customTable align="center" width="100%" style="height: auto;">
             <tbody>
-            <tr style="margin-bottom: 40px;">
-                <td style="text-align: center">
-                    <img src= "${imagePath}" alt="company-logo" />
-                </td>
-            </tr>
+<#--            <tr style="margin-bottom: 40px;">-->
+<#--                <td style="text-align: center">-->
+<#--                    <img src= "${imagePath}" alt="company-logo" />-->
+<#--                </td>-->
+<#--            </tr>-->
 
             <tr style="margin-bottom: 64px;">
                 <td style="text-align: center">

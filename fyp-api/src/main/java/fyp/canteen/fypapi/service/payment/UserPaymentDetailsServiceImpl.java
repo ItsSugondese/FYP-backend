@@ -82,11 +82,21 @@ public class UserPaymentDetailsServiceImpl implements UserPaymentDetailsService{
     }
 
     @Override
-    public void payRemainingAmount(UserPaymentDetailsRequestPojo requestPojo) {
+    public boolean payRemainingAmount(UserPaymentDetailsRequestPojo requestPojo) {
         List<PaymentDetailsDataPojo> paritalPaidPaymentDataList = userPaymentDetailsMapper
                 .getRemainingToPayTransactionOfUserByUserId(requestPojo.getUserId());
+        List<OnsiteOrder> onsiteOrdersList = onsiteOrderRepo.findUnpaidOnsiteOrdersOfUserByUserId(requestPojo.getUserId());
+
+        double totalToPay = paritalPaidPaymentDataList.stream().mapToDouble(e -> e.getDueAmount()).sum() +
+                onsiteOrdersList.stream().mapToDouble(e -> e.getTotalPrice()).sum();
+
+        if(requestPojo.getPaidAmount() > totalToPay)
+            throw new AppException("User only owes Rs." + totalToPay);
+
 
         payRemainingAmount(paritalPaidPaymentDataList, requestPojo.getPaidAmount(), requestPojo.getUserId());
+
+        return true;
     }
 
     private void payRemainingAmount(List<PaymentDetailsDataPojo> paritalPaidPaymentDataList, double remainingCashAfterCurrent, Long userId) {

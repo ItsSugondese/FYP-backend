@@ -1,6 +1,7 @@
 package fyp.canteen.fypapi.service.food;
 
 import fyp.canteen.fypapi.mapper.foodmgmt.FoodMenuMapper;
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.pojo.FoodFilter;
@@ -33,14 +34,19 @@ public class FoodMenuServiceImpl implements FoodMenuService{
 
     @Override
     @Transactional
-    public void saveFoodMenu(FoodMenuRequestPojo requestPojo) {
+    public FoodMenu saveFoodMenu(FoodMenuRequestPojo requestPojo) {
         FoodMenu foodMenu = new FoodMenu();
         if(requestPojo.getId() != null)
             foodMenu = foodMenuRepo.findById(requestPojo.getId()).orElse(foodMenu);
 
-        if(foodMenu.getId() == null && requestPojo.getPhotoId() == null){
+        if(foodMenu.getId() == null){
+         if(requestPojo.getPhotoId() == null)
             throw new AppException("Food Picture is must");
+
+        if(Boolean.TRUE.equals(requestPojo.getIsAuto()))
+            foodMenu.setIsAvailableToday(false);
         }
+
 
         try {
             beanUtilsBean.copyProperties(foodMenu, requestPojo);
@@ -49,7 +55,6 @@ public class FoodMenuServiceImpl implements FoodMenuService{
         }
 
 
-        foodMenu.setIsAvailableToday(foodMenu.getIsAvailableToday()==null? true : foodMenu.getIsAvailableToday());
         FoodMenu savedFoodMenu = foodMenuRepo.saveAndFlush(foodMenu);
 
         foodPictureService.saveFoodPicture(
@@ -58,6 +63,7 @@ public class FoodMenuServiceImpl implements FoodMenuService{
                         .photoId(requestPojo.getPhotoId())
                         .build(), savedFoodMenu);
 
+        return savedFoodMenu;
     }
 
     @Override

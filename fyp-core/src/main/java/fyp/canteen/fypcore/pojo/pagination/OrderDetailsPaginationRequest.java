@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class OrderDetailsPaginationRequest extends PaginationRequest {
-    private boolean today = false;
+    private Boolean today = false;
     private PayStatus payStatus = null;
     public enum OrderTimeType{
         TODAY, SPECIFY

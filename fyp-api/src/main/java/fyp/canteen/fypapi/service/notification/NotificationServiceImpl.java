@@ -12,7 +12,9 @@ import fyp.canteen.fypcore.utils.pagination.PaginationRequest;
 import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +26,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final BeanUtilsBean beanUtilsBean = new NullAwareBeanUtilsBean();
     private final UserDataConfig userDataConfig;
     private final CustomPaginationHandler customPaginationHandler;
+    private final SimpMessagingTemplate messagingTemplate;
     @Override
     public void saveNotification(NotificationRequestPojo requestPojo) {
         if(requestPojo.getUserId() == null)
@@ -62,7 +65,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    @Transactional
     public PaginationResponse getAllNotificationOfMember(PaginationRequest request) {
+        markAsSeen();
         return customPaginationHandler.getPaginatedData(
                 notificationRepo.getAllNotificationMessageOfMember(userDataConfig.userId(), request.getPageable()));
     }
@@ -78,4 +83,8 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepo.getNewNotificationCount(userDataConfig.userId());
     }
 
+    @Override
+    public void newNotificationsSocket(Long userId) {
+        messagingTemplate.convertAndSendToUser(String.valueOf(userId), "/topic/notification", notificationRepo.getNewNotificationCount(userId));
+    }
 }

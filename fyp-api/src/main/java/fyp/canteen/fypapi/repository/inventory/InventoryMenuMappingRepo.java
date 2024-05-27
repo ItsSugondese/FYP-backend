@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Map;
 
 public interface InventoryMenuMappingRepo extends GenericSoftDeleteRepository<InventoryMenuMapping, Long> {
@@ -32,4 +33,14 @@ public interface InventoryMenuMappingRepo extends GenericSoftDeleteRepository<In
             "SELECT id, to_char(imm.created_date, 'YYYY-MM-DD HH:MI AM') as date ,  stock, remaining_quantity as \"remainingQuantity\"\n" +
             "FROM inventory_menu_mapping imm where food_menu_id = ?1 and imm.is_active order by imm.created_date desc) foo")
     Page<Map<String, Object>> getMenuMappingLogOfFoodPaginated(Long foodId, Pageable pageable);
+
+
+
+    @Query(value = "select * from inventory_menu_mapping imm where imm.is_active  and  imm.remaining_quantity > 0 and imm.food_menu_id = ?1\n" +
+            "order by imm.created_date asc ", nativeQuery = true)
+    List<InventoryMenuMapping> findAllInStockByFoodMenuId(Long id);
+
+    @Query(value = "select * from inventory_menu_mapping imm where imm.is_active and imm.food_menu_id = ?1\n" +
+            "order by imm.created_date desc limit 1", nativeQuery = true)
+    InventoryMenuMapping findLatestLog(Long id);
 }

@@ -1,7 +1,7 @@
 
-g	java:S112>"FDefine and throw a dedicated exception instead of using a generic one.(–ıùàÿÿÿÿÿ8êßóÊì1
-Q
-java:S1066-"/Merge this if statement with the enclosing one.(×£ß»úÿÿÿÿ8íßóÊì1
-o
-java:S62049"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚8–àóÊì1
-Z	java:S106D"9Replace this use of System.out or System.err by a logger.(¨¶ÑÍşÿÿÿÿ8›àóÊì1
+b	java:S112$"FDefine and throw a dedicated exception instead of using a generic one.(¾Ç²º8œÁ†û1
+V	java:S125,"<This block of commented-out lines of code should be removed.(ªŒåşÿÿÿÿ
+m
+java:S6204<"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ãúÛ÷üÿÿÿÿ
+Z
+java:S1128"=Remove this unused import 'fyp.canteen.fypcore.enums.Device'.(Ú‡ĞÑ8½İ†û1

@@ -16,12 +16,16 @@ public class UserPaymentDetailsRequestPojo {
     @NotNull
     private Double totalAmount;
     @NotNull
+    @Builder.Default
     private Double paidAmount = 0.00;
+    @Builder.Default
     private Double discount = 0.00;
+    @Builder.Default
     private Double dueAmount = 0.00;
 
     private String remarks;
 
+    @Builder.Default
     private PaymentMode paymentMode = PaymentMode.CASH;
 
     @NotNull

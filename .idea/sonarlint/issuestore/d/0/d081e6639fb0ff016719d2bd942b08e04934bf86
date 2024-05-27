@@ -1,10 +1,11 @@
 
-o	java:S116"URename this field "SECRET_KEY" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÚÒËÈıÿÿÿÿ
-<
-java:S1170"!Make this final field static too.(ÚÒËÈıÿÿÿÿ
-Q
-java:S6437#"6Revoke and change this password, as it is compromised.(¨‚à˜úÿÿÿÿ
-L
-java:S64375"6Revoke and change this password, as it is compromised.(Áãşÿ
-L
-java:S6437:"6Revoke and change this password, as it is compromised.(ÑƒÅÙ
+v	java:S116"URename this field "SECRET_KEY" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÚÒËÈıÿÿÿÿ8ÁîÜ¬î1
+C
+java:S1170"!Make this final field static too.(ÚÒËÈıÿÿÿÿ8ÂîÜ¬î1
+X
+java:S6437#"6Revoke and change this password, as it is compromised.(¨‚à˜úÿÿÿÿ8ÌîÜ¬î1
+]	java:S125-"<This block of commented-out lines of code should be removed.(¬î±Òøÿÿÿÿ8àâ¬î1
+S
+java:S64376"6Revoke and change this password, as it is compromised.(Áãşÿ8ÖîÜ¬î1
+S
+java:S6437;"6Revoke and change this password, as it is compromised.(ÑƒÅÙ8ÛîÜ¬î1

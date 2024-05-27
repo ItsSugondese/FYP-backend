@@ -9,7 +9,12 @@ import fyp.canteen.fypapi.mapper.table.TableMapper;
 import fyp.canteen.fypapi.mapper.usermgmt.UserDetailMapper;
 import fyp.canteen.fypcore.pojo.dashboard.*;
 import fyp.canteen.fypcore.pojo.dashboard.data.*;
+import fyp.canteen.fypcore.utils.data.DateRangeHolder;
+import fyp.canteen.fypcore.utils.data.DateTypeEnum;
+import fyp.canteen.fypcore.utils.data.FromToDateGenerator;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.type.descriptor.java.DataHelper;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +31,8 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
     private final RevenueMapper revenueMapper;
     private final FoodMenuMapper foodMenuMapper;
     private final TableMapper tableMapper;
+    private final SimpMessagingTemplate messagingTemplate;
+
 
     @Override
     public OrderDataPojo getOrderData(OrderDataRequestPojo requestPojo) {
@@ -40,28 +47,31 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
 
     @Override
     public RevenueDataPojo getRevenueData(RevenueDataRequestPojo requestPojo) {
+        FromToDateGenerator.getFromToDate(DateTypeEnum.DAY, 1, requestPojo);
         return revenueMapper.revenueAmountStatistics(requestPojo.getFromDate(), requestPojo.getToDate());
     }
 
     @Override
     public FoodMenuDataPojo getFoodMenuDataData(FoodMenuDataRequestPojo requestPojo) {
+        FromToDateGenerator.getFromToDate(DateTypeEnum.DAY, 1, requestPojo);
         return foodMenuMapper.getFoodMenuStatistics(requestPojo.getFromDate(), requestPojo.getToDate());
     }
 
     @Override
     public UserDataPojo getUserData(UserDataRequestPojo requestPojo) {
+        FromToDateGenerator.getFromToDate(DateTypeEnum.DAY, 1, requestPojo);
         return userDetailMapper.userCountStatistics(requestPojo.getFromDate(), requestPojo.getToDate());
     }
 
     @Override
     public TableDataPojo getTableData(TableDataRequestPojo requestPojo) {
+        FromToDateGenerator.getFromToDate(DateTypeEnum.DAY, 1, requestPojo);
         return tableMapper.getTableDataStatistics(requestPojo.getFromDate(), requestPojo.getToDate());
     }
 
     @Override
     public SalesDataPojo getSalesData(SalesDataRequestPojo requestPojo) {
-
-
+        FromToDateGenerator.getFromToDate(DateTypeEnum.DAY, 1, requestPojo);
         List<SalesDataPojo.FoodSalesData> foodSalesData = userPaymentDetailsMapper.getSalesData(
                 requestPojo.getFilterType().toString(),
                 requestPojo.getFromDate(),
@@ -121,5 +131,36 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
                 .totalQuantity(quantity)
                 .totalMenu(foodSalesData.size())
                 .build();
+    }
+
+    @Override
+    public void sendRevenueDataSocket(){
+        messagingTemplate.convertAndSend("/topic/revenue", getRevenueData(new RevenueDataRequestPojo()));
+    }
+
+    @Override
+    public void pingOrderSocket() {
+        messagingTemplate.convertAndSend("/topic/ping/order", true);
+    }
+
+    @Override
+    public void pingSalesDataSocket() {
+        messagingTemplate.convertAndSend("/topic/ping/sales-data", true);
+
+    }
+
+    @Override
+    public void sendTableDataSocket() {
+        messagingTemplate.convertAndSend("/topic/table", getTableData(new TableDataRequestPojo()));
+    }
+
+    @Override
+    public void sendFoodMenuDataSocket() {
+        messagingTemplate.convertAndSend("/topic/food-menu", getFoodMenuDataData(new FoodMenuDataRequestPojo()));
+    }
+
+    @Override
+    public void sendUsersDataSocket() {
+        messagingTemplate.convertAndSend("/topic/users", getUserData(new UserDataRequestPojo()));
     }
 }

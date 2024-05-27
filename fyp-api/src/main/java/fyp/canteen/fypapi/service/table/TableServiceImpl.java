@@ -5,6 +5,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import fyp.canteen.fypapi.repository.table.TableRepo;
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.tablemodel.CustomTable;
 import fyp.canteen.fypcore.pojo.table.TableRequestPojo;
@@ -13,7 +14,6 @@ import fyp.canteen.fypcore.utils.genericfile.FilePathConstants;
 import fyp.canteen.fypcore.utils.genericfile.FilePathMapping;
 
 import fyp.canteen.fypcore.utils.genericfile.GenericFileUtil;
-import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -31,9 +31,10 @@ public class TableServiceImpl implements TableService {
     private final TableRepo tableRepo;
     private final BeanUtilsBean beanUtilsBean = new NullAwareBeanUtilsBean();
     private final GenericFileUtil genericFileUtil;
+    private final AdminDashboardService adminDashboardService;
 
     @Override
-    public void saveTable(TableRequestPojo requestPojo) {
+    public CustomTable saveTable(TableRequestPojo requestPojo) {
         if(requestPojo.getTableNumber() == null)
             throw new AppException("Table number is must");
         CustomTable customTable = new CustomTable();
@@ -71,12 +72,14 @@ public class TableServiceImpl implements TableService {
         File qrCodeFile = new File(filePath);
 
         customTable.setQrPath(qrCodeFile.getAbsolutePath());
-        tableRepo.save(customTable);
+        customTable = tableRepo.save(customTable);
         try {
             MatrixToImageWriter.writeToPath(bitMatrix, "PNG", qrCodeFile.toPath());
         }catch (Exception e){
             throw new AppException(e.getMessage(), e);
         }
+        adminDashboardService.sendTableDataSocket();
+        return customTable;
     }
 
     @Override
@@ -95,7 +98,19 @@ public class TableServiceImpl implements TableService {
     }
 
     @Override
+    public boolean verifyOnsite(String text) {
+        return tableRepo.findByGuid(text.split(":")[0]).isPresent();
+    }
+
+    @Override
+    public boolean verifyOnsiteCode(String text) {
+        if(tableRepo.findByGuid(text.split(":")[0]).isPresent())
+            return  true;
+        throw new AppException("Onsite Order verificaiton failed");
+    }
+    @Override
     public void deleteById(Long id) {
         tableRepo.deleteById(id);
+        adminDashboardService.sendTableDataSocket();
     }
 }

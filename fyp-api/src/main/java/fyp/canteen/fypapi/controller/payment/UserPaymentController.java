@@ -1,5 +1,6 @@
 package fyp.canteen.fypapi.controller.payment;
 
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
 import fyp.canteen.fypapi.service.payment.UserPaymentDetailsService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.MessageConstants;
@@ -21,9 +22,11 @@ import javax.validation.Valid;
 @Tag(name = ModuleNameConstants.PAYMENT)
 public class UserPaymentController extends BaseController {
     private final UserPaymentDetailsService userPaymentDetailsService;
+    private final AdminDashboardService adminDashboardService;
 
-    public UserPaymentController(UserPaymentDetailsService userPaymentDetailsService) {
+    public UserPaymentController(UserPaymentDetailsService userPaymentDetailsService, AdminDashboardService adminDashboardService) {
         this.userPaymentDetailsService = userPaymentDetailsService;
+        this.adminDashboardService = adminDashboardService;
         this.moduleName = ModuleNameConstants.PAYMENT;
     }
 
@@ -32,6 +35,7 @@ public class UserPaymentController extends BaseController {
             responses = {@ApiResponse(responseCode = "200")})
     public ResponseEntity<GlobalApiResponse> savePaymentDetails(@RequestBody @Valid UserPaymentDetailsRequestPojo requestPojo){
         userPaymentDetailsService.savePayment(requestPojo);
+        adminDashboardService.pingSalesDataSocket();
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 CRUD.SAVE, null));
     }
@@ -41,6 +45,7 @@ public class UserPaymentController extends BaseController {
             responses = {@ApiResponse(responseCode = "200")})
     public ResponseEntity<GlobalApiResponse> payRemaining(@RequestBody UserPaymentDetailsRequestPojo requestPojo){
         userPaymentDetailsService.payRemainingAmount(requestPojo);
+        adminDashboardService.pingSalesDataSocket();
         return ResponseEntity.ok(successResponse("Remaining amount paid successfully",
                 CRUD.SAVE, null));
     }

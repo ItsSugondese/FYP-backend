@@ -1,5 +1,6 @@
 package fyp.canteen.fypapi.service.usermgmt;
 
+import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import fyp.canteen.fypcore.pojo.usermgmt.StaffDetailPaginationRequest;
 import fyp.canteen.fypcore.pojo.usermgmt.StaffDetailResponsePojo;
 import fyp.canteen.fypcore.pojo.usermgmt.StaffDetailsRequestPojo;
@@ -8,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface StaffService {
 
-    void saveStaff(StaffDetailsRequestPojo requestPojo);
+    User saveStaff(StaffDetailsRequestPojo requestPojo);
     PaginationResponse getAllStaffPaginated(StaffDetailPaginationRequest paginationRequest);
 
     StaffDetailResponsePojo getSingleStaffById(Long id);

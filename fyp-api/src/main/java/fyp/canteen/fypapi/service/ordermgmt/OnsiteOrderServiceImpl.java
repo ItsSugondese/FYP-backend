@@ -1,17 +1,23 @@
 package fyp.canteen.fypapi.service.ordermgmt;
 
-import fyp.canteen.fypapi.mapper.ordermgmt.OnsiteOrderMapper;
 import fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper;
+import fyp.canteen.fypapi.repository.foodmgmt.FoodMenuRepo;
+import fyp.canteen.fypapi.repository.inventory.InventoryMenuMappingRepo;
 import fyp.canteen.fypapi.repository.notification.NotificationRepo;
 import fyp.canteen.fypapi.repository.ordermgmt.OnsiteOrderRepo;
 import fyp.canteen.fypapi.repository.payment.UserPaymentDetailsRepo;
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
+import fyp.canteen.fypapi.service.notification.NotificationService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.constants.NotificationMessageConstants;
 import fyp.canteen.fypcore.enums.ApprovalStatus;
 import fyp.canteen.fypcore.enums.PayStatus;
 import fyp.canteen.fypcore.exception.AppException;
+import fyp.canteen.fypcore.model.entity.foodmgmt.FoodMenu;
+import fyp.canteen.fypcore.model.entity.inventory.InventoryMenuMapping;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnsiteOrder;
+import fyp.canteen.fypcore.model.entity.ordermgmt.OrderFoodMapping;
 import fyp.canteen.fypcore.model.entity.usermgmt.User;
 import fyp.canteen.fypcore.model.notification.Notification;
 import fyp.canteen.fypcore.pojo.ordermgmt.OnsiteOrderRequestPojo;
@@ -31,7 +37,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -50,11 +55,14 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     private final OrderFoodMappingMapper orderFoodMappingMapper;
     private final UserPaymentDetailsRepo userPaymentDetailsRepo;
     private final NotificationRepo notificationRepo;
-    private final OnsiteOrderMapper onsiteOrderMapper;
+    private final InventoryMenuMappingRepo inventoryMenuMappingRepo;
+    private final FoodMenuRepo foodMenuRepo;
+    private final NotificationService notificationService;
+    private final AdminDashboardService adminDashboardService;
 
     @Transactional
     @Override
-    public void saveOnsiteOrder(OnsiteOrderRequestPojo requestPojo) {
+    public OnsiteOrder saveOnsiteOrder(OnsiteOrderRequestPojo requestPojo) {
         OnsiteOrder onsiteOrder = new OnsiteOrder();
 
         if(requestPojo.getId() != null)
@@ -75,13 +83,16 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
 
 
         onsiteOrder.setApprovalStatus(ApprovalStatus.PENDING);
-        onsiteOrder = onsiteOrderRepo.save(onsiteOrder);
+        OnsiteOrder savedOnsite = onsiteOrderRepo.save(onsiteOrder);
 
         if (!requestPojo.getFoodOrderList().isEmpty() || !requestPojo.getRemoveFoodId().isEmpty())
             orderFoodMappingService.saveOrderFoodMapping(OrderFoodMappingRequestPojo.builder()
                     .foodOrderList(requestPojo.getFoodOrderList())
                     .removeFoodId(requestPojo.getRemoveFoodId())
-                    .build(), null, onsiteOrder);
+                    .build(), null, savedOnsite);
+
+        adminDashboardService.pingOrderSocket();
+        return onsiteOrder;
     }
 
     @Override
@@ -182,8 +193,35 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
     public void updateOrderStatus(Long id, ApprovalStatus status) {
         OnsiteOrder onsiteOrder = findById(id);
 
+        List<OrderFoodMapping> foodMappings = orderFoodMappingService.getAllOrderedFoodByOnsiteOrder(onsiteOrder);
+        foodMappings.forEach(
+                e -> {
+                    FoodMenu menu = foodMenuRepo.findById(e.getFoodMenu().getId()).get();
+                    if(menu.getIsAuto()){
+                       InventoryMenuMapping menuMapping= inventoryMenuMappingRepo.findLatestLog(e.getFoodMenu().getId());
+
+                        if(menuMapping.getStock() < (e.getQuantity()+ menuMapping.getRemainingQuantity())){
+                            menuMapping.setStock(menuMapping.getRemainingQuantity() + e.getQuantity());
+                            menuMapping.setRemainingQuantity(menuMapping.getStock());
+                        }else {
+                            menuMapping.setRemainingQuantity(menuMapping.getRemainingQuantity() + e.getQuantity());
+                        }
+
+                        inventoryMenuMappingRepo.save(menuMapping);
+
+                        if(!menu.getIsAvailableToday()){
+                            menu.setIsAvailableToday(true);
+                            foodMenuRepo.save(menu);
+                        }
+                    }
+                }
+        );
         onsiteOrder.setApprovalStatus(status);
         onsiteOrderRepo.save(onsiteOrder);
+
+        adminDashboardService.sendRevenueDataSocket();
+        adminDashboardService.pingOrderSocket();
+
     }
 
     @Override
@@ -192,8 +230,8 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                 requestPojo.getToDate(),
                 userDataConfig.userId(),
                 requestPojo.getPayStatus() == null? null : requestPojo.getPayStatus().name(),
-                requestPojo.isToday(),
-                requestPojo.isToday()? Pageable.unpaged():  requestPojo.getPageable()));
+                requestPojo.getToday(),
+                requestPojo.getToday()? Pageable.unpaged():  requestPojo.getPageable()));
 
         setPaginationResponseWithExtraResponseDataForUserHistory(response);
         return  response;
@@ -213,8 +251,13 @@ public class OnsiteOrderServiceImpl implements OnsiteOrderService {
                         .isSeen(false)
                 .build());
 
+        notificationService.newNotificationsSocket(onsiteOrder.getUser().getId());
+
+
 
     }
+
+
 
     @Override
     public void setToPaid(Long orderId) {

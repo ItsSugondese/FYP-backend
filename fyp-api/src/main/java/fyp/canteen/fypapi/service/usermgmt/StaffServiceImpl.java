@@ -4,6 +4,7 @@ import fyp.canteen.fypapi.mapper.temporaryattachments.TemporaryAttachmentsDetail
 import fyp.canteen.fypapi.mapper.usermgmt.StaffDetailMapper;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.auth.RoleService;
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
 import fyp.canteen.fypapi.service.resetpassword.ResetPasswordService;
 import fyp.canteen.fypapi.utils.email.EmailServiceHelper;
 import fyp.canteen.fypcore.constants.Message;
@@ -32,7 +33,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
-public class StaffServiceImpl  implements StaffService {
+public class StaffServiceImpl implements StaffService {
     private final UserRepo userRepo;
     private final BeanUtilsBean beanUtilsBean = new NullAwareBeanUtilsBean();
     private final TemporaryAttachmentsDetailMapper temporaryAttachmentsDetailMapper;
@@ -40,41 +41,43 @@ public class StaffServiceImpl  implements StaffService {
     private final GenericFileUtil genericFileUtil;
     private final StaffDetailMapper staffDetailMapper;
     private final UserServiceHelper userServiceHelper;
+    private final AdminDashboardService adminDashboardService;
 
 
     @Override
-    public void saveStaff(StaffDetailsRequestPojo requestPojo) {
+    public User saveStaff(StaffDetailsRequestPojo requestPojo) {
         User user = new User();
         boolean alreadyExists;
-        if(requestPojo.getId() != null)
+        if (requestPojo.getId() != null)
             user = userRepo.findById(requestPojo.getId()).orElse(user);
 
         alreadyExists = staffValidation(requestPojo, user);
 
-        try{
+        try {
             beanUtilsBean.copyProperties(user, requestPojo);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new AppException(e.getMessage(), e);
         }
 
-        if(!alreadyExists){
+        if (!alreadyExists) {
             user.setRole(requestPojo.getUserType() == UserType.STAFF ?
                     userServiceHelper.getRoles(UserType.STAFF.name()) :
-                    userServiceHelper.getRoles(UserType.EXTERNAL_USER.name())
-                    );
+                    userServiceHelper.getRoles(UserType.USER.name())
+            );
             user.setUserType(requestPojo.getUserType());
         }
 
-        if(requestPojo.getProfileId() != null){
+        if (requestPojo.getProfileId() != null) {
             user.setProfilePath(savePictureToPath(requestPojo.getProfileId()));
         }
 
         userRepo.save(user);
 
-    if(!alreadyExists)
-        sendPasswordSettingMail(requestPojo);
+        if (!alreadyExists)
+            sendPasswordSettingMail(requestPojo);
 
-
+        adminDashboardService.sendUsersDataSocket();
+        return user;
     }
 
     private void sendPasswordSettingMail(StaffDetailsRequestPojo requestPojo) {
@@ -104,10 +107,10 @@ public class StaffServiceImpl  implements StaffService {
     public void getStaffPhoto(HttpServletResponse response, Long id) {
         String photoPath = userRepo.findById(id).orElseThrow(() -> new RuntimeException("Staff not found")).getProfilePath();
         try {
-            if(photoPath != null)
+            if (photoPath != null)
                 genericFileUtil.getFileFromFilePath(photoPath, response);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new AppException(e.getMessage(), e);
         }
     }
@@ -116,15 +119,15 @@ public class StaffServiceImpl  implements StaffService {
     private boolean staffValidation(StaffDetailsRequestPojo requestPojo, User user) {
         boolean exists = false;
 
-        if(user.getId() == null || requestPojo.getId() == null){
+        if (user.getId() == null || requestPojo.getId() == null) {
             userServiceHelper.checkForUniqueEmail(requestPojo.getEmail());
-        }else {
+        } else {
             exists = true;
         }
         return exists;
     }
 
-    private String savePictureToPath(Long id){
+    private String savePictureToPath(Long id) {
         try {
             TemporaryAttachmentsDetailResponsePojo temporaryAttachmentsById = temporaryAttachmentsDetailMapper.getTemporaryAttachmentsById(id);
             return genericFileUtil.copyFileToServer(temporaryAttachmentsById.getLocation(), FilePathMapping.USER_FILE, FilePathConstants.TEMP_PATH);

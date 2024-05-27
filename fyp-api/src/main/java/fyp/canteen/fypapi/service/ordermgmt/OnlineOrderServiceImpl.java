@@ -3,11 +3,15 @@ package fyp.canteen.fypapi.service.ordermgmt;
 import fyp.canteen.fypapi.mapper.ordermgmt.OnlineOrderMapper;
 import fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper;
 import fyp.canteen.fypapi.repository.ordermgmt.OnlineOrderRepo;
+import fyp.canteen.fypapi.repository.ordermgmt.OrderFoodMappingRepo;
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
+import fyp.canteen.fypapi.service.table.TableService;
 import fyp.canteen.fypcore.constants.Message;
 import fyp.canteen.fypcore.constants.ModuleNameConstants;
 import fyp.canteen.fypcore.enums.ApprovalStatus;
 import fyp.canteen.fypcore.enums.OrderType;
 import fyp.canteen.fypcore.enums.PayStatus;
+import fyp.canteen.fypcore.enums.UserType;
 import fyp.canteen.fypcore.exception.AppException;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OrderFoodMapping;
@@ -45,6 +49,9 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
     private final OrderFoodMappingMapper orderFoodMappingMapper;
     private final OnlineOrderMapper onlineOrderMapper;
     private final OnsiteOrderService onsiteOrderService;
+    private final OrderFoodMappingRepo orderFoodMappingRepo;
+    private final TableService tableService;
+    private final AdminDashboardService adminDashboardService;
 
     @Override
     @Transactional
@@ -114,12 +121,20 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
 
     @Override
     @Transactional
-    public void convertOnlineToOnsite(Long id) {
+    public void convertOnlineToOnsite(Long id, String code) {
         OnlineOrder onlineOrder = findById(id);
+        Integer tableNumber = null;
         List<OrderFoodMapping> orderFoodMappingList =  orderFoodMappingService.getAllOrderedFoodByOnlineOrder(onlineOrder);
 
         if(orderFoodMappingList.isEmpty())
             throw new AppException("No Food Is ordered");
+
+        if(userDataConfig.userType().equals(UserType.USER) || userDataConfig.userType().equals(UserType.EXTERNAL_USER)){
+            if(!tableService.verifyOnsite(code))
+               throw new AppException("Invalid Qr Used for verification");
+
+            tableNumber = Integer.parseInt(code.split(":")[1]);
+        }
         onlineOrder.setApprovalStatus(ApprovalStatus.DELIVERED);
         onlineOrder = onlineOrderRepo.saveAndFlush(onlineOrder);
 
@@ -132,11 +147,15 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
                                         .build()
                         ).collect(Collectors.toList()))
                         .payStatus(PayStatus.UNPAID)
+                        .fromOnline(true)
                         .removeFoodId(new ArrayList<>())
+                        .tableNumber(tableNumber)
                         .orderedTime(onlineOrder.getCreatedDate().toLocalDateTime())
                         .totalPrice(onlineOrder.getTotalPrice())
                         .userId(onlineOrder.getUser().getId())
                 .build());
+
+        adminDashboardService.pingOrderSocket();
     }
 
     @Override
@@ -153,6 +172,13 @@ public class OnlineOrderServiceImpl implements OnlineOrderService {
     @Override
     public List<OnlineOrderResponsePojo> getUserOnlineOrder() {
         return onlineOrderMapper.getTodayOrderOfUserByUserId(userDataConfig.userId());
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        orderFoodMappingRepo.deleteAllByOnlineOrderId(id);
+        onlineOrderRepo.deleteCompletely(id);
     }
 
     @Override

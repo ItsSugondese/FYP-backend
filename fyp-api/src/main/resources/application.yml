@@ -20,7 +20,7 @@ spring:
       max-lifetime: 1800
       leak-detection-threshold: 600000
   jpa:
-    show-sql: true
+#    show-sql: true
     hibernate:
       ddl-auto: update
     database: postgresql
@@ -31,7 +31,10 @@ spring:
             non_contextual_creation: true
       format_sql: true
     open-in-view: false
-
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 40MB
 
   security:
     oauth2:
@@ -49,3 +52,6 @@ mybatis:
 
 base:
   fe-url: http://localhost:4200/
+  main-mail: rohanniroula5528@gmail.com
+  pass: 123456
+  origin: http://localhost:4200

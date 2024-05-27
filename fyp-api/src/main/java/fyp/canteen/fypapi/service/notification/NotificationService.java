@@ -13,5 +13,7 @@ public interface NotificationService {
     PaginationResponse getAllNotificationOfMember(PaginationRequest request);
     void markAsSeen();
     Integer newNotifications();
+    void newNotificationsSocket(Long userId);
+
 
 }

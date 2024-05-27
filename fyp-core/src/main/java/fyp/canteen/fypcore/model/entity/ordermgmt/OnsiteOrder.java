@@ -51,6 +51,9 @@ public class OnsiteOrder extends AuditActiveAbstract {
     @Column(columnDefinition = "boolean default false")
     private boolean hasFeedback = false;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean fromOnline = false;
+
 
 
 }

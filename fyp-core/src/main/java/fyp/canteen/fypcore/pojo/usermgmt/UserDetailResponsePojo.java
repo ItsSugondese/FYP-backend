@@ -10,7 +10,7 @@ public class UserDetailResponsePojo {
     private Long id;
     private String fullName;
     private boolean isAccountNonLocked;
-    private boolean isExternal;
+    private Boolean isExternal;
     private String email;
     private String profilePath;
     private String contactNumber;

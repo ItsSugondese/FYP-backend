@@ -15,5 +15,6 @@ public class JwtRequest {
     private String userEmail;
     @NotNull
     private String userPassword;
+    @Builder.Default
     private Device device = Device.WEBSITE;
 }

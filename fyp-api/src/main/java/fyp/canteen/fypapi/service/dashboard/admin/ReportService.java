@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public interface ReportService {
 
-    void generateRevenueReport(HttpServletResponse response, RevenueDataRequestPojo requestPojo);
+    boolean generateRevenueReport(HttpServletResponse response, RevenueDataRequestPojo requestPojo);
     void generateSalesReport(HttpServletResponse response, SalesDataRequestPojo requestPojo);
 
     void generateUserFinanceData(HttpServletResponse response, UserFinanceDataPaginationRequest request);

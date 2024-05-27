@@ -14,4 +14,13 @@ public interface AdminDashboardService {
     RevenueDataPojo getRevenueData(RevenueDataRequestPojo requestPojo);
     FoodMenuDataPojo getFoodMenuDataData(FoodMenuDataRequestPojo requestPojo);
     TableDataPojo getTableData(TableDataRequestPojo requestPojo);
+
+    void sendRevenueDataSocket();
+    void pingOrderSocket();
+    void pingSalesDataSocket();
+    void sendTableDataSocket();
+    void sendUsersDataSocket();
+    void sendFoodMenuDataSocket();
+
+
 }

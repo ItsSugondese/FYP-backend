@@ -17,10 +17,11 @@ public interface OnlineOrderService {
 
     PaginationResponse getPaginatedOrderListByTime(OnlineOrderPaginationRequestPojo requestPojo);
     List<OnlineOrderResponsePojo> getUserOnlineOrder();
-    void  convertOnlineToOnsite(Long id);
+    void  convertOnlineToOnsite(Long id, String code);
     OnlineOrderResponsePojo getOnlineOrderById(Long id);
 
     List<OrderFoodResponsePojo> getOrderSummary(LocalTime fromTime, LocalTime toTime);
 
+    void deleteById(Long id);
     OnlineOrder findById(Long id);
 }

@@ -14,10 +14,10 @@ public interface AnnouncementRepo extends GenericSoftDeleteRepository<Announceme
 
 
     @Query(nativeQuery = true, value = "select to_char(a.created_date, 'YYYY-MM-DD at  HH:MI AM') as date, \n" +
-            "    initcap( u.full_name) as \"postedBy\", u.id as \"userId\", a.message\n" +
+            "    initcap( u.full_name) as \"postedBy\", u.id as \"userId\", a.message, u.profile_path as \"profileUrl\"\n" +
             "    from announcement a \n" +
             "    join users u on a.created_by = u.id where \n" +
-            "case when (cast(?1 as date) is null or cast(?2 as date) is null) then true else a.created_date between ?1 and ?2 end and \n" +
+            "case when (cast(?1 as date) is null or cast(?2 as date) is null) then true else cast(a.created_date as date) between ?1 and ?2 end and \n" +
             "case when ?3 = '-1' then true else u.full_name ilike concat('%', ?3, '%') end\n" +
             "    order by a.created_date desc",
     countQuery = "select count(*) from (\n" +
@@ -25,7 +25,7 @@ public interface AnnouncementRepo extends GenericSoftDeleteRepository<Announceme
             "    initcap( u.full_name) as \"postedBy\", u.profile_path as \"profileUrl\", a.message\n" +
             "    from announcement a \n" +
             "    join users u on a.created_by = u.id where\n" +
-            "case when (cast(?1 as date) is null or cast(?2 as date) is null) then true else a.created_date between ?1 and ?2 end and \n" +
+            "case when (cast(?1 as date) is null or cast(?2 as date) is null) then true else cast(a.created_date as date) between ?1 and ?2 end and \n" +
             "case when ?3 = '-1' then true else u.full_name ilike concat('%', ?3, '%') end\n" +
             "    order by a.created_date desc) foo")
     Page<Map<String, Object>> getAllAnnouncementPaginated(LocalDate fromDate, LocalDate toDate, String name, Pageable pageable);

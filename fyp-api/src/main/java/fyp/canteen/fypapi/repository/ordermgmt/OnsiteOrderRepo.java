@@ -66,7 +66,8 @@ public interface OnsiteOrderRepo extends GenericSoftDeleteRepository<OnsiteOrder
 //            , nativeQuery = true)
 //    Page<Map<String, Object>> getOnsiteOrderPaginated(Integer minute, String showStatus, String name, Pageable pageable);
 
-    @Query(value = "  SELECT oo.id, to_char(oo.created_date, 'YYYY-MM-DD HH:MI AM') as date, INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
+    @Query(value = "  SELECT oo.id, to_char(oo.created_date, 'YYYY-MM-DD HH:MI AM') as date, oo.table_number as \"tableNumber\",\n" +
+            "INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
             "  case \n" +
             "\t  when \n" +
             "  \tExtract(day from (current_timestamp - oo.ordered_time)) > 0 then  Extract(day from (current_timestamp - oo.ordered_time)) ||  ' days ' ||\n" +
@@ -170,7 +171,8 @@ countQuery = "select count(*) from (\n" +
     Page<Map<String, Object>> getOnsiteOrderOfUserPaginated(Long id, String showStatus, Pageable pageable);
 
     @Query(value = "  SELECT oo.id, to_char(oo.created_date, 'YYYY-MM-DD HH:MI AM') as \"date\",  INITCAP(oo.pay_status) as \"payStatus\", oo.pay_status as \"payStatusCheck\", \n" +
-            "  case \n" +
+            "oo.table_number as \"tableNumber\",  \n" +
+            "case \n" +
             "\t  when \n" +
             "  \tExtract(day from (current_timestamp - oo.ordered_time)) > 0 then  Extract(day from (current_timestamp - oo.ordered_time)) ||  ' days ' ||\n" +
             "\tExtract(hour from (current_timestamp - oo.ordered_time)) || ' hours'  \n" +

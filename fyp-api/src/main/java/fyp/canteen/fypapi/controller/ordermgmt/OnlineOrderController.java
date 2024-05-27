@@ -1,6 +1,7 @@
 package fyp.canteen.fypapi.controller.ordermgmt;
 
 import fyp.canteen.fypapi.mapper.ordermgmt.OrderFoodMappingMapper;
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
 import fyp.canteen.fypapi.service.ordermgmt.OnlineOrderService;
 import fyp.canteen.fypapi.service.ordermgmt.OrderFoodMappingService;
 import fyp.canteen.fypcore.constants.Message;
@@ -34,12 +35,14 @@ public class OnlineOrderController extends BaseController {
     private final OnlineOrderService onlineOrderService;
     private final OrderFoodMappingService orderFoodMappingService;
     private final OrderFoodMappingMapper orderFoodMappingMapper;
+    private final AdminDashboardService adminDashboardService;
 
     public OnlineOrderController(OnlineOrderService onlineOrderService, OrderFoodMappingMapper orderFoodMappingMapper,
-                                 OrderFoodMappingService orderFoodMappingService){
+                                 OrderFoodMappingService orderFoodMappingService, AdminDashboardService adminDashboardService){
         this.onlineOrderService = onlineOrderService;
         this.orderFoodMappingMapper = orderFoodMappingMapper;
         this.orderFoodMappingService = orderFoodMappingService;
+        this.adminDashboardService = adminDashboardService;
         this.moduleName = ModuleNameConstants.ONLINE_ORDER;
     }
 
@@ -50,6 +53,7 @@ public class OnlineOrderController extends BaseController {
         onlineOrder.setOrderFoodDetails(orderFoodMappingMapper.getAllFoodDetailsByOrderId(onlineOrder.getId(),
                 true));
         onlineOrder.setOrderCode(onlineOrder.getOrderCode().split(" ")[1]);
+        adminDashboardService.pingOrderSocket();
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.SAVE, moduleName),
                 CRUD.SAVE, onlineOrder));
     }
@@ -72,14 +76,14 @@ public class OnlineOrderController extends BaseController {
                 CRUD.GET, onlineOrderService.getUserOnlineOrder()));
     }
 
-    @GetMapping("/make-onsite/{id}")
+    @GetMapping("/make-onsite/{id}/{code}")
     @Operation(summary = "Use this api to paginated online order list", responses = {@ApiResponse(responseCode = "200",
             content = {@Content(array =
             @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
-    public ResponseEntity<GlobalApiResponse> convertToOnsite(@PathVariable("id") Long id){
-        onlineOrderService.convertOnlineToOnsite(id);
-        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
-                CRUD.GET,null));
+    public ResponseEntity<GlobalApiResponse> convertToOnsite(@PathVariable("id") Long id, @PathVariable("code") String code){
+        onlineOrderService.convertOnlineToOnsite(id, code);
+        return ResponseEntity.ok(successResponse("Order conversion successful",
+                CRUD.SAVE,null));
     }
 
     @GetMapping("/summary/{fromTime}/{toTime}")
@@ -98,6 +102,16 @@ public class OnlineOrderController extends BaseController {
     public ResponseEntity<GlobalApiResponse> getOnlineOrderById(@PathVariable("id") Long id){
         return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
                 CRUD.GET, onlineOrderService.getOnlineOrderById(id)));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Use this api to get single online order", responses = {@ApiResponse(responseCode = "200",
+            content = {@Content(array =
+            @ArraySchema(schema = @Schema(implementation = Map.class)))}, description = "This api will save the details of Bank,Bank Type and Network")})
+    public ResponseEntity<GlobalApiResponse> deleteOnlineOrderById(@PathVariable("id") Long id){
+        onlineOrderService.deleteById(id);
+        return ResponseEntity.ok(successResponse(Message.crud(MessageConstants.GET, moduleName),
+                CRUD.GET, null));
     }
 
     @DeleteMapping("/order-food/{id}")

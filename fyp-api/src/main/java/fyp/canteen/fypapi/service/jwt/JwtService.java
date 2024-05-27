@@ -34,38 +34,42 @@ public class JwtService {
 
 
     public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
-        String userEmail = jwtRequest.getUserEmail();
+        String userEmail = jwtRequest.getUserEmail().trim();
         String userPassword = jwtRequest.getUserPassword();
 
         authenticate(userEmail, userPassword);
 
         User user = userService.findUserByEmail(userEmail);
 
-        if(jwtRequest.getDevice().equals(Device.PHONE)){
-            if(user.getUserType().equals(UserType.ADMIN))
-                throw new AppException("Only users and staff are eligible to use the app");
-        }
+//        if(jwtRequest.getDevice().equals(Device.PHONE)){
+//            if(user.getUserType().equals(UserType.ADMIN))
+//                throw new AppException("Only users and staff are eligible to use the app");
+//        }
+
+        if(!user.isAccountNonLocked() && !user.getUserType().equals(UserType.ADMIN))
+            throw new AppException("The account disabled by admin. Please contact the operator.");
+
         String newGeneratedToken = jwtUtil.generateToken(userDetailsService.loadUserByUsername(userEmail),
                 user);
 
 
-        JwtResponse response = new JwtResponse();
-        response.setJwtToken(newGeneratedToken);
-
-        response.setRoles(user.getRole().stream().map(
-                Role::getRole
-        ).collect(Collectors.toList()));
-        response.setUsername(user.getFullName());
-        return response;
+        return  JwtResponse.builder()
+                .jwtToken(newGeneratedToken)
+                .roles(user.getRole().stream().map(
+                        Role::getRole
+                ).collect(Collectors.toList()))
+                .userId(user.getId())
+                .email(user.getEmail())
+                .username(user.getFullName())
+                .build();
     }
 
-    private void authenticate(String userEmail, String userPassword) throws Exception{
+    private void authenticate(String userEmail, String userPassword) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userEmail, userPassword));
         }catch (DisabledException e) {
             throw new AppException("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            System.out.println(e);
             throw new AppException("INVALID_CREDENTIALS", e);
         }
     }

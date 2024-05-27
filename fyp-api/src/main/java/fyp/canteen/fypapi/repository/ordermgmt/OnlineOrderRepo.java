@@ -4,7 +4,9 @@ import fyp.canteen.fypcore.generics.api.GenericSoftDeleteRepository;
 import fyp.canteen.fypcore.model.entity.ordermgmt.OnlineOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,6 +17,10 @@ public interface OnlineOrderRepo extends GenericSoftDeleteRepository<OnlineOrder
     @Query(value = "select count(*)  from online_order oo where CAST(oo.created_date AS DATE) = ?1",nativeQuery = true)
     int noOfOrders(LocalDate date);
 
+    @Query(value = "delete from online_order where id = ?1", nativeQuery = true)
+    @Transactional
+    @Modifying
+    void deleteCompletely(Long id);
 //    @Query(value = "select oo.id, oo.approval_status, oo.order_code ,\n" +
 //            "to_char(oo.arrival_time, 'HH:mi am' ) as arrival_time, \n" +
 //            "    (string_to_array(oo.order_code , ' ')) [2] as order_code, oo.user_id, u.full_name, u.email \n" +

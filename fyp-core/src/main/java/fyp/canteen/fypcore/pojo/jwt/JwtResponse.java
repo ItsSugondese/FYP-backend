@@ -1,9 +1,6 @@
 package fyp.canteen.fypcore.pojo.jwt;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,8 +8,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class JwtResponse {
     private String jwtToken;
+    private String email;
     private List<String> roles;
     private String username;
+    private Long userId;
 }

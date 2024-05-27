@@ -1,19 +1,23 @@
 
 k
-java:S1192n"PDefine a constant instead of duplicating this literal "remainingAmount" 6 times.(ƒ•¾‹ùÿÿÿÿ
+java:S1192y"PDefine a constant instead of duplicating this literal "remainingAmount" 6 times.(ƒ•¾‹ùÿÿÿÿ
 a
-java:S1192¤"JDefine a constant instead of duplicating this literal "payStatus" 3 times.(“ğË
+java:S1192¯"JDefine a constant instead of duplicating this literal "payStatus" 3 times.(“ğË
 l
-java:S1192l"QDefine a constant instead of duplicating this literal "orderFoodDetails" 4 times.(æ’Üüıÿÿÿÿ
-Q	java:S125\"<This block of commented-out lines of code should be removed.(·ÌÄû
+java:S1192w"QDefine a constant instead of duplicating this literal "orderFoodDetails" 4 times.(æ’Üüıÿÿÿÿ
+?
+java:S5411È"(Use a primitive boolean expression here.(¢İÅÆ
+?
+java:S5411Ô"(Use a primitive boolean expression here.(”Š‹£
+?
+java:S5411ê"(Use a primitive boolean expression here.(ÄÙé
+Q	java:S125g"<This block of commented-out lines of code should be removed.(·ÌÄû
 h
-java:S6204q"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚
+java:S6204|"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚
 i
-java:S6204Œ"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚
-R	java:S125›"<This block of commented-out lines of code should be removed.(·ÌÄû
+java:S6204—"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚
+R	java:S125¦"<This block of commented-out lines of code should be removed.(·ÌÄû
 i
-java:S6204¯"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚
+java:S6204º"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚
 i
-java:S6204ı"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚
-K
-java:S1128""0Remove this unused import 'java.time.LocalDate'.(›‘¬èıÿÿÿÿ
+java:S6204¨"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(¨ß®‚

@@ -6,6 +6,7 @@ import fyp.canteen.fypapi.mapper.usermgmt.UserDetailMapper;
 import fyp.canteen.fypapi.repository.payment.UserPaymentDetailsRepo;
 import fyp.canteen.fypapi.repository.usermgmt.UserRepo;
 import fyp.canteen.fypapi.service.auth.RoleService;
+import fyp.canteen.fypapi.service.dashboard.admin.AdminDashboardService;
 import fyp.canteen.fypapi.service.resetpassword.ResetPasswordService;
 import fyp.canteen.fypapi.utils.email.EmailServiceHelper;
 import fyp.canteen.fypcore.constants.Message;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService{
     private final UserDetailMapper userDetailMapper;
     private final UserDataConfig userDataConfig;
     private final UserServiceHelper userServiceHelper;
-    private final UserPaymentDetailsRepo userPaymentDetailsRepo;
+    private final AdminDashboardService adminDashboardService;
 
     @Override
     public void saveUserFromGoogleLogin(UserDetailsRequestPojo requestPojo) {
@@ -57,6 +58,7 @@ public class UserServiceImpl implements UserService{
 
         user.setRole(userServiceHelper.getRoles(ModuleNameConstants.USER.toUpperCase()));
         userRepo.save(user);
+        adminDashboardService.sendUsersDataSocket();
     }
 
     @Override

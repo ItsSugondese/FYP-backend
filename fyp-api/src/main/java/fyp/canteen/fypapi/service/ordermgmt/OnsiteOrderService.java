@@ -14,7 +14,7 @@ import fyp.canteen.fypcore.utils.pagination.PaginationResponse;
 import java.util.List;
 
 public interface OnsiteOrderService {
-    void saveOnsiteOrder(OnsiteOrderRequestPojo requestPojo);
+    OnsiteOrder saveOnsiteOrder(OnsiteOrderRequestPojo requestPojo);
 
     void updateOrderStatus(Long id, ApprovalStatus status);
     PaginationResponse getPaginatedOrderListByTime(OnsiteOrderPaginationRequestPojo requestPojo);
@@ -25,6 +25,7 @@ public interface OnsiteOrderService {
     PaginationResponse getPaginatedOrderHistoryDetails(OrderDetailsPaginationRequest requestPojo);
 
     void setToPaid(Long orderId);
+
 
     OnsiteOrder findById(Long id);
 }

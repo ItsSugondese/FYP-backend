@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserPaymentDetailsService {
 
     void savePayment(UserPaymentDetailsRequestPojo requestPojo);
-    void payRemainingAmount(UserPaymentDetailsRequestPojo requestPojo);
+    boolean payRemainingAmount(UserPaymentDetailsRequestPojo requestPojo);
     Double getRemainingAmountOfUser(Long id);
     List<PaymentHistoryOfOrderResponsePojo> getOrderHistoryOfUserByOrderId(Long id);
 }

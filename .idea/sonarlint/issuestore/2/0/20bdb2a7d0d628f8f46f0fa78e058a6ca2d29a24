@@ -1,11 +1,11 @@
 
-b
-java:S1854I"@Remove this useless assignment to local variable "futureResult".(¾€ñÜüÿÿÿÿ8’Èîì1
-S
-java:S1481I"1Remove this unused "futureResult" local variable.(¾€ñÜüÿÿÿÿ8—Èîì1
-r
-java:S1128"PRemove this unused import 'fyp.canteen.fypapi.service.usermgmt.UserServiceImpl'.(Ñõòúûÿÿÿÿ8ÛçÄîì1
-_
-java:S1128"BRemove this unused import 'fyp.canteen.fypcore.constants.Message'.(Œ¤œÿ8ÛçÄîì1
-h
-java:S1128"KRemove this unused import 'fyp.canteen.fypcore.constants.MessageConstants'.(–Òñ8ÛçÄîì1
+[
+java:S1854I"@Remove this useless assignment to local variable "futureResult".(¾€ñÜüÿÿÿÿ
+L
+java:S1481I"1Remove this unused "futureResult" local variable.(¾€ñÜüÿÿÿÿ
+k
+java:S1128"PRemove this unused import 'fyp.canteen.fypapi.service.usermgmt.UserServiceImpl'.(Ñõòúûÿÿÿÿ
+X
+java:S1128"BRemove this unused import 'fyp.canteen.fypcore.constants.Message'.(Œ¤œÿ
+a
+java:S1128"KRemove this unused import 'fyp.canteen.fypcore.constants.MessageConstants'.(–Òñ
